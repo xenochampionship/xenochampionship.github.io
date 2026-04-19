@@ -1,2 +1,2 @@
-# xenochampionship.github.io
-Xeno Championship Site
+# Xeno Championship Site
+xenochampionship.github.io
