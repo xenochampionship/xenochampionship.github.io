@@ -2,7 +2,7 @@ const dataHostUrl = "https://xenochampionship.github.io/source/data/";
 
 const records = [
     {
-        title: "XC 2026", dates: "01/06/2026 - 30/06/2026", 
+        title: "XC 2026", dates: "TBD", 
         past: false, // If current or upcoming, set past to false
         top3: ["TBD", "TBD", "TBD"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc26.json"
