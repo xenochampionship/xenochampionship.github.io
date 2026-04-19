@@ -174,7 +174,7 @@ function populateHomePage(data, record) {
             <p class="para-txt">Ready to dive in? Check out these popular sections:</p>
             <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
                 <button class="btn site-btn" onclick="navigateToPage('rules')"><i class="fas fa-book"></i> Tournament Rules</button>
-                <button class="btn site-btn" onclick="navigateToPage('hof')"><i class="fas fa-star"></i> Hall of Fame</button>
+                <button class="btn site-btn" onclick="navigateToPage('hof')"><i class="fas fa-trophy"></i> Hall of Fame</button>
                 <button class="btn site-btn" onclick="navigateToPage('results')"><i class="fas fa-history"></i> Past Results</button>
                 <button class="btn site-btn" onclick="navigateToPage('contact')"><i class="fas fa-envelope"></i> Get Involved</button>
             </div>
