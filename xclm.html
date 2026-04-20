@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="shortcut icon" href="source/images/xc-logo.png" type="image/png">
+        <title>Xeno Championship - Local Manager</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        <style>
+            @font-face {
+                font-family: 'NMSFuturaProBook';
+                src: url('https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.eot');
+                src: url('https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.eot?#iefix') format('embedded-opentype'),
+                    url('https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.woff') format('woff'),
+                    url('https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.ttf') format('truetype');
+            }
+
+            @font-face {
+                font-family: 'NMSFont';
+                src: url('./source/NMS-Glyphs-Mono.ttf') format('truetype');
+            }
+
+            :root {
+                --wfa: -webkit-fill-available;
+                --nms-font: 'NMSFuturaProBook';
+                --primary-color: #34a5fb;
+                --secondary-color: #ff6b00;
+                --bg-gradient: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+                --card-bg: rgba(255, 255, 255, 0.05);
+                --text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html {
+                min-height: 100%;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                font-family: var(--nms-font);
+                background: var(--bg-gradient);
+                color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 2rem;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--primary-color);
+                position: fixed;
+                top: 0px;
+                width: var(--wfa);
+                z-index: 1000;
+            }
+
+            #addPlayerBtn, #exportBtn {
+                margin: 0 !important;
+            }
+
+            .brand {
+                background-image: url('source/images/xc-logo.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 200px;
+                height: 75px;
+            }
+
+            main {
+                flex: 1;
+                margin-top: 100px;
+                padding: 2rem;
+            }
+
+            .card {
+                background: var(--card-bg);
+                border: 1px solid var(--primary-color);
+                border-radius: 10px;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+            }
+
+            .card h2 {
+                margin-top: 0px;
+                color: var(--primary-color);
+                text-shadow: var(--text-shadow);
+            }
+
+            .btn {
+                background: var(--primary-color);
+                color: #010101;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                font-family: var(--nms-font);
+                font-weight: bold;
+                transition: background 0.3s;
+                margin: 0.25rem;
+            }
+
+            .btn:hover {
+                background: #34a5fba6;
+            }
+
+            .btn-danger {
+                background: #ff4444;
+            }
+
+            .btn-danger:hover {
+                background: #cc3333;
+            }
+
+            .btn-success {
+                background: #44ff44;
+            }
+
+            .btn-success:hover {
+                background: #33cc33;
+            }
+
+            .file-upload {
+                margin: 1rem 0;
+                margin-bottom: 0px;
+            }
+
+            .file-upload input[type="file"] {
+                display: none;
+            }
+
+            .file-upload label {
+                background: var(--card-bg);
+                border: 1px solid var(--primary-color);
+                border-radius: 5px;
+                padding: 0.75rem 1rem;
+                cursor: pointer;
+                display: inline-block;
+                transition: background 0.3s;
+            }
+
+            .file-upload label:hover {
+                background: rgba(0, 212, 255, 0.1);
+            }
+
+            .storage-controls {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                margin-top: 1rem;
+            }
+
+            .storage-controls button {
+                margin: 0;
+            }
+
+            .storage-status {
+                font-size: 0.9rem;
+                color: var(--secondary-color);
+            }
+
+            .metadata-section, .players-section {
+                margin: 1rem 0;
+                display: grid;
+                gap: 1rem;
+            }
+
+            .metadata-grid, .player-grid {
+                display: grid;
+                gap: 1rem;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-group label {
+                font-weight: bold;
+                color: var(--primary-color);
+            }
+
+            .form-group input, .form-group select {
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid var(--primary-color);
+                border-radius: 5px;
+                padding: 0.5rem;
+                color: #fff;
+                font-family: var(--nms-font);
+            }
+
+            .form-group input:focus, .form-group select:focus {
+                outline: none;
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+            }
+
+            .player-card {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(0, 212, 255, 0.2);
+                border-radius: 10px;
+                padding: 1rem;
+                position: relative;
+            }
+
+            .player-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
+
+            .player-header h3 {
+                margin: 0;
+                color: var(--secondary-color);
+            }
+
+            .results-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 0.5rem;
+            }
+
+            .results-grid .form-group {
+                margin-bottom: 0px;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal.active {
+                display: flex;
+            }
+
+            .modal-content {
+                background: var(--card-bg);
+                border: 1px solid var(--primary-color);
+                border-radius: 10px;
+                padding: 2rem;
+                max-width: 500px;
+                width: 90%;
+                backdrop-filter: blur(10px);
+            }
+
+            .modal h2 {
+                margin-top: 0;
+                text-align: center;
+            }
+
+            .modal .form-group {
+                margin: 1rem 0;
+            }
+
+            .modal-buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-top: 1.5rem;
+            }
+
+            .status-message {
+                padding: 1rem;
+                border-radius: 5px;
+                margin: 1rem 0;
+                display: none;
+            }
+
+            .status-success {
+                background: rgba(68, 255, 68, 0.2);
+                border: 1px solid #44ff44;
+                color: #aaffaa;
+                margin-bottom: 0px;
+            }
+
+            .status-error {
+                background: rgba(255, 68, 68, 0.2);
+                border: 1px solid #ff4444;
+                color: #ffaaaa;
+            }
+
+            .registration-section {
+                margin: 1rem 0;
+                padding: 1rem;
+                background: rgba(0, 212, 255, 0.08);
+                border: 1px solid rgba(0, 212, 255, 0.35);
+                border-radius: 10px;
+                margin-bottom: 0px;
+            }
+
+            .registration-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .registration-grid .form-group {
+                margin-bottom: 0px;
+            }
+
+            .friend-code-group {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .friend-code-input {
+                width: var(--wfa);
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+            .friend-code-separator {
+                color: var(--primary-color);
+                font-weight: bold;
+                user-select: none;
+            }
+
+            .password-modal {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                z-index: 3000;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+            }
+
+            .password-modal-content {
+                background: var(--card-bg);
+                border: 1px solid var(--primary-color);
+                border-radius: 10px;
+                padding: 2rem;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+            }
+
+            .password-modal h2 {
+                margin-top: 0;
+                color: var(--primary-color);
+                text-shadow: var(--text-shadow);
+            }
+
+            .password-modal .form-group {
+                margin: 2rem 0;
+            }
+
+            .password-modal input[type="password"] {
+                width: 100%;
+                padding: 0.75rem;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid var(--primary-color);
+                border-radius: 5px;
+                color: #fff;
+                font-family: var(--nms-font);
+                font-size: 1.1rem;
+                text-align: center;
+                letter-spacing: 0.1rem;
+            }
+
+            .password-modal input[type="password"]:focus {
+                outline: none;
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+            }
+
+            .password-modal .btn {
+                width: 100%;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            .password-error {
+                color: #ffaaaa;
+                font-size: 0.9rem;
+                margin-top: 1rem;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="passwordModal" class="password-modal">
+            <div class="password-modal-content">
+                <h2><i class="fas fa-lock" style="margin-right: 0.5rem;"></i> Access Required</h2>
+                <p style="color: #ccc; margin-bottom: 1rem;">Enter the password to access the Local Manager</p>
+                <div class="form-group">
+                    <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
+                </div>
+                <button class="btn" id="passwordSubmitBtn">
+                    <i class="fas fa-key" style="margin-right: 0.25rem;"></i> Access Tool
+                </button>
+                <div id="passwordError" class="password-error">Incorrect password. Please try again.</div>
+            </div>
+        </div>
+
+        <header style="display: none;">
+            <div class="brand"></div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <h1 style="color: var(--primary-color); margin: 0; font-size: 1.5rem;">Local Manager</h1>
+                <button class="btn btn-danger" id="logoutBtn" style="font-size: 0.8rem; margin: 0;">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 0.25rem;"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <main style="display: none;">
+            <div class="card">
+                <h2><i class="fas fa-upload" style="margin-right: 0.5rem;"></i> Load Championship Data</h2>
+                <div class="file-upload">
+                    <input type="file" id="jsonFileInput" accept=".json">
+                    <label for="jsonFileInput">
+                        <i class="fas fa-file-upload" style="margin-right: 0.25rem;"></i> Choose JSON File
+                    </label>
+                    <span id="fileName" style="margin-left: 1rem; color: var(--secondary-color);"></span>
+                </div>
+                <div class="storage-controls">
+                    <button class="btn btn-success" id="loadFromStorageBtn" style="display: none;">
+                        <i class="fas fa-database" style="margin-right: 0.25rem;"></i> Load from Storage
+                    </button>
+                    <button class="btn btn-danger" id="clearStorageBtn" style="display: none;">
+                        <i class="fas fa-trash" style="margin-right: 0.25rem;"></i> Clear Storage
+                    </button>
+                    <span id="storageStatus" class="storage-status"></span>
+                </div>
+                <div id="loadStatus" class="status-message"></div>
+            </div>
+
+            <div id="dataContainer" style="display: none;">
+                <div class="card">
+                    <h2><i class="fas fa-cog" style="margin-right: 0.5rem;"></i> Championship Metadata</h2>
+                    <div class="metadata-section">
+                        <div class="metadata-grid">
+                            <div class="form-group">
+                                <label for="tournamentName">Tournament Name:</label>
+                                <input type="text" id="tournamentName" placeholder="e.g., Xeno Championship 2026">
+                            </div>
+                            <div class="form-group">
+                                <label for="year">Year:</label>
+                                <input type="number" id="year" placeholder="e.g., 2026">
+                            </div>
+                            <div class="form-group">
+                                <label for="organiser">Organiser:</label>
+                                <input type="text" id="organiser" placeholder="e.g., JamieHarperUK">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="registration-section">
+                        <h3><i class="fas fa-user-plus" style="margin-right: 0.5rem;"></i> Registration Settings</h3>
+                        <div class="registration-grid">
+                            <div class="form-group">
+                                <label for="registrationOpen">Registration Status:</label>
+                                <select id="registrationOpen">
+                                    <option value="0">Not yet open</option>
+                                    <option value="1">Registration open</option>
+                                    <option value="2">Registration closed</option>
+                                    <option value="3">Tournament started</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="formLink">Registration Form Link:</label>
+                                <input type="url" id="formLink" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-users" style="margin-right: 0.5rem;"></i> Players</h2>
+                    <div id="playersContainer" class="players-section"></div>
+                    <button class="btn btn-success" id="addPlayerBtn">
+                        <i class="fas fa-plus" style="margin-right: 0.25rem;"></i> Add Player
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-download" style="margin-right: 0.5rem;"></i> Export Data</h2>
+                    <button class="btn" id="exportBtn">
+                        <i class="fas fa-file-export" style="margin-right: 0.25rem;"></i> Export JSON File
+                    </button>
+                    <div id="exportStatus" class="status-message"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Export Modal -->
+        <div id="exportModal" class="modal">
+            <div class="modal-content">
+                <h2>Export Championship Data</h2>
+                <div class="form-group">
+                    <label for="exportFileName">File Name:</label>
+                    <input type="text" id="exportFileName" placeholder="e.g., xc26.json" value="xc26.json">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-danger" id="cancelExportBtn">Cancel</button>
+                    <button class="btn btn-success" id="confirmExportBtn">Export</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const PASSWORD = (() => {
+                // B64
+                return atob('RGVsdGFFY2hvMjYjKg==');
+            })();
+            const AUTH_KEY = 'xcManagerAuthenticated';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const isAuthenticated = sessionStorage.getItem(AUTH_KEY) === 'true';
+                
+                if (isAuthenticated) {
+                    showMainInterface();
+                } else {
+                    setupPasswordModal();
+                }
+            });
+
+            function setupPasswordModal() {
+                const passwordInput = document.getElementById('passwordInput');
+                const submitBtn = document.getElementById('passwordSubmitBtn');
+                const errorDiv = document.getElementById('passwordError');
+
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkPassword();
+                    }
+                });
+
+                submitBtn.addEventListener('click', checkPassword);
+
+                function checkPassword() {
+                    const enteredPassword = passwordInput.value.trim();
+                    
+                    if (enteredPassword === PASSWORD) {
+                        sessionStorage.setItem(AUTH_KEY, 'true');
+                        showMainInterface();
+                    } else {
+                        errorDiv.style.display = 'block';
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                        
+                        setTimeout(() => {
+                            errorDiv.style.display = 'none';
+                        }, 3000);
+                    }
+                }
+            }
+
+            function showMainInterface() {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.querySelector('header').style.display = 'flex';
+                document.querySelector('main').style.display = 'block';
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    if (confirm('Are you sure you want to logout? You will need to enter the password again to access the tool.')) {
+                        sessionStorage.removeItem(AUTH_KEY);
+                        location.reload();
+                    }
+                });
+                
+                checkStoredData();
+                setupStorageControls();
+            }
+
+            let championshipData = null;
+            const STORAGE_KEY = 'xcChampionshipData';
+
+            function checkStoredData() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    document.getElementById('loadFromStorageBtn').style.display = 'inline-block';
+                    document.getElementById('clearStorageBtn').style.display = 'inline-block';
+                    document.getElementById('storageStatus').textContent = 'Data available in browser storage';
+                }
+            }
+
+            function setupStorageControls() {
+                document.getElementById('loadFromStorageBtn').addEventListener('click', loadFromStorage);
+                document.getElementById('clearStorageBtn').addEventListener('click', clearStorage);
+            }
+
+            function loadFromStorage() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    try {
+                        championshipData = JSON.parse(stored);
+                        populateForm();
+                        document.getElementById('dataContainer').style.display = 'block';
+                        document.getElementById('fileName').textContent = 'Loaded from browser storage';
+                        showStatus('loadStatus', 'Data loaded from browser storage!', 'success');
+                    } catch (error) {
+                        showStatus('loadStatus', 'Error loading stored data.', 'error');
+                        console.error('Storage load error:', error);
+                    }
+                }
+            }
+
+            function clearStorage() {
+                if (confirm('Are you sure you want to clear all stored championship data from browser storage?')) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    document.getElementById('loadFromStorageBtn').style.display = 'none';
+                    document.getElementById('clearStorageBtn').style.display = 'none';
+                    document.getElementById('storageStatus').textContent = '';
+                    showStatus('loadStatus', 'Browser storage cleared!', 'success');
+                }
+            }
+
+            function saveToStorage() {
+                if (championshipData) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(championshipData));
+                    checkStoredData();
+                }
+            }
+
+            document.getElementById('jsonFileInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    document.getElementById('fileName').textContent = file.name;
+                    loadJSONFile(file);
+                }
+            });
+
+            function loadJSONFile(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        championshipData = JSON.parse(e.target.result);
+                        saveToStorage();
+                        populateForm();
+                        document.getElementById('dataContainer').style.display = 'block';
+                        showStatus('loadStatus', 'File loaded successfully!', 'success');
+                    } catch (error) {
+                        showStatus('loadStatus', 'Error parsing JSON file. Please check the file format.', 'error');
+                        console.error('JSON parse error:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            function populateForm() {
+                if (!championshipData) return;
+
+                document.getElementById('tournamentName').value = championshipData.metadata?.tournamentName || '';
+                document.getElementById('year').value = championshipData.metadata?.year || '';
+                document.getElementById('organiser').value = championshipData.metadata?.organiser || '';
+                document.getElementById('registrationOpen').value = championshipData.metadata?.registration?.open || 0;
+                document.getElementById('formLink').value = championshipData.metadata?.registration?.formLink || '';
+
+                populatePlayers();
+            }
+
+            function populatePlayers() {
+                const container = document.getElementById('playersContainer');
+                container.innerHTML = '';
+
+                if (!championshipData.players || championshipData.players.length === 0) {
+                    container.innerHTML = '<p>No players found in the data.</p>';
+                    return;
+                }
+
+                championshipData.players.forEach((player, index) => {
+                    const playerCard = createPlayerCard(player, index);
+                    container.appendChild(playerCard);
+                });
+            }
+
+            function populatePlayers() {
+                const container = document.getElementById('playersContainer');
+                container.innerHTML = '';
+
+                if (!championshipData.players || championshipData.players.length === 0) {
+                    container.innerHTML = '<p>No players found in the data.</p>';
+                    return;
+                }
+
+                championshipData.players.forEach((player, index) => {
+                    const playerCard = createPlayerCard(player, index);
+                    container.appendChild(playerCard);
+                });
+            }
+
+            function createPlayerCard(player, index) {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+
+                const friendCodeParts = splitFriendCode(player.nmsFriendCode || '');
+
+                card.innerHTML = `
+                    <div class="player-header">
+                        <h3>Player ${index + 1}</h3>
+                        <button class="btn btn-danger btn-sm" onclick="removePlayer(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" value="${player.name || ''}" onchange="updatePlayerField(${index}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Platform:</label>
+                        <select onchange="updatePlayerField(${index}, 'platform', this.value)">
+                            <option value="PlayStation" ${player.platform === 'PlayStation' ? 'selected' : ''}>PlayStation</option>
+                            <option value="Switch" ${player.platform === 'Switch' ? 'selected' : ''}>Switch</option>
+                            <option value="Xbox" ${player.platform === 'Xbox' ? 'selected' : ''}>Xbox</option>
+                            <option value="PC" ${player.platform === 'PC' ? 'selected' : ''}>PC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>NMS Friend Code:</label>
+                        <div class="friend-code-group">
+                            <input type="text" class="friend-code-input" maxlength="5" placeholder="AAAAA" value="${friendCodeParts[0]}" oninput="updateFriendCodePart(${index}, 0, this.value.toUpperCase())" onkeyup="moveToNext(this, 1)">
+                            <span class="friend-code-separator">-</span>
+                            <input type="text" class="friend-code-input" maxlength="5" placeholder="BBBBB" value="${friendCodeParts[1]}" oninput="updateFriendCodePart(${index}, 1, this.value.toUpperCase())" onkeyup="moveToNext(this, 2)">
+                            <span class="friend-code-separator">-</span>
+                            <input type="text" class="friend-code-input" maxlength="5" placeholder="CCCCC" value="${friendCodeParts[2]}" oninput="updateFriendCodePart(${index}, 2, this.value.toUpperCase())" onkeyup="moveToNext(this, 3)">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="results-grid">
+                            <div class="form-group">
+                                <label>Played:</label>
+                                <input type="number" min="0" value="${player.results?.played || 0}" onchange="updatePlayerResult(${index}, 'played', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>Wins:</label>
+                                <input type="number" min="0" value="${player.results?.wins || 0}" onchange="updatePlayerResult(${index}, 'wins', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>Losses:</label>
+                                <input type="number" min="0" value="${player.results?.losses || 0}" onchange="updatePlayerResult(${index}, 'losses', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>Forfeits:</label>
+                                <input type="number" min="0" value="${player.results?.forfeits || 0}" onchange="updatePlayerResult(${index}, 'forfeits', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>Points:</label>
+                                <input type="number" step="0.1" value="${player.results?.points || 0}" onchange="updatePlayerResult(${index}, 'points', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>OMW %:</label>
+                                <input type="number" step="0.1" min="0" max="100" value="${player.results?.omw || 0}" onchange="updatePlayerResult(${index}, 'omw', this.value)">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return card;
+            }
+
+            function updatePlayerField(index, field, value) {
+                if (championshipData.players[index]) {
+                    championshipData.players[index][field] = value;
+                    saveToStorage();
+                }
+            }
+
+            function updatePlayerResult(index, field, value) {
+                if (championshipData.players[index]) {
+                    if (!championshipData.players[index].results) {
+                        championshipData.players[index].results = {};
+                    }
+                    championshipData.players[index].results[field] = field === 'omw' ? parseFloat(value) : parseInt(value);
+                    saveToStorage();
+                }
+            }
+
+            function updateFriendCodePart(index, partIndex, value) {
+                if (championshipData.players[index]) {
+                    const currentCode = championshipData.players[index].nmsFriendCode || '';
+                    const parts = splitFriendCode(currentCode);
+
+                    parts[partIndex] = value;
+
+                    const combinedCode = parts.filter(p => p).join('-');
+                    championshipData.players[index].nmsFriendCode = combinedCode || '';
+                    saveToStorage();
+                }
+            }
+
+            function splitFriendCode(code) {
+                if (!code) return ['', '', ''];
+                const parts = code.split('-');
+                return [
+                    parts[0] || '',
+                    parts[1] || '',
+                    parts[2] || ''
+                ];
+            }
+
+            function moveToNext(currentInput, nextIndex) {
+                if (currentInput.value.length === 4 && nextIndex <= 3) {
+                    const inputs = currentInput.parentElement.querySelectorAll('.friend-code-input');
+                    if (inputs[nextIndex - 1]) {
+                        inputs[nextIndex - 1].focus();
+                    }
+                }
+            }
+
+            function removePlayer(index) {
+                if (confirm('Are you sure you want to remove this player?')) {
+                    championshipData.players.splice(index, 1);
+                    saveToStorage();
+                    populatePlayers();
+                }
+            }
+
+            document.getElementById('addPlayerBtn').addEventListener('click', function() {
+                const newPlayer = {
+                    name: '',
+                    nmsFriendCode: '',
+                    platform: 'Xbox',
+                    results: {
+                        played: 0,
+                        wins: 0,
+                        losses: 0,
+                        forfeits: 0,
+                        points: 0,
+                        omw: 0.0
+                    }
+                };
+                championshipData.players.push(newPlayer);
+                saveToStorage();
+                populatePlayers();
+            });
+
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                // Update data from form inputs
+                updateDataFromForm();
+                document.getElementById('exportModal').classList.add('active');
+            });
+
+            document.getElementById('cancelExportBtn').addEventListener('click', function() {
+                document.getElementById('exportModal').classList.remove('active');
+            });
+
+            document.getElementById('confirmExportBtn').addEventListener('click', function() {
+                const fileName = document.getElementById('exportFileName').value.trim();
+                if (!fileName) {
+                    alert('Please enter a file name.');
+                    return;
+                }
+
+                if (!fileName.endsWith('.json')) {
+                    alert('File name must end with .json');
+                    return;
+                }
+
+                exportJSONFile(fileName);
+                document.getElementById('exportModal').classList.remove('active');
+            });
+
+            function updateDataFromForm() {
+                if (!championshipData.metadata) {
+                    championshipData.metadata = {};
+                }
+                if (!championshipData.metadata.registration) {
+                    championshipData.metadata.registration = {};
+                }
+
+                championshipData.metadata.tournamentName = document.getElementById('tournamentName').value;
+                championshipData.metadata.year = parseInt(document.getElementById('year').value);
+                championshipData.metadata.organiser = document.getElementById('organiser').value;
+                championshipData.metadata.registration.open = parseInt(document.getElementById('registrationOpen').value);
+                championshipData.metadata.registration.formLink = document.getElementById('formLink').value;
+
+                saveToStorage();
+            }
+
+            function exportJSONFile(fileName) {
+                const dataStr = JSON.stringify(championshipData, null, 4);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showStatus('exportStatus', `File "${fileName}" exported successfully!`, 'success');
+            }
+
+            function showStatus(elementId, message, type) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.className = `status-message status-${type}`;
+                element.style.display = 'block';
+
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 5000);
+            }
+        </script>
+    </body>
+</html>
