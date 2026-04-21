@@ -1,12 +1,8 @@
-// Production flag - set to false to hide the construction banner
 const SITE_UNDER_CONSTRUCTION = true;
 
-// SPA Navigation with Hash Routing
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize construction banner
     initConstructionBanner();
     
-    // Initialize mobile menu
     initMobileMenu();
 
     const navLinks = document.querySelectorAll('.nav-menu a');
@@ -19,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Handle footer links
     document.querySelectorAll('footer a').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -28,17 +23,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Listen for hash changes
     window.addEventListener('hashchange', function() {
         const hash = window.location.hash.substring(1) || 'home';
         showPage(hash);
     });
 
-    // Initial page load
     const initialHash = window.location.hash.substring(1) || 'home';
     showPage(initialHash);
 
-    // Load data
     loadCurrentChampionship();
     populateHallOfFame();
     setupPastResultsSelector();
@@ -65,7 +57,6 @@ function initConstructionBanner() {
         localStorage.setItem('bannerDismissed', 'true');
     });
 
-    // Check if user has previously dismissed the banner
     if (localStorage.getItem('bannerDismissed') === 'true') {
         banner.classList.add('hidden');
         header.classList.remove('banner-visible');
@@ -79,28 +70,23 @@ function initMobileMenu() {
     const mobileLinks = document.querySelectorAll('.mobile-nav-menu a, .mobile-dropbtn');
     const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
 
-    // Toggle menu on hamburger click
     hamburger.addEventListener('click', function() {
         hamburger.classList.toggle('active');
         mobileModal.classList.toggle('active');
     });
 
-    // Close menu when a link is clicked
     mobileLinks.forEach(link => {
         link.addEventListener('click', function() {
-            // Check if it's a dropdown toggle
             if (this.classList.contains('mobile-dropbtn')) {
                 const parent = this.parentElement;
                 parent.classList.toggle('active');
                 return;
             }
-            // Otherwise close the menu
             hamburger.classList.remove('active');
             mobileModal.classList.remove('active');
         });
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('header') && !e.target.closest('.mobile-menu-modal')) {
             hamburger.classList.remove('active');
@@ -142,7 +128,6 @@ async function loadCurrentChampionship() {
 function populateHomePage(data, record) {
     const homePage = document.getElementById('page-home');
     homePage.innerHTML = `
-        <!-- <h1>Welcome to the NMS Xeno Championship</h1> -->
         <div class="card hero-card">
             <img src="https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg" alt="Xeno Championship Image" class="home-hero-image">
         </div>
@@ -321,7 +306,7 @@ async function populateCurrentChampionship() {
 
     currentChampionshipPage.innerHTML = `
         <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
-        <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">(${currentRecord.dates})</p>
+        <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
         ${registrationHtml}
         <div class="card">
             <h2 class="para-h1">Upcoming Fixtures</h2>
@@ -390,7 +375,7 @@ function renderRegistrationCard(metadata) {
     const registration = metadata.registration;
     const status = Number(registration.open);
 
-    if (status === 3) return ''; // Tournament started, no card
+    if (status === 3) return '';
 
     let statusText = '';
     let buttonHtml = '';
@@ -413,7 +398,7 @@ function renderRegistrationCard(metadata) {
             statusText = 'Registration is now closed. The tournament will begin soon!';
             break;
         default:
-            return ''; // Invalid status, don't show card
+            return '';
     }
 
     return `
