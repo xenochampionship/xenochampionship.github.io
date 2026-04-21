@@ -115,8 +115,11 @@ async function loadCurrentChampionship() {
     const currentRecord = records.find(r => !r.past);
     if (!currentRecord || !currentRecord.resultsJson) return;
 
-    const currentChampionshipMenuItem = document.getElementById('nav-current');
-    currentChampionshipMenuItem.innerHTML = currentRecord.title;
+    // Update both desktop and mobile navigation items
+    const currentChampionshipMenuItems = document.querySelectorAll('a[href="#current"]');
+    currentChampionshipMenuItems.forEach(item => {
+        item.innerHTML = currentRecord.title;
+    });
 
     try {
         const response = await fetch(currentRecord.resultsJson);
