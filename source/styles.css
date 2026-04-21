@@ -833,6 +833,14 @@ select.select option {
         margin-top: -43px;
     }
 
+    .hof-grid {
+        display: block;
+    }
+
+    .hof-winner-card {
+        margin: 1rem 0 !important;
+    }
+
     .podium-grid {
         grid-template-columns: 1fr;
     }
@@ -966,6 +974,14 @@ select.select option {
     main {
         margin-top: 80px;
         padding: 0.75rem;
+    }
+
+    .hof-grid {
+        display: block;
+    }
+
+    .hof-winner-card {
+        margin: 1rem 0 !important;
     }
 
     h1 {
