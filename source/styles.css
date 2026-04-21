@@ -935,7 +935,7 @@ select.select option {
     }
 
     .construction-banner {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
         text-align: center;
         padding: 0.5rem;
@@ -946,7 +946,7 @@ select.select option {
     }
 
     .banner-close {
-        position: absolute;
+        position: initial;
         top: 0.25rem;
         right: 0.25rem;
     }
