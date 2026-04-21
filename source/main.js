@@ -5,13 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initMobileMenu();
 
-    const navLinks = document.querySelectorAll('.nav-menu a');
-
+    // Only add navigation for links that are not dropdown triggers
+    const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
             navigateToPage(targetId);
+        });
+    });
+
+    // Prevent dropdown parent links from navigating and toggle dropdown
+    document.querySelectorAll('.nav-menu .dropbtn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const parent = this.parentElement;
+            parent.classList.toggle('active');
         });
     });
 
