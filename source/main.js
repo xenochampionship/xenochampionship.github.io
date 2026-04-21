@@ -174,10 +174,8 @@ function populateHallOfFame() {
     const hofPage = document.getElementById('page-hof');
     const pastRecords = records.filter(r => r.past).slice().sort((a, b) => getRecordYear(b) - getRecordYear(a));
 
-    hofPage.innerHTML = `
-        <h1>Hall of Fame</h1>
-        <p class="hof-subtitle para-txt">Only the champions make it here. Every year a single player wins the right to be immortalized in the Xeno Championship Hall of Fame.</p>
-        <div class="hof-grid">
+    const hofContent = pastRecords.length > 0
+        ? `<div class="hof-grid">
             ${pastRecords.map(record => `
                 <div class="card hof-winner-card">
                     <div class="hof-year">${record.title}</div>
@@ -186,7 +184,17 @@ function populateHallOfFame() {
                     <div class="hof-winner-label">Champion</div>
                 </div>
             `).join('')}
-        </div>
+        </div>`
+        : `<div class="card" style="text-align: center; padding: 2rem;">
+            <i class="fas fa-trophy" style="font-size: 4rem; color: var(--secondary-color); margin-bottom: 1rem;"></i>
+            <h2 class="para-h1" style="margin-bottom: 1rem;">Champions Will Be Immortalized Here</h2>
+            <p class="para-txt">The Hall of Fame will showcase the champions of each Xeno Championship tournament. Check back after the completion of future tournaments to see the winners celebrated here.</p>
+        </div>`;
+
+    hofPage.innerHTML = `
+        <h1>Hall of Fame</h1>
+        <p class="hof-subtitle para-txt">Only the champions make it here. Every year a single player wins the right to be immortalized in the Xeno Championship Hall of Fame.</p>
+        ${hofContent}
     `;
 }
 
@@ -194,6 +202,18 @@ function setupPastResultsSelector() {
     const resultsPage = document.getElementById('page-results');
     const pastRecords = records.filter(r => r.past);
     const sortedPastRecords = pastRecords.slice().sort((a, b) => getRecordYear(b) - getRecordYear(a));
+
+    if (sortedPastRecords.length === 0) {
+        resultsPage.innerHTML = `
+            <h1>Past Results</h1>
+            <div class="card" style="text-align: center; padding: 2rem;">
+                <i class="fas fa-history" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <h2 class="para-h1" style="margin-bottom: 1rem;">Past Tournament Results</h2>
+                <p class="para-txt">Detailed results from completed Xeno Championship tournaments will be available here. Check back after the completion of future tournaments to view standings, match results, and tournament statistics.</p>
+            </div>
+        `;
+        return;
+    }
 
     resultsPage.innerHTML = `
         <h1>Past Results</h1>
@@ -345,7 +365,7 @@ async function populateCurrentChampionship() {
             <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
             <p class="para-txt"><strong>Schedule:</strong> Weekday fixtures in UK time (UTC+01:00)</p>
             <p class="para-txt"><strong>Streaming:</strong> All matches are streamed and monitored</p>
-            <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;">View Full Rules</button>
+            <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
 }
