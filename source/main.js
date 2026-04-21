@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCurrentChampionship();
     populateHallOfFame();
     setupPastResultsSelector();
-    populateXC2026();
+    populateCurrentChampionship();
 });
 
 function initConstructionBanner() {
@@ -153,7 +153,7 @@ function populateHomePage(data, record) {
                 <p class="para-txt">Whether you're a seasoned explorer or new to the universe, there's something for everyone. Learn about the championship, watch live streams, and join the community!</p>
                 <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                     <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> Learn More</button>
-                    <button class="btn site-btn" onclick="navigateToPage('xc2026')"><i class="fas fa-trophy"></i> Current Championship</button>
+                    <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> Current Championship</button>
                 </div>
             </div>
             <div class="home-image">
@@ -260,11 +260,11 @@ function togglePlayerDetails(index) {
     }
 }
 
-async function populateXC2026() {
+async function populateCurrentChampionship() {
     const currentRecord = records.find(r => !r.past);
     if (!currentRecord) return;
 
-    const xc2026Page = document.getElementById('page-xc2026');
+    const currentChampionshipPage = document.getElementById('page-current');
 
     let data = null;
     if (currentRecord.resultsJson) {
@@ -274,6 +274,16 @@ async function populateXC2026() {
         } catch (error) {
             console.error('Error loading XC 2026 data:', error);
         }
+    }
+
+    let fixturesHtml = '';
+    try {
+        const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json');
+        const fixturesData = await fixturesResponse.json();
+        fixturesHtml = renderUpcomingFixtures(fixturesData);
+    } catch (error) {
+        console.log('No fixtures data available');
+        fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet. Check back soon!</p></div>';
     }
 
     const registrationHtml = data ? renderRegistrationCard(data.metadata) : '';
@@ -309,10 +319,14 @@ async function populateXC2026() {
             `;
         })();
 
-    xc2026Page.innerHTML = `
+    currentChampionshipPage.innerHTML = `
         <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
         <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">(${currentRecord.dates})</p>
         ${registrationHtml}
+        <div class="card">
+            <h2 class="para-h1">Upcoming Fixtures</h2>
+            ${fixturesHtml}
+        </div>
         <div class="card">
             <h2 class="para-h1">Current Standings</h2>
             ${standingsHtml}
@@ -424,6 +438,50 @@ function renderAllPastRecords(records) {
             ${renderPodium(record.top3)}
         </div>
     `).join('');
+}
+
+function renderUpcomingFixtures(fixturesData) {
+    if (!fixturesData || !fixturesData.fixtures || fixturesData.fixtures.length === 0) {
+        return '<p class="para-txt">No upcoming fixtures scheduled yet. Check back soon!</p>';
+    }
+
+    const fixtures = fixturesData.fixtures;
+    return `
+        <div class="fixtures-list">
+            ${fixtures.map(fixture => `
+                <div class="fixture-card">
+                    <div class="fixture-details">
+                        <div class="fixture-datetime">
+                            <div class="fixture-dt-box">
+                                <span><i class="fas fa-hashtag" style="margin-right: 0.25rem;"></i> ${fixture.fixtureId}</span>
+                                <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${new Date(fixture.date).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                                <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time}</span>
+                            </div>
+                        </div>
+                        <div class="fixture-matchup">
+                            <div class="fixture-player">
+                                <span class="player-name">${fixture.player1}</span>
+                                <span class="player-platform">${fixture.platform1}</span>
+                            </div>
+                            <div class="vs-text">VS</div>
+                            <div class="fixture-player">
+                                <span class="player-name">${fixture.player2}</span>
+                                <span class="player-platform">${fixture.platform2}</span>
+                            </div>
+                        </div>
+                        <div class="fixture-umpire">
+                            <div class="fixture-ump-box">
+                                <i class="fas fa-user-tie"></i> Umpire: ${fixture.umpire}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixture-status ${fixture.status}">
+                        ${fixture.status === 'scheduled' ? 'Scheduled' : fixture.status === 'live' ? 'LIVE' : 'Completed'}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
 }
 
 async function showPastResults(record) {
