@@ -6,11 +6,6 @@
         url('https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'NMSFont';
-    src: url('./source/NMS-Glyphs-Mono.ttf') format('truetype');
-}
-
 :root {
     --wfa: -webkit-fill-available;
     --nms-font: 'NMSFuturaProBook';
@@ -665,7 +660,6 @@ select.select option {
     font-family: var(--nms-font);
 }
 
-/* Fixtures Section Styles */
 .fixtures-list {
     display: grid;
     gap: 1rem;
@@ -807,8 +801,7 @@ select.select option {
     }
 }
 
-/* Mobile Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     header {
         padding: 0.75rem 1rem;
         justify-content: space-between;
