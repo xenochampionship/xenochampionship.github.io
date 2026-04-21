@@ -115,6 +115,9 @@ async function loadCurrentChampionship() {
     const currentRecord = records.find(r => !r.past);
     if (!currentRecord || !currentRecord.resultsJson) return;
 
+    const currentChampionshipMenuItem = document.getElementById('nav-current');
+    currentChampionshipMenuItem.innerHTML = currentRecord.title;
+
     try {
         const response = await fetch(currentRecord.resultsJson);
         const data = await response.json();
