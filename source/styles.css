@@ -665,6 +665,125 @@ select.select option {
     font-family: var(--nms-font);
 }
 
+/* Fixtures Section Styles */
+.fixtures-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.fixture-card {
+    background: rgba(52, 165, 251, 0.05);
+    border: 1px solid rgba(52, 165, 251, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.fixture-card:hover {
+    background: rgba(52, 165, 251, 0.1);
+    border-color: rgba(52, 165, 251, 0.5);
+    box-shadow: 0 4px 15px rgba(52, 165, 251, 0.15);
+}
+
+.fixture-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.fixture-datetime {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.fixture-matchup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.fixture-player {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.fixture-player .player-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.fixture-player .player-platform {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.vs-text {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.fixture-umpire {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fixture-status {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    min-width: 100px;
+    height: var(--wfa);
+    align-content: center;
+}
+
+.fixture-status.scheduled {
+    background: rgba(52, 165, 251, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.fixture-status.live {
+    background: rgba(255, 107, 0, 0.2);
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+    animation: pulse 2s infinite;
+}
+
+.fixture-status.completed {
+    background: rgba(0, 200, 100, 0.2);
+    border-color: #00c864;
+    color: #00c864;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
     header {
@@ -739,6 +858,30 @@ select.select option {
 
     .table th, .table td {
         padding: 0.25rem;
+    }
+
+    .fixture-card {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .fixture-round-badge {
+        position: static;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .fixture-matchup {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .vs-text {
+        margin: 0.5rem 0;
+    }
+
+    .fixture-status {
+        width: 100%;
     }
 
     .construction-banner {
