@@ -257,7 +257,7 @@ async function populateCurrentChampionship() {
             const response = await fetch(currentRecord.resultsJson);
             data = await response.json();
         } catch (error) {
-            console.error('Error loading XC 2026 data:', error);
+            console.error('Error loading Current Championship data:', error);
         }
     }
 
@@ -319,15 +319,15 @@ async function populateCurrentChampionship() {
         <div class="card podium-card">
             <h2 class="para-h1">Championship Podium</h2>
             <div class="podium-grid">
-                <div class="podium-item silver">
-                    <span class="medal-badge">2</span>
-                    <div>${currentRecord.top3[1]}</div>
-                    <div class="podium-label">Silver</div>
-                </div>
                 <div class="podium-item gold">
                     <span class="medal-badge">1</span>
                     <div>${currentRecord.top3[0]}</div>
                     <div class="podium-label">Gold</div>
+                </div>
+                <div class="podium-item silver">
+                    <span class="medal-badge">2</span>
+                    <div>${currentRecord.top3[1]}</div>
+                    <div class="podium-label">Silver</div>
                 </div>
                 <div class="podium-item bronze">
                     <span class="medal-badge">3</span>
@@ -350,15 +350,15 @@ async function populateCurrentChampionship() {
 function renderPodium(top3) {
     return `
         <div class="podium-grid">
-            <div class="podium-item silver">
-                <span class="medal-badge">2</span>
-                <div class="para-txt">${top3[1]}</div>
-                <div class="podium-label">Silver</div>
-            </div>
             <div class="podium-item gold">
                 <span class="medal-badge">1</span>
                 <div class="para-txt">${top3[0]}</div>
                 <div class="podium-label">Gold</div>
+            </div>
+            <div class="podium-item silver">
+                <span class="medal-badge">2</span>
+                <div class="para-txt">${top3[1]}</div>
+                <div class="podium-label">Silver</div>
             </div>
             <div class="podium-item bronze">
                 <span class="medal-badge">3</span>
