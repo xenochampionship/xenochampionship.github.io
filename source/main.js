@@ -186,9 +186,9 @@ function populateHallOfFame() {
             `).join('')}
         </div>`
         : `<div class="card" style="text-align: center; padding: 2rem;">
-            <i class="fas fa-trophy" style="font-size: 4rem; color: var(--secondary-color); margin-bottom: 1rem;"></i>
+            <i class="fas fa-trophy" style="font-size: 4rem; color: rgba(255, 215, 0, 1); margin-bottom: 1rem;"></i>
             <h2 class="para-h1" style="margin-bottom: 1rem;">Champions Will Be Immortalized Here</h2>
-            <p class="para-txt">The Hall of Fame will showcase the champions of each Xeno Championship tournament. Check back after the completion of future tournaments to see the winners celebrated here.</p>
+            <p class="para-txt">The Hall of Fame will showcase the champions of each Xeno Championship tournament.<br><br>Check back after the completion of future tournaments to see the winners celebrated here.</p>
         </div>`;
 
     hofPage.innerHTML = `
@@ -209,7 +209,7 @@ function setupPastResultsSelector() {
             <div class="card" style="text-align: center; padding: 2rem;">
                 <i class="fas fa-history" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
                 <h2 class="para-h1" style="margin-bottom: 1rem;">Past Tournament Results</h2>
-                <p class="para-txt">Detailed results from completed Xeno Championship tournaments will be available here. Check back after the completion of future tournaments to view standings, match results, and tournament statistics.</p>
+                <p class="para-txt">Detailed results from completed Xeno Championship tournaments will be available here.<br><br>Check back after the completion of future tournaments to view standings, match results, and tournament statistics.</p>
             </div>
         `;
         return;
