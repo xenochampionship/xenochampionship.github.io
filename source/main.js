@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initMobileMenu();
 
-    // Only add navigation for links that are not dropdown triggers
     const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Prevent dropdown parent links from navigating and toggle dropdown
     document.querySelectorAll('.nav-menu .dropbtn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -32,13 +30,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Google Analytics 4 SPA hash navigation tracking ---
+    function trackPageView(pageId) {
+        if (window.gtag) {
+            gtag('event', 'page_view', {
+                page_location: window.location.href,
+                page_path: '/' + pageId,
+                page_title: document.title
+            });
+        }
+    }
+    // ------------------------------------------------------
+
     window.addEventListener('hashchange', function() {
         const hash = window.location.hash.substring(1) || 'home';
         showPage(hash);
+        trackPageView(hash); // Track SPA navigation
     });
 
     const initialHash = window.location.hash.substring(1) || 'home';
     showPage(initialHash);
+    trackPageView(initialHash); // Track initial load
 
     loadCurrentChampionship();
     populateHallOfFame();
@@ -124,7 +136,6 @@ async function loadCurrentChampionship() {
     const currentRecord = records.find(r => !r.past);
     if (!currentRecord || !currentRecord.resultsJson) return;
 
-    // Update both desktop and mobile navigation items
     const currentChampionshipMenuItems = document.querySelectorAll('a[href="#current"]');
     currentChampionshipMenuItems.forEach(item => {
         item.innerHTML = currentRecord.title;
