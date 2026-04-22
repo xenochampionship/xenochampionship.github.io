@@ -470,7 +470,7 @@ button i.fas {
     align-items: center;
     justify-content: center;
     background: rgba(0, 212, 255, 0.2);
-    color: var(--primary-color);
+    color: var(--nms-light);
     font-weight: bold;
     border: 1px solid rgba(0, 212, 255, 0.35);
 }
