@@ -5,5 +5,14 @@
         "stage": "Qualification Stage",
         "round": 1
     },
-    "fixtures": []
+    "fixtures": [
+        {
+            "fixtureId": "QS R1 F1", "round": 1,
+            "date": "2026-06-01", "time": "11:00", "timeZone": "UTC+01:00",
+            "player1": "JamieHarperUK", "player2": "TBC",
+            "platform1": "Xbox", "platform2": "PC",
+            "umpire": "TBC",
+            "streamLink": null, "status": "scheduled"
+        }
+    ]
 }
