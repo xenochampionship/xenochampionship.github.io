@@ -159,12 +159,13 @@ function populateHomePage(data, record) {
         </div>
         <div class="card home-hero">
             <div class="home-content">
-                <h2 class="para-h1">Discover Xeno Arena Battles</h2>
-                <p style="margin-bottom: 1rem;" class="para-txt">Experience the thrill of competitive No Man's Sky gameplay! Watch epic 1v1 battles in the Xeno Arena, where players showcase their skills in intense, strategic combat.</p>
-                <p class="para-txt">Whether you're a seasoned explorer or new to the universe, there's something for everyone. Learn about the championship, watch live streams, and join the community!</p>
+                <h2 class="para-h1">Enter the Xeno Arena</h2>
+                <p style="margin-bottom: 1rem;" class="para-txt">The Xeno Championship is a structured competitive event built around the Xeno Arena.</p>
+                <p style="margin-bottom: 1rem;" class="para-txt">Players face off in scheduled 1v1 fixtures, using strategy, timing, and companion synergy to outplay their opponents.</p>
+                <p class="para-txt">Every match is streamed, every result matters, and only the top competitors advance to the final stage.</p>
                 <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> Learn More</button>
-                    <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> Current Championship</button>
+                    <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
+                    <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
                 </div>
             </div>
             <div class="home-image">
@@ -351,6 +352,9 @@ async function populateCurrentChampionship() {
         })();
 
     currentChampionshipPage.innerHTML = `
+        <div class="card hero-card">
+            <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+        </div>
         <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
         <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
         ${registrationHtml}
