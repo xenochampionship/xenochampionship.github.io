@@ -9,8 +9,13 @@
 :root {
     --wfa: -webkit-fill-available;
     --nms-font: 'NMSFuturaProBook';
-    --primary-color: #34a5fb;
-    --secondary-color: #ff6b00;
+    --nms-charcoal: #1a1a1a;
+    --nms-light: #ffffff;
+    --nms-red: #D71920;
+    --nms-red-light: #D719208C;
+
+    --primary-color: var(--nms-red);
+    --secondary-color: var(--nms-light);
     --bg-gradient: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
     --card-bg: rgba(255, 255, 255, 0.05);
     --text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
@@ -205,7 +210,7 @@ header {
 }
 
 .brand {
-    background-image: url('images/xc-logo.png');
+    background-image: url('images/xc-new-t.png');
     background-size: contain;
     background-repeat: no-repeat;
     width: 200px;
@@ -233,7 +238,7 @@ header {
     border: 1px solid var(--primary-color);
     border-radius: 5px;
     min-width: 160px;
-    box-shadow: 0 8px 16px rgba(0, 212, 255, 0.2);
+    box-shadow: 0 8px 16px rgb(158 24 29 / 0.5);
     z-index: 1;
 }
 
@@ -265,6 +270,7 @@ header {
 
 .nav-menu a:hover {
     color: var(--primary-color);
+    text-shadow: 0 0 10px rgb(158 24 29 / 0.5);
 }
 
 main {
@@ -287,8 +293,18 @@ main {
 }
 
 h1, h2, h3 {
-    color: var(--primary-color);
+    color: var(--nms-light);
     text-shadow: var(--text-shadow);
+}
+
+i.fas {
+    color: var(--nms-red);
+    text-shadow: 0 0 10px rgb(158 24 29 / 0.5);
+}
+
+button i.fas {
+    color: var(--nms-light);
+    text-shadow: none;
 }
 
 .hero-card {
@@ -593,7 +609,7 @@ h1, h2, h3 {
 
 .btn {
     background: var(--primary-color);
-    color: #010101;
+    color: var(--nms-light);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -604,7 +620,7 @@ h1, h2, h3 {
 }
 
 .btn:hover {
-    background: #34a5fba6;
+    background: var(--nms-red-light);
 }
 
 a.contact-email {
@@ -731,7 +747,7 @@ select.select option {
 .fixture-player .player-name {
     font-weight: bold;
     font-size: 1.1rem;
-    color: var(--primary-color);
+    color: var(--nms-light);
 }
 
 .fixture-player .player-platform {
@@ -766,7 +782,7 @@ select.select option {
     padding: 0.6rem 1rem;
     text-align: center;
     font-weight: bold;
-    font-size: 0.85rem;
+    font-size: 1rem;
     white-space: nowrap;
     min-width: 100px;
     height: var(--wfa);
@@ -774,22 +790,22 @@ select.select option {
 }
 
 .fixture-status.scheduled {
-    background: rgba(52, 165, 251, 0.2);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    background: rgb(210 210 210 / 0.2);
+    border-color: rgb(210 210 210 / 1);
+    color: rgb(210 210 210 / 1);
 }
 
 .fixture-status.live {
-    background: rgba(255, 107, 0, 0.2);
-    border-color: var(--secondary-color);
-    color: var(--secondary-color);
+    background: rgb(0 216 32 / 0.2);
+    border-color: rgb(76 199 94);
+    color: rgb(76 199 94);
     animation: pulse 2s infinite;
 }
 
 .fixture-status.completed {
-    background: rgba(0, 200, 100, 0.2);
-    border-color: #00c864;
-    color: #00c864;
+    background: rgb(80 179 255 / 0.2);
+    border-color: rgb(80 179 255);
+    color: rgb(80 179 255);
 }
 
 @keyframes pulse {
