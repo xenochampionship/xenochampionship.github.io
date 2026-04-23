@@ -315,12 +315,12 @@ async function populateCurrentChampionship() {
         fixturesHtml = renderUpcomingFixtures(fixturesData);
     } catch (error) {
         console.log('No fixtures data available');
-        fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet. Check back soon!</p></div>';
+        fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
     }
 
     const registrationHtml = data ? renderRegistrationCard(data.metadata) : '';
     const standingsHtml = (!data || !data.players || data.players.length === 0) 
-        ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet. Check back soon!</p></div>'
+        ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
         : (() => {
             const hasScores = data.players.some(p => p.results.points > 0 || p.results.played > 0);
             return `
@@ -433,7 +433,7 @@ function renderRegistrationCard(metadata) {
 
     switch (status) {
         case 0:
-            statusText = 'Registration is not open yet. Check back soon for the sign-up window.';
+            statusText = 'Registration is not open yet. Check back soon.';
             if (registration.opensOn) {
                 extraLine = `<p class="para-txt"><strong>Opens:</strong> ${registration.opensOn}</p>`;
             }
@@ -477,7 +477,7 @@ function renderAllPastRecords(records) {
 
 function renderUpcomingFixtures(fixturesData) {
     if (!fixturesData || !fixturesData.fixtures || fixturesData.fixtures.length === 0) {
-        return '<p class="para-txt">No upcoming fixtures scheduled yet. Check back soon!</p>';
+        return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
     }
 
     const fixtures = fixturesData.fixtures;
