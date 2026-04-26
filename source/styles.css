@@ -14,6 +14,12 @@
     --nms-red: #D71920;
     --nms-red-light: #D719208C;
 
+    /* Charity Colors */
+    --charity-box-bg: #00007e20;
+    --charity-box-border: #009cee96;
+    --charity-btn-bg: #F0F0FFde;
+    --charity-btn-hover: #e60079de;
+
     --primary-color: var(--nms-red);
     --secondary-color: var(--nms-light);
     --bg-gradient: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
@@ -279,6 +285,20 @@ main {
     padding: 2rem;
 }
 
+img.cruk-logo {
+    width: 200px;
+    height: auto;
+}
+
+ul.scoring-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul.scoring-list li i {
+    padding-right: 0.1rem;
+}
+
 .page {
     display: none;
     min-height: 60vh;
@@ -332,6 +352,9 @@ button i.fas {
 .registration-card {
     border-color: rgba(0, 212, 255, 0.35);
     background: rgba(0, 212, 255, 0.08);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .registration-card p {
@@ -339,9 +362,60 @@ button i.fas {
     color: #e6f7ff;
 }
 
+.donation-card {
+    border-color: var(--charity-box-border);
+    background: var(--charity-box-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.donation-card p {
+    margin: 0.75rem 0 0;
+    color: #fff3bf;
+    display: inline-flex;
+}
+
+img.charity-box-logo {
+    width: 200px;
+    height: auto;
+    margin-left: 1rem;
+}
+
+.card-row {
+    display: grid;
+    gap: 1rem;
+}
+
+.card-row.two-cards {
+    grid-template-columns: 1fr 1fr;
+}
+
+.card-row.one-card {
+    grid-template-columns: 1fr;
+}
+
 .registration-btn {
     display: inline-block;
+    margin-top: auto;
+    text-decoration: none;
+    width: var(--wfa);
+    text-align: center;
+}
+
+.donation-btn {
+    display: inline-block;
+    margin-top: auto;
+    text-decoration: none;
+    width: var(--wfa);
+    text-align: center;
+    background-color: var(--charity-btn-bg) !important;
+    color: var(--charity-btn-hover) !important;
     margin-top: 1rem;
+}
+
+.donation-btn:hover {
+    background-color: var(--charity-btn-hover) !important;
+    color: var(--charity-btn-bgr) !important;
 }
 
 .card h2 {
@@ -882,7 +956,15 @@ select.select option {
 
     .card {
         padding: 1rem;
-        margin: 0.75rem 0;
+        margin: 1rem 0;
+    }
+
+    .registration-card {
+        margin: 0;
+    }
+
+    .registration-btn {
+        text-align: center;
     }
 
     .about-hero, .home-hero {
@@ -894,10 +976,30 @@ select.select option {
         font-size: 4rem;
     }
 
+    .card-row {
+        grid-template-columns: 1fr;
+    }
+
+    .card-row.two-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .donation-card p {
+        display: block;
+    }
+
+    .registration-btn {
+        margin-top: 1rem;
+    }
+
+    img.charity-box-logo {
+        margin-top: 1rem;
+    }
+
     .btn {
         padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
-        width: 100%;
+        width: var(--wfa);
     }
 
     .table {
@@ -1018,7 +1120,28 @@ select.select option {
 
     .card {
         padding: 0.75rem;
-        margin: 0.5rem 0;
+        margin: 1rem 0;
+    }
+
+    .card-row.two-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .donation-card p {
+        display: block;
+    }
+
+    img.charity-box-logo {
+        margin-top: 1rem;
+    }
+
+    .registration-card {
+        margin: 0;
+    }
+
+    .registration-btn {
+        text-align: center;
+        margin-top: 1rem;
     }
 
     .pr-search-card {
