@@ -6,7 +6,7 @@ const pageNames = {
     'rules': 'Championship Rules',
     'hof': 'Hall of Fame',
     'results': 'Past Results',
-    'current': null, // Will be populated from recs.js
+    'current': null,
     'contact': 'Contact',
     'disclaimer': 'Disclaimer'
 };
