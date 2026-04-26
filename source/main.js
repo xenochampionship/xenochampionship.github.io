@@ -1,5 +1,16 @@
 const SITE_UNDER_CONSTRUCTION = true;
 
+const pageNames = {
+    'home': 'Home',
+    'about': 'About',
+    'rules': 'Championship Rules',
+    'hof': 'Hall of Fame',
+    'results': 'Past Results',
+    'current': null, // Will be populated from recs.js
+    'contact': 'Contact',
+    'disclaimer': 'Disclaimer'
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     initConstructionBanner();
     
@@ -129,7 +140,21 @@ function showPage(pageId) {
     const targetPage = document.getElementById('page-' + pageId);
     if (targetPage) {
         targetPage.classList.add('active');
+        updatePageTitle(pageId);
     }
+}
+
+function updatePageTitle(pageId) {
+    let pageName = pageNames[pageId] || pageId;
+    
+    if (pageId === 'current') {
+        const currentRecord = records.find(r => !r.past);
+        if (currentRecord) {
+            pageName = currentRecord.title;
+        }
+    }
+    
+    document.title = pageName ? `Xeno Championship - ${pageName}` : 'Xeno Championship';
 }
 
 async function loadCurrentChampionship() {
