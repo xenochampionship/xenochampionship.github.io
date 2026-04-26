@@ -9,7 +9,8 @@
             "registrationLink": "#",
             "donation": {
                 "cause": "Cancer Research UK",
-                "link": "https://www.cancerresearchuk.org"
+                "logo": "source/images/Cancer-Research-UK.png",
+                "link": "#"
             }
         }
     },
