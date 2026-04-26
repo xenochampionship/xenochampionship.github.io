@@ -318,7 +318,12 @@ async function populateCurrentChampionship() {
         fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
     }
 
-    const registrationHtml = data ? renderRegistrationCard(data.metadata) : '';
+    const registrationHtml = renderRegistrationCard(currentRecord);
+    const donationHtml = renderDonationCard(currentRecord, data?.metadata);
+    const registrationSection = (registrationHtml || donationHtml)
+        ? `<div class="card-row ${registrationHtml && donationHtml ? 'two-cards' : 'one-card'}">${registrationHtml}${donationHtml}</div>`
+        : '';
+
     const standingsHtml = (!data || !data.players || data.players.length === 0) 
         ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
         : (() => {
@@ -357,14 +362,14 @@ async function populateCurrentChampionship() {
         </div>
         <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
         <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
-        ${registrationHtml}
-        <div class="card">
-            <h2 class="para-h1">Upcoming Fixtures</h2>
-            ${fixturesHtml}
-        </div>
+        ${registrationSection}
         <div class="card">
             <h2 class="para-h1">Current Standings</h2>
             ${standingsHtml}
+        </div>
+        <div class="card">
+            <h2 class="para-h1">Upcoming Fixtures</h2>
+            ${fixturesHtml}
         </div>
         <div class="card podium-card">
             <h2 class="para-h1">Championship Podium</h2>
@@ -419,46 +424,95 @@ function renderPodium(top3) {
     `;
 }
 
-function renderRegistrationCard(metadata) {
-    if (!metadata || !metadata.registration) return '';
+function renderRegistrationCard(record) {
+    if (!record || !record.dates) return '';
 
-    const registration = metadata.registration;
-    const status = Number(registration.open);
+    const range = parseTournamentDateRange(record.dates);
+    if (!range) return '';
 
-    if (status === 3) return '';
+    const now = new Date();
+    const tournamentStart = range.start;
+    const tournamentEnd = range.end;
+
+    const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
+    
+    const registrationClose = new Date(tournamentStart);
+    registrationClose.setDate(registrationClose.getDate() - 4);
 
     let statusText = '';
     let buttonHtml = '';
     let extraLine = '';
 
-    switch (status) {
-        case 0:
-            statusText = 'Registration is not open yet. Check back soon.';
-            if (registration.opensOn) {
-                extraLine = `<p class="para-txt"><strong>Opens:</strong> ${registration.opensOn}</p>`;
-            }
-            break;
-        case 1:
-            statusText = 'Registration is now open. Secure your place in the current tournament before slots fill up.';
-            if (registration.formLink) {
-                buttonHtml = `<a href="${registration.formLink}" class="btn registration-btn" target="_blank" rel="noopener">Register Now</a>`;
-            }
-            break;
-        case 2:
-            statusText = 'Registration is now closed. The tournament will begin soon!';
-            break;
-        default:
-            return '';
+    if (now < monthBefore) {
+        statusText = 'Registration is not open yet. Check back soon.';
+        extraLine = `<p class="para-txt"><strong>Registration Opens:</strong> ${monthBefore.toLocaleDateString('en-GB')}</p>`;
+    } else if (now >= monthBefore && now < registrationClose) {
+        statusText = 'Registration is now open. Secure your place in the current tournament before slots fill up.';
+        buttonHtml = `<a href="#" class="btn registration-btn" target="_blank" rel="noopener">Register Now</a>`;
+    } else if (now >= registrationClose && now < tournamentStart) {
+        statusText = 'Registration is now closed. The tournament will begin soon!';
+    } else {
+        return '';
     }
 
     return `
         <div class="card registration-card">
-            <h2 class="para-h1">Registration</h2>
+            <h2 class="para-h1">Contestant Registration</h2>
             <p class="para-txt">${statusText}</p>
             ${extraLine}
             ${buttonHtml}
         </div>
     `;
+}
+
+function renderDonationCard(record, metadata) {
+    if (!record || !record.dates) return '';
+
+    const range = parseTournamentDateRange(record.dates);
+    if (!range) return '';
+
+    const now = new Date();
+    const tournamentStart = range.start;
+    const tournamentEnd = range.end;
+
+    const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
+
+    if (now < monthBefore || now > tournamentEnd) return '';
+
+    const donation = metadata?.registration?.donation;
+    const donationCause = donation?.cause || '';
+    const donationLink = donation?.link || '#';
+    const donationLogo = donation?.logo || '#';
+    const donationLabel = `Donate to ${donationCause}`;
+    const donationMessage = `This year the Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${donationCause}'s mission.`;
+
+    return `
+        <div class="card registration-card donation-card">
+            <h2 class="para-h1">Charitable Donation</h2>
+            <p class="para-txt">${donationMessage}<img src="${donationLogo}" class="charity-box-logo" /></p>
+            <a href="${donationLink}" class="btn donation-btn" target="_blank" rel="noopener">${donationLabel}</a>
+        </div>
+    `;
+}
+
+function parseTournamentDateRange(rangeText) {
+    if (!rangeText) return null;
+
+    const parts = rangeText.split(' - ').map(part => part.trim());
+    if (parts.length !== 2) return null;
+
+    const start = parseDateDMY(parts[0]);
+    const end = parseDateDMY(parts[1]);
+    if (!start || !end) return null;
+
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+}
+
+function parseDateDMY(dateText) {
+    const [day, month, year] = dateText.split('/').map(Number);
+    if (!day || !month || !year) return null;
+    return new Date(year, month - 1, day);
 }
 
 function getRecordYear(record) {
