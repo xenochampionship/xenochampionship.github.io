@@ -281,7 +281,6 @@ header {
 
 main {
     flex: 1;
-    width: var(--wfa);
     margin-top: 100px;
     padding: 0.5rem 2rem 2rem 2rem;
 }
@@ -390,6 +389,7 @@ img.charity-box-logo {
 
 .card-row {
     display: grid;
+    width: var(--wfa);
     gap: 1rem;
 }
 
