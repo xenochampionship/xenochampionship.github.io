@@ -432,6 +432,7 @@ img.charity-box-logo {
     background-attachment: fixed;
     position: relative;
     min-height: 500px;
+    width: var(--wfa);
     display: flex;
     align-items: center;
     justify-content: center;
