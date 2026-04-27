@@ -2,7 +2,6 @@ const dataHostUrl = "https://xenochampionship.github.io/source/data/";
 
 const defaultCharity = {
     cause: "Cancer Research UK",
-    logo: "source/images/Cancer-Research-UK.png",
     link: "https://www.cancerresearchuk.org"
 };
 
