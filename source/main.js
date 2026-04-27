@@ -179,42 +179,51 @@ async function loadCurrentChampionship() {
 function populateHomePage(data, record) {
     const homePage = document.getElementById('page-home');
     homePage.innerHTML = `
-        <div class="card hero-card">
-            <img src="https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg" alt="Xeno Championship Image" class="home-hero-image">
-        </div>
-        <div class="card home-hero">
-            <div class="home-content">
-                <h2 class="para-h1">Enter the Xeno Arena</h2>
-                <p style="margin-bottom: 1rem;" class="para-txt">The Xeno Championship is a structured competitive event built around the Xeno Arena.</p>
-                <p style="margin-bottom: 1rem;" class="para-txt">Players face off in scheduled 1v1 fixtures, using strategy, timing, and companion synergy to outplay their opponents.</p>
-                <p class="para-txt">Every match is streamed, every result matters, and only the top competitors advance to the final stage.</p>
-                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <div class="hero-overlay" style="background-image: url('https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg');">
+            <div class="hero-overlay-content">
+                <h1 style="font-size: 3.5rem; margin: 0 0 1.5rem 0; text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);">Enter the Xeno Arena</h1>
+                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship is a structured competitive event where skilled pilots face off in thrilling 1v1 battles for glory and immortality.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
                     <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
                     <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
                 </div>
             </div>
-            <div class="home-image">
-                <i class="fas fa-rocket"></i>
+        </div>
+
+        <div class="card-row two-cards">
+            <div class="card" style="margin: 0;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h2 class="para-h1">Competitive Gameplay</h2>
+                <p class="para-txt" style="margin-bottom: 1rem;">Experience fast-paced 1v1 Xeno Arena battles where strategy, timing, and companion synergy determine victory. Every match is streamed live and monitored by tournament umpires.</p>
+                <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: auto;">Learn the Rules</button>
+            </div>
+            <div class="card" style="margin: 0;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h2 class="para-h1">Hall of Fame</h2>
+                <p class="para-txt" style="margin-bottom: 1rem;">Join the ranks of champions and have your name immortalized. Only the most skilled and dedicated pilots can claim victory and earn their place in Xeno Championship history.</p>
+                <button class="btn site-btn" onclick="navigateToPage('hof')" style="margin-top: auto;">View Champions</button>
             </div>
         </div>
-        <div class="card">
-            <h2 class="para-h1">Featured Content</h2>
-            <ul class="para-ul" style="margin-bottom: 0px;">
-                <li><strong><i class="fas fa-gamepad"></i> Xeno Arena Basics:</strong> Learn the fundamentals of competitive play</li>
-                <li><strong><i class="fas fa-video"></i> Live Streams:</strong> Watch ongoing matches and tournaments</li>
-                <li><strong><i class="fas fa-crown"></i> Hall of Fame:</strong> Celebrate past champions and their achievements</li>
-                <li><strong><i class="fas fa-users"></i> Community:</strong> Connect with fellow explorers and players</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h2 class="para-h1">Quick Links</h2>
-            <p class="para-txt">Ready to dive in? Check out these popular sections:</p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="btn site-btn" onclick="navigateToPage('rules')"><i class="fas fa-book"></i> Tournament Rules</button>
-                <button class="btn site-btn" onclick="navigateToPage('hof')"><i class="fas fa-trophy"></i> Hall of Fame</button>
-                <button class="btn site-btn" onclick="navigateToPage('results')"><i class="fas fa-history"></i> Past Results</button>
-                <button class="btn site-btn" onclick="navigateToPage('contact')"><i class="fas fa-envelope"></i> Get Involved</button>
+
+        <div class="card home-card-single">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                <i class="fas fa-video"></i>
             </div>
+            <h2 class="para-h1">Live Streams</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Watch every fixture in real-time as competitors battle for supremacy. All matches are streamed live, giving you a front-row seat to the action and drama of competitive Xeno Arena.</p>
+            <button class="btn site-btn" onclick="navigateToPage('current')" style="margin-top: auto;">Watch Now</button>
+        </div>
+        <div class="card home-card-single">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                <i class="fas fa-users"></i>
+            </div>
+            <h2 class="para-h1">Community</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Join a passionate community of No Man's Sky explorers and competitors. Get involved, share your experience, and connect with fellow pilots who share your love for competitive space combat.</p>
+            <button class="btn site-btn" onclick="navigateToPage('contact')" style="margin-top: auto;">Get Involved</button>
         </div>
     `;
 }
@@ -382,11 +391,11 @@ async function populateCurrentChampionship() {
         })();
 
     currentChampionshipPage.innerHTML = `
+        <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
+        <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
         <div class="card hero-card">
             <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
         </div>
-        <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
-        <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
         ${registrationSection}
         <div class="card">
             <h2 class="para-h1">Current Standings</h2>
@@ -469,7 +478,7 @@ function renderRegistrationCard(record) {
     let extraLine = '';
 
     if (now < monthBefore) {
-        statusText = 'Registration is not open yet. Check back soon.';
+        statusText = 'Registration for this tournament is not open yet. Check back soon for more information.';
         extraLine = `<p class="para-txt"><strong>Registration Opens:</strong> ${monthBefore.toLocaleDateString('en-GB')}</p>`;
     } else if (now >= monthBefore && now < registrationClose) {
         statusText = 'Registration is now open. Secure your place in the current tournament before slots fill up.';
@@ -500,22 +509,40 @@ function renderDonationCard(record, metadata) {
     const tournamentStart = range.start;
     const tournamentEnd = range.end;
 
+    // Month before tournament start
     const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
 
-    if (now < monthBefore || now > tournamentEnd) return '';
+    let donationCause = '';
+    let donationLink = '';
+    let donationLogo = '';
+    let donationLabel = '';
+    let donationMessage = '';
 
-    const donation = metadata?.registration?.donation;
-    const donationCause = donation?.cause || '';
-    const donationLink = donation?.link || '#';
-    const donationLogo = donation?.logo || '#';
-    const donationLabel = `Donate to ${donationCause}`;
-    const donationMessage = `This year the Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${donationCause}'s mission.`;
+    // Determine which charity to display based on current date
+    if (now >= monthBefore && now <= tournamentEnd) {
+        // During registration/tournament period: use metadata donation
+        const donation = metadata?.registration?.donation;
+        donationCause = donation?.cause || defaultCharity.cause || '';
+        donationLink = donation?.link || defaultCharity.link || '#';
+        donationLogo = donation?.logo || defaultCharity.logo || '';
+        donationLabel = `Donate to ${donationCause}`;
+        donationMessage = `This year the Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${donationCause}'s mission.`;
+    } else {
+        // Before or after tournament: use default charity
+        donationCause = defaultCharity.cause || '';
+        donationLink = defaultCharity.link || '#';
+        donationLogo = defaultCharity.logo || '';
+        donationLabel = `Support ${donationCause}`;
+        donationMessage = `Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Visit their website to see how best to support ${donationCause}'s mission.`;
+    }
+
+    const donationButton = `<a href="${donationLink}" class="btn donation-btn" target="_blank" rel="noopener">${donationLabel}</a>`;
 
     return `
         <div class="card registration-card donation-card">
             <h2 class="para-h1">Charitable Donation</h2>
             <p class="para-txt">${donationMessage}<img src="${donationLogo}" class="charity-box-logo" /></p>
-            <a href="${donationLink}" class="btn donation-btn" target="_blank" rel="noopener">${donationLabel}</a>
+            ${donationButton}
         </div>
     `;
 }
