@@ -381,12 +381,6 @@ button i.fas {
     display: inline-flex;
 }
 
-img.charity-box-logo {
-    width: 220px;
-    height: auto;
-    margin-left: 1rem;
-}
-
 .card-row {
     display: grid;
     gap: 1rem;
@@ -1053,10 +1047,6 @@ select.select option {
         margin-top: 1rem;
     }
 
-    img.charity-box-logo {
-        margin-top: 1rem;
-    }
-
     .btn {
         padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
@@ -1214,10 +1204,6 @@ select.select option {
 
     .donation-card p {
         display: contents;
-    }
-
-    img.charity-box-logo {
-        margin-top: 1rem;
     }
 
     .registration-card {
