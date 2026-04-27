@@ -455,7 +455,7 @@ img.charity-box-logo {
     position: relative;
     z-index: 2;
     text-align: center;
-    max-width: 700px;
+    width: var(--wfa);
     color: #fff;
     padding: 2rem;
 }
