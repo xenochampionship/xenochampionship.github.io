@@ -300,17 +300,17 @@ function setupPastResultsSelector() {
 
 function sortPlayersByStandings(players) {
     return players.slice().sort((a, b) => {
-        const pointsA = Number(a.results.points ?? 0);
-        const pointsB = Number(b.results.points ?? 0);
-        if (pointsB !== pointsA) return pointsB - pointsA;
+        const winsA = Number(a.results.wins ?? 0);
+        const winsB = Number(b.results.wins ?? 0);
+        if (winsB !== winsA) return winsB - winsA;
 
         const omwA = Number(a.results.omw ?? 0);
         const omwB = Number(b.results.omw ?? 0);
         if (omwB !== omwA) return omwB - omwA;
 
-        const winsA = Number(a.results.wins ?? 0);
-        const winsB = Number(b.results.wins ?? 0);
-        if (winsB !== winsA) return winsB - winsA;
+        const playedA = Number(a.results.played ?? 0);
+        const playedB = Number(b.results.played ?? 0);
+        if (playedB !== playedA) return playedB - playedA;
 
         return a.name.localeCompare(b.name);
     });
@@ -361,7 +361,7 @@ async function populateCurrentChampionship() {
     const standingsHtml = (!data || !data.players || data.players.length === 0) 
         ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
         : (() => {
-            const hasScores = data.players.some(p => p.results.points > 0 || p.results.played > 0);
+            const hasScores = data.players.some(p => p.results.wins > 0 || p.results.played > 0);
             return `
                 <div class="standings-accordion">
                     ${sortPlayersByStandings(data.players).map((player, index) => `
@@ -373,7 +373,7 @@ async function populateCurrentChampionship() {
                                     <span class="player-platform">${player.platform}</span>
                                 </span>
                                 <span class="player-stats">
-                                    <span class="points">${player.results.points} pts</span>
+                                    <span class="wins">${player.results.wins} Wins</span>
                                     <span class="omw">OMW ${player.results.omw ?? '—'}%</span>
                                 </span>
                             </button>
@@ -381,7 +381,6 @@ async function populateCurrentChampionship() {
                                 <div class="detail-row"><span>Played</span><span>${player.results.played}</span></div>
                                 <div class="detail-row"><span>Wins</span><span>${player.results.wins}</span></div>
                                 <div class="detail-row"><span>Losses</span><span>${player.results.losses}</span></div>
-                                <div class="detail-row"><span>Forfeits</span><span>${player.results.forfeits ?? 0}</span></div>
                                 ${player.results.omw !== undefined ? `<div class="detail-row"><span>OMW%</span><span>${player.results.omw}%</span></div>` : ''}
                             </div>
                         </div>
@@ -648,7 +647,7 @@ async function showPastResults(record) {
                                 <th>Played</th>
                                 <th>Wins</th>
                                 <th>Losses</th>
-                                <th>Points</th>
+                                <th>OMW%</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -659,7 +658,7 @@ async function showPastResults(record) {
                                     <td>${player.results.played}</td>
                                     <td>${player.results.wins}</td>
                                     <td>${player.results.losses}</td>
-                                    <td>${player.results.points}</td>
+                                    <td>${player.results.omw ?? '—'}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
