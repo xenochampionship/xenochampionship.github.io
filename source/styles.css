@@ -332,7 +332,6 @@ button i.fas {
 .hero-card {
     padding: 0px !important;
     overflow: hidden;
-    width: var(--wfa);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -390,7 +389,6 @@ img.charity-box-logo {
 
 .card-row {
     display: grid;
-    width: var(--wfa);
     gap: 1rem;
 }
 
@@ -432,7 +430,6 @@ img.charity-box-logo {
     background-attachment: fixed;
     position: relative;
     min-height: 500px;
-    width: var(--wfa);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -455,7 +452,7 @@ img.charity-box-logo {
     position: relative;
     z-index: 2;
     text-align: center;
-    width: var(--wfa);
+    max-width: 700px;
     color: #fff;
     padding: 2rem;
 }
