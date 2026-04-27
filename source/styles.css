@@ -148,7 +148,7 @@ header {
 }
 
 #hamburger-menu.active span:nth-child(1) {
-    transform: rotate(45deg) translate(10px, 10px);
+    transform: rotate(45deg) translate(5px, 5px);
 }
 
 #hamburger-menu.active span:nth-child(2) {
@@ -156,7 +156,7 @@ header {
 }
 
 #hamburger-menu.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
+    transform: rotate(-45deg) translate(8px, -9px);
 }
 
 .mobile-menu-modal {
@@ -947,7 +947,7 @@ select.select option {
 @media (max-width: 900px) {
     .hero-overlay {
         min-height: 400px;
-        margin: 0 -2rem 1.5rem -2rem;
+        margin: 0 -1rem 1.5rem -1rem;
     }
 
     .hero-overlay-content {
@@ -985,7 +985,7 @@ select.select option {
     }
 
     .mobile-menu-modal.active {
-        margin-top: -43px;
+        margin-top: -45px;
     }
 
     .hof-grid {
@@ -1142,7 +1142,7 @@ select.select option {
 @media (max-width: 480px) {
     .hero-overlay {
         min-height: 350px;
-        margin: 0 -2rem 1rem -2rem;
+        margin: 0 -0.75rem 1rem -0.75rem;
         background-attachment: scroll;
     }
 
@@ -1175,7 +1175,7 @@ select.select option {
     }
 
     .mobile-menu-modal.active {
-        margin-top: -32px;
+        margin-top: -33px;
     }
 
     main {
