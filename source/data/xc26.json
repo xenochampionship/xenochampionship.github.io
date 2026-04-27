@@ -12,5 +12,14 @@
             }
         }
     },
-    "players": []
+    "players": [
+        {
+            "name": "Test Player 1", "platform": "Xbox",
+            "results": {"played": 2, "wins": 1, "losses": 1, "omw": 50.0}
+        },
+        {
+            "name": "Test Player 2", "platform": "Xbox",
+            "results": {"played": 2, "wins": 1, "losses": 1, "omw": 50.0}
+        }
+    ]
 }
