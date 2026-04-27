@@ -1,5 +1,11 @@
 const dataHostUrl = "https://xenochampionship.github.io/source/data/";
 
+const defaultCharity = {
+    cause: "Cancer Research UK",
+    logo: "source/images/Cancer-Research-UK.png",
+    link: "https://www.cancerresearchuk.org"
+};
+
 const records = [
     {
         title: "XC 2026", dates: "01/08/2026 - 30/08/2026", 
