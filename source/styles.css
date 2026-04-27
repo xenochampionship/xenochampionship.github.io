@@ -1046,7 +1046,7 @@ select.select option {
     }
 
     .donation-card p {
-        display: block;
+        display: contents;
     }
 
     .registration-btn {
@@ -1213,7 +1213,7 @@ select.select option {
     }
 
     .donation-card p {
-        display: block;
+        display: contents;
     }
 
     img.charity-box-logo {
