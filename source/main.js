@@ -182,7 +182,7 @@ function populateHomePage(data, record) {
         <div class="hero-overlay" style="background-image: url('https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg');">
             <div class="hero-overlay-content">
                 <h1 style="font-size: 3.5rem; margin: 0 0 1.5rem 0; text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);">Enter the Xeno Arena</h1>
-                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship is a structured competitive event where skilled pilots face off in thrilling 1v1 battles for glory and immortality.</p>
+                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship is a structured competitive event where skilled pilots face off in thrilling 1v1 battles for glory and immortality.<br>All in aid of Cancer Reasearch UK.</p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
                     <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
                     <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
@@ -509,29 +509,22 @@ function renderDonationCard(record, metadata) {
     const tournamentStart = range.start;
     const tournamentEnd = range.end;
 
-    // Month before tournament start
     const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
 
     let donationCause = '';
     let donationLink = '';
-    let donationLogo = '';
     let donationLabel = '';
     let donationMessage = '';
 
-    // Determine which charity to display based on current date
     if (now >= monthBefore && now <= tournamentEnd) {
-        // During registration/tournament period: use metadata donation
         const donation = metadata?.registration?.donation;
         donationCause = donation?.cause || defaultCharity.cause || '';
         donationLink = donation?.link || defaultCharity.link || '#';
-        donationLogo = donation?.logo || defaultCharity.logo || '';
         donationLabel = `Donate to ${donationCause}`;
         donationMessage = `This year the Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${donationCause}'s mission.`;
     } else {
-        // Before or after tournament: use default charity
         donationCause = defaultCharity.cause || '';
         donationLink = defaultCharity.link || '#';
-        donationLogo = defaultCharity.logo || '';
         donationLabel = `Support ${donationCause}`;
         donationMessage = `Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Visit their website to see how best to support ${donationCause}'s mission.`;
     }
@@ -541,7 +534,7 @@ function renderDonationCard(record, metadata) {
     return `
         <div class="card registration-card donation-card">
             <h2 class="para-h1">Charitable Donation</h2>
-            <p class="para-txt">${donationMessage}<img src="${donationLogo}" class="charity-box-logo" /></p>
+            <p class="para-txt">${donationMessage}</p>
             ${donationButton}
         </div>
     `;
