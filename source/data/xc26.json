@@ -12,14 +12,5 @@
             }
         }
     },
-    "players": [
-        {
-            "name": "Test Player 1", "platform": "Xbox",
-            "results": {"played": 3, "wins": 1, "losses": 2, "omw": 66.67}
-        },
-        {
-            "name": "Test Player 2", "platform": "Xbox",
-            "results": {"played": 3, "wins": 2, "losses": 1, "omw": 33.33}
-        }
-    ]
+    "players": []
 }
