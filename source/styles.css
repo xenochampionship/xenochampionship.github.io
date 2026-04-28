@@ -308,12 +308,6 @@ ul.scoring-list li i {
     display: block;
 }
 
-/*
-.page.active h1 {
-    margin-top: 0;
-}
-*/
-
 h1, h2, h3 {
     color: var(--nms-light);
     text-shadow: var(--text-shadow);
@@ -936,6 +930,69 @@ select.select option {
     50% {
         opacity: 0.7;
     }
+}
+
+.accordion-rule-card {
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.accordion-rule-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 1.5rem;
+    color: inherit;
+    font-family: inherit;
+    transition: background 0.3s ease;
+}
+
+.accordion-rule-toggle:hover {
+    background: rgb(215 25 32 / 0.1);
+}
+
+.accordion-rule-toggle h2 {
+    margin: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.accordion-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: var(--primary-color);
+}
+
+.accordion-rule-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.accordion-rule-card.expanded .accordion-rule-content {
+    max-height: 2000px;
+    padding: 1.5rem;
+}
+
+.accordion-rule-card.expanded .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-rule-card.expanded button {
+    background: rgb(215 25 32 / 0.2);
 }
 
 @media (max-width: 900px) {
