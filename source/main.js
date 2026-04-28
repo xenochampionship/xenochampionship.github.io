@@ -41,9 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('footer a').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        if (!href.startsWith('#')) {
+            return;
+        }
+
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
+            const targetId = href.substring(1);
             navigateToPage(targetId);
         });
     });
