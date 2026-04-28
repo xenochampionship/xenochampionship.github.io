@@ -11,6 +11,13 @@ const pageNames = {
     'disclaimer': 'Disclaimer'
 };
 
+function toggleRuleAccordion(button) {
+    const card = button.closest('.accordion-rule-card');
+    if (card) {
+        card.classList.toggle('expanded');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initConstructionBanner();
     
