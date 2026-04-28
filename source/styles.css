@@ -809,9 +809,9 @@ select.select option {
 }
 
 .fixture-card:hover {
-    background: rgba(52, 165, 251, 0.1);
+    background: rgba(52, 165, 251, 0.075);
     border-color: rgba(52, 165, 251, 0.5);
-    box-shadow: 0 4px 15px rgba(52, 165, 251, 0.15);
+    box-shadow: 0 4px 15px rgba(52, 165, 251, 0.10);
 }
 
 .fixture-details {
@@ -905,8 +905,8 @@ select.select option {
 
 .fixture-status.scheduled {
     background: rgb(210 210 210 / 0.2);
-    border-color: rgb(210 210 210 / 1);
-    color: rgb(210 210 210 / 1);
+    border-color: rgb(210 210 210 / 0.75);
+    color: rgb(210 210 210 / 0.75);
 }
 
 .fixture-status.live {
@@ -917,9 +917,9 @@ select.select option {
 }
 
 .fixture-status.completed {
-    background: rgb(80 179 255 / 0.2);
-    border-color: rgb(80 179 255);
-    color: rgb(80 179 255);
+    background: rgb(60 228 85 / 0.1);
+    border-color: rgb(76 199 94 / 0.5);
+    color: rgb(76 199 94 / 0.5);
 }
 
 @keyframes pulse {
