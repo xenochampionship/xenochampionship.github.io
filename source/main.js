@@ -369,6 +369,8 @@ async function populateCurrentChampionship() {
     const registrationSection = (registrationHtml || donationHtml)
         ? `<div class="card-row ${registrationHtml && donationHtml ? 'two-cards' : 'one-card'}">${registrationHtml}${donationHtml}</div>`
         : '';
+    
+    const tournamentName = data?.metadata?.tournamentName || currentRecord.title;
 
     const standingsHtml = (!data || !data.players || data.players.length === 0) 
         ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
@@ -402,7 +404,7 @@ async function populateCurrentChampionship() {
         })();
 
     currentChampionshipPage.innerHTML = `
-        <h1 style="margin-bottom: 0;">${currentRecord.title}</h1>
+        <h1 style="margin-bottom: 0;">${tournamentName}</h1>
         <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
         <div class="card hero-card">
             <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
