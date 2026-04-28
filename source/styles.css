@@ -758,6 +758,7 @@ footer {
     padding: 1rem;
     background: rgba(0, 0, 0, 0.8);
     border-top: 1px solid var(--primary-color);
+    padding: 1rem 0;
 }
 
 footer a {
