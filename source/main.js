@@ -593,7 +593,7 @@ function renderUpcomingFixtures(fixturesData) {
                     <div class="fixture-details">
                         <div class="fixture-datetime">
                             <div class="fixture-dt-box">
-                                <span><i class="fas fa-hashtag" style="margin-right: 0.25rem;"></i> ${fixture.fixtureId}</span>
+                                <span><i class="fas fa-gamepad" style="margin-right: 0.25rem;"></i> ${fixture.fixtureId}</span>
                                 <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${new Date(fixture.date).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                                 <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time}</span>
                             </div>
