@@ -1039,6 +1039,16 @@ select.select option {
         margin-top: -45px;
     }
 
+    .fixture-dt-box span {
+        display: grid;
+        text-align: center;
+    }
+
+    .fixture-dt-box span i {
+        margin: 0;
+        margin-bottom: 0.25rem;
+    }
+
     .hof-grid {
         display: block;
     }
@@ -1236,6 +1246,16 @@ select.select option {
 
     .hof-winner-card {
         margin: 1rem 0 !important;
+    }
+
+    .fixture-dt-box span {
+        display: grid;
+        text-align: center;
+    }
+
+    .fixture-dt-box span i {
+        margin: 0;
+        margin-bottom: 0.25rem;
     }
 
     h1 {
