@@ -194,10 +194,10 @@ function populateHomePage(data, record) {
         <div class="hero-overlay" style="background-image: url('https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg');">
             <div class="hero-overlay-content">
                 <h1 style="font-size: 3.5rem; margin: 0 0 1.5rem 0; text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);">Enter the Xeno Arena</h1>
-                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship is a structured competitive event where skilled pilots face off in thrilling 1v1 battles for glory and immortality.<br>All in aid of Cancer Reasearch UK.</p>
+                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship blends fan-run passion with organized competition. Pilots face off in best-of-three Xeno Arena fixtures across Swiss-style Qualification rounds and a top-8 elimination Finals bracket. All proceeds support Cancer Research UK and every battle is streamed live for the community.</p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                    <button class="btn site-btn" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
-                    <button class="btn site-btn" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
+                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
+                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
                 </div>
             </div>
         </div>
@@ -205,37 +205,48 @@ function populateHomePage(data, record) {
         <div class="card-row two-cards">
             <div class="card" style="margin: 0;">
                 <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
-                    <i class="fas fa-gamepad"></i>
-                </div>
-                <h2 class="para-h1">Competitive Gameplay</h2>
-                <p class="para-txt" style="margin-bottom: 1rem;">Experience fast-paced 1v1 Xeno Arena battles where strategy, timing, and companion synergy determine victory. Every match is streamed live and monitored by tournament umpires.</p>
-                <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: auto;">Learn the Rules</button>
-            </div>
-            <div class="card" style="margin: 0;">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
                     <i class="fas fa-crown"></i>
                 </div>
                 <h2 class="para-h1">Hall of Fame</h2>
-                <p class="para-txt" style="margin-bottom: 1rem;">Join the ranks of champions and have your name immortalized. Only the most skilled and dedicated pilots can claim victory and earn their place in Xeno Championship history.</p>
-                <button class="btn site-btn" onclick="navigateToPage('hof')" style="margin-top: auto;">View Champions</button>
+                <p class="para-txt" style="margin-bottom: 1rem;">Only the best interlopers survive the Qualification stage and rise through the Finals. Champions earn permanent recognition in the Hall of Fame, a record of those who mastered the Xeno Arena and claimed the title of Xeno Champion.</p>
+                <button class="btn site-btn" onclick="navigateToPage('hof')" style="margin-top: auto;">View Hall of Fame</button>
+            </div>
+            <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
+                <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
             </div>
         </div>
 
         <div class="card home-card-single">
             <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
-                <i class="fas fa-video"></i>
+                <i class="fas fa-gamepad"></i>
             </div>
-            <h2 class="para-h1">Live Streams</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">Watch every fixture in real-time as competitors battle for supremacy. All matches are streamed live, giving you a front-row seat to the action and drama of competitive Xeno Arena.</p>
-            <button class="btn site-btn" onclick="navigateToPage('current')" style="margin-top: auto;">Watch Now</button>
+            <h2 class="para-h1">Competitive Gameplay</h2>
+            <p class="para-txt">From the opening Qualification round to the knockout Finals, every match rewards smart ship builds, tight timing, and strong arena tactics. The championship uses a fair, community-curated rule set with Swiss-style standings and tie-breakers that keep the competition tight until the end.</p>
         </div>
+
+        <div class="card-row two-cards">
+            <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
+                <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
+            </div>
+            <div class="card" style="margin: 0;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h2 class="para-h1">Broadcast Coverage</h2>
+                <p class="para-txt" style="margin-bottom: 1rem;">Keep up with every fixture, standings update and championship moment through live streams and event summaries. The Xeno Championship brings the arena action to viewers, so the full journey from qualifiers to finals is easy to follow.</p>
+                <button class="btn site-btn" onclick="navigateToPage('current')" style="margin-top: auto;">View Twitch Channel</button>
+            </div>
+        </div>
+
         <div class="card home-card-single">
             <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
                 <i class="fas fa-users"></i>
             </div>
             <h2 class="para-h1">Community</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">Join a passionate community of No Man's Sky explorers and competitors. Get involved, share your experience, and connect with fellow pilots who share your love for competitive space combat.</p>
-            <button class="btn site-btn" onclick="navigateToPage('contact')" style="margin-top: auto;">Get Involved</button>
+            <p class="para-txt" style="margin-bottom: 1rem;">This is a fan-driven event built for the No Man's Sky community. Whether you compete, spectate, or help organise, the championship aims to connects players across the world with shared rules, scheduled fixtures, and a focus on fair play and mutual support.</p>
+            <div class="home-card-buttons">
+                <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a><a class="btn site-btn" href="#" target="_blank" rel="noopener">Discord Server</a>
+            </div>
         </div>
     `;
 }
