@@ -208,7 +208,8 @@ function populateHomePage(data, record) {
                     <i class="fas fa-crown"></i>
                 </div>
                 <h2 class="para-h1">Hall of Fame</h2>
-                <p class="para-txt" style="margin-bottom: 1rem;">Only the best interlopers survive the Qualification stage and rise through the Finals. Champions earn permanent recognition in the Hall of Fame, a record of those who mastered the Xeno Arena and claimed the title of Xeno Champion.</p>
+                <p class="para-txt">Those who compete in the Xeno Championship and win the Grand Final, attaining the title of Xeno Champion, are immortalised in our online Hall of Fame. Along with to championship title, Xeno Champions are also guaranteed a spot in the next year's tournament if they wish.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">For contestants who make it into the top 3 in the Finals, they are also listed in our Past Results page. This page shows the top 3 contestants from all of the previous Xeno Championship events.</p>
                 <button class="btn site-btn" onclick="navigateToPage('hof')" style="margin-top: auto;">View Hall of Fame</button>
             </div>
             <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
