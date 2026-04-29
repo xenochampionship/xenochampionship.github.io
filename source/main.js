@@ -250,7 +250,7 @@ function populateHomePage(data, record) {
             <h2 class="para-h1">Community Engagement</h2>
             <p class="para-txt" style="margin-bottom: 1rem;">This is a fan-driven event built for the No Man's Sky community. Whether you compete, spectate, or help organise, the championship aims to connects players across the world with shared rules, scheduled fixtures, and a focus on fair play and mutual support.</p>
             <div class="home-card-buttons">
-                <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Twitter (X)</a><a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord</a>
+                <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a><a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Discord Server</a>
             </div>
         </div>
     `;
