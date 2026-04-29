@@ -458,7 +458,7 @@ async function populateCurrentChampionship() {
             <h2 class="para-h1">Tournament Information</h2>
             <p class="para-txt"><strong>Format:</strong> 1v1 Best-of-3 Xeno Arena matches</p>
             <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
-            <p class="para-txt"><strong>Schedule:</strong> Round completiong windows in UK time (UTC+01:00)</p>
+            <p class="para-txt"><strong>Schedule:</strong> Round scheduling window is in UK time (UTC+01:00)</p>
             <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout August</p>
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
