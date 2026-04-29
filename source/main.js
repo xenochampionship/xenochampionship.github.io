@@ -222,7 +222,8 @@ function populateHomePage(data, record) {
                 <i class="fas fa-gamepad"></i>
             </div>
             <h2 class="para-h1">Competitive Gameplay</h2>
-            <p class="para-txt">From the opening Qualification round to the knockout Finals, every match rewards smart ship builds, tight timing, and strong arena tactics. The championship uses a fair, community-curated rule set with Swiss-style standings and tie-breakers that keep the competition tight until the end.</p>
+            <p class="para-txt">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
+            <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of Cancer Research UK, with a fair play and goodwill focus kept in mind.</p>
         </div>
 
         <div class="card-row two-cards">
