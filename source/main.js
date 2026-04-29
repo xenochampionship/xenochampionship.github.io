@@ -1,4 +1,4 @@
-const SITE_UNDER_CONSTRUCTION = true;
+const SITE_UNDER_CONSTRUCTION = false;
 
 const pageNames = {
     'home': 'Home',
