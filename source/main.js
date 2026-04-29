@@ -223,7 +223,7 @@ function populateHomePage(data, record) {
             </div>
             <h2 class="para-h1">Competitive Gameplay</h2>
             <p class="para-txt" style="margin-bottom: 1rem;">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
-            <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of Cancer Research UK, with a fair play and goodwill focus kept in mind.</p>
+            <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of <a href="https://www.cancerresearchuk.org" target="_blank" rel="noopener">Cancer Research UK</a>, with a fair play and goodwill focus kept in mind.</p>
         </div>
 
         <div class="card-row two-cards">
