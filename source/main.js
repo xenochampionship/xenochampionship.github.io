@@ -228,7 +228,7 @@ function populateHomePage(data, record) {
 
         <div class="card-row two-cards">
             <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
-                <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
+                <img src="https://www.nomanssky.com/media/f5ej53x4/spectators39.png" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
             </div>
             <div class="card" style="margin: 0;">
                 <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
