@@ -483,6 +483,10 @@ button i.fas {
     align-items: center;
 }
 
+.about-hero {
+    text-align: left !important;
+}
+
 .about-content, .home-content {
     flex: 1;
 }
