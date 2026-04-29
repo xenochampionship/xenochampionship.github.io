@@ -208,7 +208,7 @@ function populateHomePage(data, record) {
                     <i class="fas fa-crown"></i>
                 </div>
                 <h2 class="para-h1">Hall of Fame</h2>
-                <p class="para-txt">Those who compete in the Xeno Championship and win the Grand Final, attaining the title of Xeno Champion, are immortalised in our online Hall of Fame. Along with to championship title, Xeno Champions are also guaranteed a spot in the next year's tournament if they wish.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">Those who compete in the Xeno Championship and win the Grand Final, attaining the title of Xeno Champion, are immortalised in our online Hall of Fame. Along with to championship title, Xeno Champions are also guaranteed a spot in the next year's tournament if they wish.</p>
                 <p class="para-txt" style="margin-bottom: 1rem;">For contestants who make it into the top 3 in the Finals, they are also listed in our Past Results page. This page shows the top 3 contestants from all of the previous Xeno Championship events.</p>
                 <button class="btn site-btn" onclick="navigateToPage('hof')" style="margin-top: auto;">View Hall of Fame</button>
             </div>
@@ -222,7 +222,7 @@ function populateHomePage(data, record) {
                 <i class="fas fa-gamepad"></i>
             </div>
             <h2 class="para-h1">Competitive Gameplay</h2>
-            <p class="para-txt">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
+            <p class="para-txt" style="margin-bottom: 1rem;">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
             <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of Cancer Research UK, with a fair play and goodwill focus kept in mind.</p>
         </div>
 
@@ -245,7 +245,7 @@ function populateHomePage(data, record) {
             <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
                 <i class="fas fa-users"></i>
             </div>
-            <h2 class="para-h1">Community</h2>
+            <h2 class="para-h1">Community Engagement</h2>
             <p class="para-txt" style="margin-bottom: 1rem;">This is a fan-driven event built for the No Man's Sky community. Whether you compete, spectate, or help organise, the championship aims to connects players across the world with shared rules, scheduled fixtures, and a focus on fair play and mutual support.</p>
             <div class="home-card-buttons">
                 <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a><a class="btn site-btn" href="#" target="_blank" rel="noopener">Discord Server</a>
