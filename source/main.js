@@ -295,7 +295,7 @@ function setupPastResultsSelector() {
             <div class="card" style="text-align: center; padding: 2rem;">
                 <i class="fas fa-history" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
                 <h2 class="para-h1" style="margin-bottom: 1rem;">Past Tournament Results</h2>
-                <p class="para-txt">Detailed results from completed Xeno Championship tournaments will be available here.<br><br>Check back after the completion of future tournaments to view standings, match results, and tournament statistics.</p>
+                <p class="para-txt">Detailed results from completed Xeno Championship tournaments will be available here.<br><br>Check back after the completion of future tournaments to view the top 3 contestants of each Xeno Championship.</p>
             </div>
         `;
         return;
