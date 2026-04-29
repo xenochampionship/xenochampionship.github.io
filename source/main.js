@@ -237,7 +237,9 @@ function populateHomePage(data, record) {
                 <h2 class="para-h1">Broadcast Coverage</h2>
                 <p class="para-txt" style="margin-bottom: 1rem;">Live and recorded highlights of Qualification fixtures are re-streamed on the official Xeno Championship Twitch channel, showing the full range of dynamic Xeno Arena tournament fixtures.</p>
                 <p class="para-txt" style="margin-bottom: 1rem;">During the Finals all fixtures are live streamed and can be viewed live on our official Twitch, enabling a high stakes tournament Finals stage, ending with an annual Bronze and Silver medalist and ultimately the tournament's Xeno Champion.</p>
-                <button class="btn site-btn" onclick="navigateToPage('current')" style="margin-top: auto;">View Twitch Channel</button>
+                <div class="home-card-buttons">
+                    <a class="btn site-btn" href="https://m.twitch.tv/xenochampionship/" target="_blank" rel="noopener">View Twitch Channel</a>
+                </div>
             </div>
         </div>
 
