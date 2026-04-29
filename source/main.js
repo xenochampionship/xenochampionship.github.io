@@ -196,7 +196,7 @@ function populateHomePage(data, record) {
                 <h1 style="font-size: 3.5rem; margin: 0 0 1.5rem 0; text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);">Enter the Xeno Arena</h1>
                 <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship blends fan-fueled passion with community-run organized competition. Interlopers face off in 1v1 Xeno Arena fixtures across Swiss-style Qualification rounds and a top-8 elimination Finals bracket. Every battle is important and all in aid of Cancer Research UK.</p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> How it Works</button>
+                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> Find Out More</button>
                     <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
                 </div>
             </div>
@@ -458,8 +458,8 @@ async function populateCurrentChampionship() {
             <h2 class="para-h1">Tournament Information</h2>
             <p class="para-txt"><strong>Format:</strong> 1v1 Best-of-3 Xeno Arena matches</p>
             <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
-            <p class="para-txt"><strong>Schedule:</strong> Weekday fixtures in UK time (UTC+01:00)</p>
-            <p class="para-txt"><strong>Streaming:</strong> All matches are streamed and monitored</p>
+            <p class="para-txt"><strong>Schedule:</strong> Round completiong windows in UK time (UTC+01:00)</p>
+            <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout August</p>
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
