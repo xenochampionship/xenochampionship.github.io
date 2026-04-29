@@ -751,6 +751,7 @@ button i.fas {
     width: var(--wfa);
     display: inline-flex;
     gap: 1rem;
+    margin-top: auto;
 }
 
 .home-card-buttons button {
