@@ -19,8 +19,6 @@ function toggleRuleAccordion(button) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    initConstructionBanner();
-    
     initMobileMenu();
 
     const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
@@ -80,33 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupPastResultsSelector();
     populateCurrentChampionship();
 });
-
-function initConstructionBanner() {
-    const banner = document.getElementById('construction-banner');
-    const closeBtn = document.getElementById('banner-close');
-    const header = document.querySelector('header');
-
-    if (!SITE_UNDER_CONSTRUCTION) {
-        banner.classList.add('hidden');
-        header.classList.add('banner-hidden');
-        return;
-    }
-
-    header.classList.add('banner-visible');
-
-    closeBtn.addEventListener('click', function() {
-        banner.classList.add('hidden');
-        header.classList.remove('banner-visible');
-        header.classList.add('banner-hidden');
-        localStorage.setItem('bannerDismissed', 'true');
-    });
-
-    if (localStorage.getItem('bannerDismissed') === 'true') {
-        banner.classList.add('hidden');
-        header.classList.remove('banner-visible');
-        header.classList.add('banner-hidden');
-    }
-}
 
 function initMobileMenu() {
     const hamburger = document.getElementById('hamburger-menu');
@@ -458,7 +429,7 @@ async function populateCurrentChampionship() {
             <h2 class="para-h1">Tournament Information</h2>
             <p class="para-txt"><strong>Format:</strong> 1v1 Best-of-3 Xeno Arena matches</p>
             <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
-            <p class="para-txt"><strong>Schedule:</strong> Round scheduling window is in UK time (UTC+01:00)</p>
+            <p class="para-txt"><strong>Schedule:</strong> Round completiong windows in UK time (UTC+01:00)</p>
             <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout August</p>
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
