@@ -2,7 +2,7 @@ const dataHostUrl = "https://xenochampionship.co.uk/source/data/";
 
 const defaultCharity = {
     cause: "Cancer Research UK",
-    link: "https://www.cancerresearchuk.org"
+    link: "https://fundraise.cancerresearchuk.org/page/xc-2026" // https://www.cancerresearchuk.org
 };
 
 const records = [
