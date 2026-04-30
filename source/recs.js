@@ -1,4 +1,4 @@
-const dataHostUrl = "https://xenochampionship.github.io/source/data/";
+const dataHostUrl = "https://xenochampionship.co.uk/source/data/";
 
 const defaultCharity = {
     cause: "Cancer Research UK",
