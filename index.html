@@ -40,6 +40,7 @@
             <nav class="nav-menu">
                 <ul>
                     <li><a href="#home">Home</a></li>
+                    <li><a href="#current" id="nav-current">Current Championship</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropbtn" tabindex="0">History</a>
                         <div class="dropdown-content">
@@ -47,12 +48,12 @@
                             <a href="#results">Past Results</a>
                         </div>
                     </li>
-                    <li><a href="#current" id="nav-current">Current Championship</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropbtn" tabindex="0">More</a>
                         <div class="dropdown-content">
                             <a href="#about">About</a>
                             <a href="#rules">Rules</a>
+                            <a href="#umpires">Umpires</a>
                             <a href="#disclaimer">Disclaimer</a>
                         </div>
                     </li>
@@ -64,6 +65,7 @@
             <nav class="mobile-nav-menu">
                 <ul>
                     <li><a href="#home">Home</a></li>
+                    <li><a href="#current" id="nav-current">Current Championship</a></li>
                     <li class="mobile-dropdown">
                         <a href="#" class="mobile-dropbtn" tabindex="0">History</a>
                         <div class="mobile-dropdown-content">
@@ -71,12 +73,12 @@
                             <a href="#results">Past Results</a>
                         </div>
                     </li>
-                    <li><a href="#current" id="nav-current">Current Championship</a></li>
                     <li class="mobile-dropdown">
                         <a href="#" class="mobile-dropbtn" tabindex="0">More</a>
                         <div class="mobile-dropdown-content">
                             <a href="#about">About</a>
                             <a href="#rules">Rules</a>
+                            <a href="#umpires">Umpires</a>
                             <a href="#disclaimer">Disclaimer</a>
                         </div>
                     </li>
@@ -398,11 +400,10 @@
                     <p class="para-txt">Responses are usually sent within 1-2 business days. Please include your name, tournament role, and a summary of your request to help us assist you faster. Alternatively you can reach out to us via Discord, and we may be able to assist you quicker.</p>
                 </div>
             </div>
-
             <div id="page-disclaimer" class="page">
                 <h1>Disclaimer</h1>
                 <div class="card hero-card">
-                    <img src="https://www.nomanssky.com/media/f5ej53x4/spectators39.png?width=1920&format=webp&v=1dcc757b9dd1bf0" alt="Xeno Championship Image" class="home-hero-image-secondary">
+                    <img src="https://www.nomanssky.com/media/f5ej53x4/spectators39.png" alt="Xeno Championship Image" class="home-hero-image-secondary">
                 </div>
                 <div class="card">
                     <h2 class="para-h1">Community Event Notice</h2>
@@ -422,6 +423,93 @@
                     <h2 class="para-h1">Registration Submitted</h2>
                     <p class="para-txt" style="margin-bottom: 1rem;">Thank you for submitting your registration for the Xeno Championship! Your entry has been received and is being processed.</p>
                     <p class="para-txt" style="margin-bottom: 1rem;">We'll review your submission and get back to you soon with confirmation and next steps via Discord. In the meantime, please explore the site and ensure you join our community on Discord.</p>
+                    <div class="home-card-buttons">
+                        <a class="btn site-btn" href="#home">Return to Home</a>
+                        <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Join Discord</a>
+                    </div>
+                </div>
+            </div>
+            <div id="page-umpires" class="page">
+                <h1>Become an Umpire</h1>
+                <div class="card hero-card">
+                    <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+                </div>
+                <div class="card">
+                    <h2 class="para-h1"><i class="fas fa-gavel" style="margin-right: 0.5rem;"></i> What is an Umpire?</h2>
+                    <p class="para-txt" style="margin-bottom: 1rem;">Umpires are essential volunteers who ensure fair play and uphold the integrity of the Xeno Championship. They oversee matches, enforce rules, and provide a smooth experience for all participants.</p>
+                    <p class="para-txt">As an Umpire, you'll play a crucial role in maintaining the competitive spirit of the tournament while supporting our community-driven event.</p>
+                </div>
+                <div class="card-row two-cards">
+                    <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
+                        <img src="https://www.nomanssky.com/media/f5ej53x4/spectators39.png" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
+                    </div>
+                    <div class="card" style="margin: 0;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h2 class="para-h1">Umpire Responsibilities</h2>
+                        <ul class="para-ul">
+                            <li><strong><i class="fas fa-check-circle"></i> Match Oversight:</strong> Monitor live fixtures and ensure compliance with championship rules.</li>
+                            <li><strong><i class="fas fa-clock"></i> Time Management:</strong> Keep matches on schedule and handle any timing issues.</li>
+                            <li><strong><i class="fas fa-balance-scale"></i> Fair Play Enforcement:</strong> Address rule violations and maintain sportsmanship.</li>
+                            <li><strong><i class="fas fa-comments"></i> Communication:</strong> Coordinate with players, organizers, and spectators as needed.</li>
+                            <li><strong><i class="fas fa-file-alt"></i> Reporting:</strong> Document match results and any incidents for tournament records.</li>
+                            <li><strong><i class="fas fa-users"></i> Community Support:</strong> Assist with tournament logistics and help create a positive environment.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card accordion-rule-card">
+                    <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                        <h2>Umpire Code of Conduct</h2>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-rule-content">
+                        <ul class="para-ul" style="margin-top: 0; margin-bottom: 0; list-style: initial; padding-left: 1.5rem;">
+                            <li><strong>Integrity:</strong> Act with honesty and impartiality in all decisions.</li>
+                            <li><strong>Confidentiality:</strong> Respect player privacy and tournament information.</li>
+                            <li><strong>Professionalism:</strong> Communicate respectfully with all participants.</li>
+                            <li><strong>Punctuality:</strong> Be available and on time for assigned matches.</li>
+                            <li><strong>Knowledge:</strong> Stay informed about current rules and procedures.</li>
+                            <li><strong>Teamwork:</strong> Collaborate effectively with other umpires and organizers.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card accordion-rule-card">
+                    <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                        <h2>Umpire Training and Requirements</h2>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-rule-content">
+                        <ul class="para-ul" style="margin-top: 0; margin-bottom: 0; list-style: initial; padding-left: 1.5rem;">
+                            <li><strong>Training:</strong> Complete mandatory training sessions before officiating.</li>
+                            <li><strong>Game Knowledge:</strong> Familiarity with No Man's Sky and Xeno Arena mechanics.</li>
+                            <li><strong>Technical Setup:</strong> Reliable internet connection and appropriate hardware.</li>
+                            <li><strong>Communication Skills:</strong> Clear verbal communication in English.</li>
+                            <li><strong>Availability:</strong> Commitment to tournament schedule and potential practice sessions.</li>
+                            <li><strong>Discord Access:</strong> Active participation in our Discord server for coordination.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2 class="para-h1"><i class="fas fa-clipboard-list" style="margin-right: 0.5rem;"></i> How to Apply</h2>
+                    <p class="para-txt" style="margin-bottom: 1rem;">Interested in becoming an Umpire? Submit your interest through our online registration form. Please note that completing the form expresses your interest in the role.</p>
+                    <p class="para-txt" style="margin-bottom: 1rem;"><strong>Important:</strong> Umpire status is confirmed only after direct approval by an Organizer via Discord. We'll contact you through our server to discuss next steps and training.</p>
+                    <div class="home-card-buttons">
+                        <a class="btn site-btn" href="https://tally.so/r/81jZZ5" target="_blank" rel="noopener">Register Interest</a>
+                        <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Join Discord</a>
+                    </div>
+                </div>
+            </div>
+            <div id="page-umpires-thank-you" class="page">
+                <h1>Thank You for Your Interest!</h1>
+                <div class="card hero-card">
+                    <img src="https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+                </div>
+                <div class="card">
+                    <h2 class="para-h1">Umpire Interest Submitted</h2>
+                    <p class="para-txt" style="margin-bottom: 1rem;">Thank you for expressing interest in becoming an Umpire for the Xeno Championship! Your submission has been received.</p>
+                    <p class="para-txt" style="margin-bottom: 1rem;"><strong>Please note:</strong> This submission only registers your interest. Umpire status will be confirmed directly by an Organizer via Discord after review.</p>
+                    <p class="para-txt" style="margin-bottom: 1rem;">We'll reach out to you on Discord if your application progresses. In the meantime, feel free to explore the site and join our community discussions.</p>
                     <div class="home-card-buttons">
                         <a class="btn site-btn" href="#home">Return to Home</a>
                         <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Join Discord</a>
