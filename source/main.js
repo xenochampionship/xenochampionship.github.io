@@ -9,7 +9,9 @@ const pageNames = {
     'current': null,
     'contact': 'Contact',
     'disclaimer': 'Disclaimer',
-    'thank-you': 'Thank You'
+    'thank-you': 'Thank You',
+    'umpires': 'Become an Umpire',
+    'umpire-thank-you': 'Thank You'
 };
 
 function toggleRuleAccordion(button) {
