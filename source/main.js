@@ -8,7 +8,8 @@ const pageNames = {
     'results': 'Past Results',
     'current': null,
     'contact': 'Contact',
-    'disclaimer': 'Disclaimer'
+    'disclaimer': 'Disclaimer',
+    'thank-you': 'Thank You'
 };
 
 function toggleRuleAccordion(button) {
