@@ -1,5 +1,3 @@
-const SITE_UNDER_CONSTRUCTION = false;
-
 const pageNames = {
     'home': 'Home',
     'about': 'About',
@@ -191,14 +189,7 @@ function populateHomePage(data, record) {
             </div>
         </div>
 
-        <div class="card home-card-single">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
-                <i class="fas fa-gamepad"></i>
-            </div>
-            <h2 class="para-h1">Competitive Gameplay</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
-            <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of <a href="https://www.cancerresearchuk.org" target="_blank" rel="noopener" class="contact-email">Cancer Research UK</a>, with a fair play and goodwill focus kept in mind.</p>
-        </div>
+        ${renderHomeDonationSection(record, data?.metadata)}
 
         <div class="card-row two-cards">
             <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
@@ -513,32 +504,87 @@ function renderDonationCard(record, metadata) {
     const tournamentEnd = range.end;
 
     const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
+    const charity = getCharityInfo(record, metadata);
 
-    let donationCause = '';
-    let donationLink = '';
-    let donationLabel = '';
-    let donationMessage = '';
+    const donationLabel = now >= monthBefore && now <= tournamentEnd
+        ? `Donate to ${charity.cause}`
+        : `Support ${charity.cause}`;
 
-    if (now >= monthBefore && now <= tournamentEnd) {
-        const donation = metadata?.registration?.donation;
-        donationCause = donation?.cause || defaultCharity.cause || '';
-        donationLink = donation?.link || defaultCharity.link || '#';
-        donationLabel = `Donate to ${donationCause}`;
-        donationMessage = `This year the Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${donationCause}'s mission.`;
-    } else {
-        donationCause = defaultCharity.cause || '';
-        donationLink = defaultCharity.link || '#';
-        donationLabel = `Support ${donationCause}`;
-        donationMessage = `Xeno Championship is proud to be supporting ${donationCause}. Help us make a difference by contributing to this worthy cause. Visit their website to see how best to support ${donationCause}'s mission.`;
-    }
+    const donationMessage = now >= monthBefore && now <= tournamentEnd
+        ? `This year the Xeno Championship is proud to be supporting ${charity.cause}. Help us make a difference by contributing to this worthy cause. Every donation counts and goes directly to supporting ${charity.cause}'s mission.`
+        : `Xeno Championship is proud to be supporting ${charity.cause}. Help us make a difference by contributing to this worthy cause. Visit their website to learn how you can support ${charity.cause}.`;
 
-    const donationButton = `<a href="${donationLink}" class="btn donation-btn" target="_blank" rel="noopener">${donationLabel}</a>`;
+    const donationButton = `<a href="${charity.link}" class="btn donation-btn" target="_blank" rel="noopener">${donationLabel}</a>`;
+    const progressHtml = renderDonationProgress(record);
 
     return `
         <div class="card registration-card donation-card">
             <h2 class="para-h1">Charitable Donation</h2>
             <p class="para-txt">${donationMessage}</p>
+            ${progressHtml}
             ${donationButton}
+        </div>
+    `;
+}
+
+function getCharityInfo(record, metadata) {
+    const donation = metadata?.registration?.donation || {};
+    return {
+        cause: donation.cause || defaultCharity.cause || '',
+        link: donation.link || defaultCharity.link || '#',
+        current: record?.charity?.current ?? null,
+        goal: record?.charity?.goal ?? null
+    };
+}
+
+function formatCurrency(amount) {
+    if (typeof amount !== 'number' || isNaN(amount)) return '£0.00';
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
+}
+
+function renderDonationProgress(record) {
+    const charity = record?.charity;
+    if (!charity || charity.current == null || charity.goal == null) return '';
+
+    const current = charity.current;
+    const goal = charity.goal;
+    const percent = goal > 0 ? Math.min(100, (current / goal) * 100) : 100;
+    const exceeded = goal > 0 && current >= goal;
+    const label = record.past ? 'Final total raised' : 'Raised';
+    const statusText = exceeded
+        ? `Goal exceeded! ${label} ${formatCurrency(current)} on a ${formatCurrency(goal)} target.`
+        : `${label} ${formatCurrency(current)} of ${formatCurrency(goal)} target.`;
+
+    return `
+        <div class="donation-progress">
+            <div class="donation-progress-label">${statusText}</div>
+            <div class="donation-progress-track">
+                <div class="donation-progress-fill ${exceeded ? 'goal-exceeded' : ''}" style="width: ${percent}%;"></div>
+            </div>
+        </div>
+    `;
+}
+
+function renderHomeDonationSection(record, metadata) {
+    const charity = getCharityInfo(record, metadata);
+    if (!charity.cause || !record.charity?.showOnHome) return `
+        <div class="card home-card-single">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <h2 class="para-h1">Competitive Gameplay</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Participating in the Xeno Championship is a fun and competitive endeavour, allowing all to battle it out against the best of the best in Xeno Arena showdowns.</p>
+            <p class="para-txt">While the tournament itself is highly competitive, it is all run in support of <a href="https://www.cancerresearchuk.org" target="_blank" rel="noopener" class="contact-email">Cancer Research UK</a>, with a fair play and goodwill focus kept in mind.</p>
+        </div>
+    `;
+
+    const progressHtml = renderDonationProgress(record);
+    return `
+        <div class="card">
+            <h2 class="para-h1">Current Donation Target</h2>
+            <p class="para-txt">Help us support ${charity.cause} during the ${record.title} tournament.</p>
+            ${progressHtml}
+            <a href="${charity.link}" class="btn donation-btn" target="_blank" rel="noopener">Donate to ${charity.cause}</a>
         </div>
     `;
 }
@@ -573,6 +619,7 @@ function renderAllPastRecords(records) {
         <div class="card">
             <h2 class="para-h1">${record.title}</h2>
             ${renderPodium(record.top3)}
+            ${renderDonationProgress(record)}
         </div>
     `).join('');
 }
