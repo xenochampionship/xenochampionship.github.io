@@ -203,7 +203,8 @@ function populateHomePage(data, record) {
                 <p class="para-txt" style="margin-bottom: 1rem;">Live and recorded highlights of Qualification fixtures are re-streamed on the official Xeno Championship Twitch channel, showing the full range of dynamic Xeno Arena tournament fixtures.</p>
                 <p class="para-txt" style="margin-bottom: 1rem;">During the Finals all fixtures are live streamed and can be viewed live on our official Twitch, enabling a high stakes tournament Finals stage, ending with an annual Bronze and Silver medalist and ultimately the tournament's Xeno Champion.</p>
                 <div class="home-card-buttons">
-                    <a class="btn site-btn" href="https://m.twitch.tv/xenochampionship/" target="_blank" rel="noopener">View Twitch Channel</a>
+                    <a class="btn site-btn" href="https://m.twitch.tv/xenochampionship/" target="_blank" rel="noopener">Twitch Channel</a>
+                    <a class="btn site-btn" href="https://www.youtube.com/@XenoChampionship" target="_blank" rel="noopener">YouTube Channel</a>
                 </div>
             </div>
         </div>
@@ -215,7 +216,8 @@ function populateHomePage(data, record) {
             <h2 class="para-h1">Community Engagement</h2>
             <p class="para-txt" style="margin-bottom: 1rem;">This is a fan-driven event built for the No Man's Sky community. Whether you compete, spectate, or help organise, the championship aims to connects players across the world with shared rules, scheduled fixtures, and a focus on fair play and mutual support.</p>
             <div class="home-card-buttons">
-                <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a><a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Discord Server</a>
+                <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a>
+                <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Discord Server</a>
             </div>
         </div>
     `;
