@@ -74,7 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
     showPage(initialHash);
     trackPageView(initialHash); // Track initial load
 
+    populateAboutPage();
     populateRulesPage();
+    populateUmpiresPage();
     loadCurrentChampionship();
     populateHallOfFame();
     setupPastResultsSelector();
@@ -159,6 +161,39 @@ async function loadCurrentChampionship() {
         console.error('Error loading current championship data:', error);
         populateHomePage(null, currentRecord);
     }
+}
+
+function populateAboutPage() {
+    const aboutPage = document.getElementById('page-about');
+    aboutPage.innerHTML = `
+        <h1>About the Xeno Championship</h1>
+        <div class="card hero-card">
+            <img src="https://www.nomanssky.com/media/wzgpapjc/battleshots20.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+        </div>
+        <div class="card about-hero">
+            <div class="about-content">
+                <h2 class="para-h1"><i class="fas fa-crown" style="margin-right: 0.5rem;"></i> Welcome to the NMS Xeno Championship</h2>
+                <p class="para-txt" style="margin-bottom: 1rem;">The NMS Xeno Championship is an annual community-run tournament celebrating the competitive spirit of No Man's Sky players. The championship aims to bring together players from across the globe to battle it out in thrilling Xeno Arena matches.</p>
+                <p class="para-txt">Compete in intense 1v1 best-of-3 fixtures, showcase your companion's skills, and climb the rankings to attain a place in the prestigious Hall of Fame!</p>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-ribbon" style="margin-right: 0.5rem;"></i> Charitable Event</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship is proud to raising money in aid of <a href="https://www.cancerresearchuk.org" class="contact-email">Cancer Research UK</a> in a concerted effort to combat cancer and support those most deeply affected by it.</p>
+            <p class="para-txt" style="margin-bottom: 1rem;">Due to the tournament being free to enter, and each fixture being live streamed, it is highly encouraged that spectators and ontestants donate what they can. This is not a requirement, however the entire goal is to make a positive impact and a real difference in the fight against cancer.</p>
+            <p class="para-txt" style="margin-bottom: 1rem;">Charitable donations are made and received via a dedicated Cancer Research UK Giving Page, with the specific donation link for the associated tournament becoming available once contestant registration window opens. At the conclusion of the tournament all proceeds will be donated to Cancer Research UK.</p>
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-circle-info" style="margin-right: 0.5rem;"></i> What is Xeno Arena?</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Xeno Arena is No Man's Sky's competitive multiplayer companion battling mode where interlopers engage in fast-paced creature battles. Using their own companions equipped with various attacks and abilities, players must outmaneuver and out-skill their opponents in a fun and competitive battle to claim the tournament's coveted title of <b>Xeno Champion</b>.</p>
+            <p class="para-txt">The championship focuses on fair, skill-based competition while maintaining the creative freedom that makes No Man's Sky special.</p>
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-users" style="margin-right: 0.5rem;"></i> Community Driven</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">This tournament is entirely community-run and fan-driven. From the organizers to the participants, everyone contributes to making the Xeno Championship a memorable annual event for the No Man's Sky community.</p>
+            <p class="para-txt">Join us in celebrating the game's competitive potential and connecting with fellow interlopers!</p>
+        </div>
+    `;
 }
 
 function populateRulesPage() {
@@ -421,6 +456,81 @@ function populateRulesPage() {
                     <li><b>31st August</b> for Semi-finals, Third Place Match, and Grand Final</li>
                 </ul>
                 <p class="para-txt">As Finals fixtures follow a fixed schedule and are broadcast-focused, failure to attend may result in forfeiture.</p>
+            </div>
+        </div>
+    `;
+}
+
+function populateUmpiresPage() {
+    const umpiresPage = document.getElementById('page-umpires');
+    umpiresPage.innerHTML = `
+        <h1>Become an Umpire</h1>
+        <div class="card hero-card">
+            <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-gavel" style="margin-right: 0.5rem;"></i> What is an Umpire?</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Umpires are essential volunteers who ensure fair play and uphold the integrity of the Xeno Championship. They oversee matches, enforce rules, and provide a smooth experience for all participants.</p>
+            <p class="para-txt">As an Umpire, you'll play a crucial role in maintaining the competitive spirit of the tournament while supporting our community-driven event.</p>
+        </div>
+        <div class="card-row two-cards">
+            <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
+                <img src="https://www.nomanssky.com/media/f5ej53x4/spectators39.png" alt="Xeno Arena gameplay" class="home-hero-image-secondary">
+            </div>
+            <div class="card" style="margin: 0;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h2 class="para-h1">Umpire Responsibilities</h2>
+                <ul class="para-ul">
+                    <li><strong><i class="fas fa-check-circle"></i> Match Oversight:</strong> Monitor live fixtures and ensure compliance with championship rules.</li>
+                    <li><strong><i class="fas fa-clock"></i> Time Management:</strong> Keep matches on schedule and handle any timing issues.</li>
+                    <li><strong><i class="fas fa-balance-scale"></i> Fair Play Enforcement:</strong> Address rule violations and maintain sportsmanship.</li>
+                    <li><strong><i class="fas fa-comments"></i> Communication:</strong> Coordinate with players, organizers, and spectators as needed.</li>
+                    <li><strong><i class="fas fa-file-alt"></i> Reporting:</strong> Document match results and any incidents for tournament records.</li>
+                    <li><strong><i class="fas fa-users"></i> Community Support:</strong> Assist with tournament logistics and help create a positive environment.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2>Umpire Code of Conduct</h2>
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-rule-content">
+                <ul class="para-ul" style="margin-top: 0; margin-bottom: 0; list-style: initial; padding-left: 1.5rem;">
+                    <li><strong>Integrity:</strong> Act with honesty and impartiality in all decisions.</li>
+                    <li><strong>Confidentiality:</strong> Respect player privacy and tournament information.</li>
+                    <li><strong>Professionalism:</strong> Communicate respectfully with all participants.</li>
+                    <li><strong>Punctuality:</strong> Be available and on time for assigned matches.</li>
+                    <li><strong>Knowledge:</strong> Stay informed about current rules and procedures.</li>
+                    <li><strong>Teamwork:</strong> Collaborate effectively with other umpires and organizers.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2>Umpire Training and Requirements</h2>
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-rule-content">
+                <ul class="para-ul" style="margin-top: 0; margin-bottom: 0; list-style: initial; padding-left: 1.5rem;">
+                    <li><strong>Training:</strong> Complete mandatory training sessions before officiating.</li>
+                    <li><strong>Game Knowledge:</strong> Familiarity with No Man's Sky and Xeno Arena mechanics.</li>
+                    <li><strong>Technical Setup:</strong> Reliable internet connection and appropriate hardware.</li>
+                    <li><strong>Communication Skills:</strong> Clear verbal communication in English.</li>
+                    <li><strong>Availability:</strong> Commitment to tournament schedule and potential practice sessions.</li>
+                    <li><strong>Discord Access:</strong> Active participation in our Discord server for coordination.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-clipboard-list" style="margin-right: 0.5rem;"></i> How to Apply</h2>
+            <p class="para-txt" style="margin-bottom: 1rem;">Interested in becoming an Umpire? Submit your interest through our online registration form. Please note that completing the form expresses your interest in the role.</p>
+            <p class="para-txt" style="margin-bottom: 1rem;"><strong>Important:</strong> Umpire status is confirmed only after direct approval by an Organizer via Discord. We'll contact you through our server to discuss next steps and training.</p>
+            <div class="home-card-buttons">
+                <a class="btn site-btn" href="https://tally.so/r/81jZZ5" target="_blank" rel="noopener">Register Interest</a>
+                <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Join Discord</a>
             </div>
         </div>
     `;
