@@ -284,6 +284,37 @@ function populateRulesPage() {
 
         <div class="card accordion-rule-card">
             <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-meteor" style="margin-right: 0.5rem;"></i> Match Rules</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">Prior to the start of each Fixture, both contestants must submit a Companion Declaration via the provided submission form. This declaration confirms the Companions that the contestant intends to use throughout the entirety of the Fixture.</p>
+                <h3 style="margin-bottom: 0.5rem;">Companion Declaration</h3>
+                <p class="para-txt">Each Companion Declaration must include the following information for every declared Companion:</p>
+                <ul style="font-size: 18px; margin-bottom: 0;">
+                    <li>Companion Name</li>
+                    <li>Companion Class</li>
+                    <li>Companion Affinity</li>
+                    <li>Health Value and Class</li>
+                    <li>Agility Value and Class</li>
+                    <li>Combat Value and Class</li>
+                </ul>
+                <h3 style="margin-bottom: 0.5rem;">Battle Order</h3>
+                <p class="para-txt" style="margin-bottom: 1rem;">Once submitted, a contestant’s declared Companion roster becomes locked for the duration of the Fixture. Contestants may freely switch between their declared Companions throughout individual Matches, as permitted by the standard Xeno Arena mechanics, however undeclared Companions may not be used under any circumstances.</p>
+                <p class="para-txt">The declared Companion order is also locked upon submission. As per standard Xeno Arena functionality, the first listed Companion will automatically be summoned at the beginning of each Match.</p>
+                <h3 style="margin-bottom: 0.5rem;">Reasoning</h3>
+                <p class="para-txt">The Companion Declaration system exists for two primary reasons:</p>
+                <ol style="font-size: 18px;">
+                    <li>To assist Umpires in monitoring Fixtures and ensuring fair play.</li>
+                    <li>To provide accurate Companion information for use in live broadcasts, commentary, and recorded match presentations.</li>
+                </ol>
+                <p class="para-txt" style="margin-bottom: 1rem;">All submitted Companion Declarations remain private and confidential until required for official tournament use. This helps preserve competitive integrity by preventing contestants from directly counter-picking opponents prior to a Fixture taking place.</p>
+                <p class="para-txt">While contestants may still review publicly available footage from previous Fixtures, there is no guarantee that an opponent will reuse the same Companion lineup in future rounds.</p>
+            </div>
+        </div>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
                 <h2 class="para-h1"><i class="fas fa-star" style="margin-right: 0.5rem;"></i> Scoring System</h2>
                 <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
