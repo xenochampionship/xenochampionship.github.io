@@ -14,3 +14,5 @@ const records = [
         charity: {current: 160.00, goal: 200.00, showOnHome: true} // GBP (£)
     }
 ];
+
+const tournamentMonth = "October";

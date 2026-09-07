@@ -355,7 +355,7 @@ function populateRulesPage() {
                 <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
             <div class="accordion-rule-content">
-                <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship takes place throughout the month of August and is divided into two scheduling formats: a flexible, player coordinated Qualification stage, followed by a fixed scheduling for the Finals.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship takes place throughout the month of ${tournamentMonth} and is divided into two scheduling formats: a flexible, player coordinated Qualification stage, followed by a fixed scheduling for the Finals.</p>
                 <h3 style="margin-bottom: 0.5rem;">Qualification Stage Scheduling</h3>
                 <p class="para-txt" style="margin-bottom: 1rem;">As the Qualification stage is played over 5 rounds, each round takes place within a <b>4-day match window</b>.</p>
                 <p class="para-txt">Prior to the start of each round, fixtures will be generated and shared with contestants. Players are then required to <b>coordinate with their assigned opponent to agree on a specific date and time</b> for their match within the allotted window.</p>
@@ -368,8 +368,8 @@ function populateRulesPage() {
                 <h3 style="margin-bottom: 0.5rem;">Finals Scheduling</h3>
                 <p class="para-txt">The Finals stage follows a <b>fixed schedule</b> and takes place across two days:</p>
                 <ul>
-                    <li><b>30th August</b> - Quarter-finals (Top 8)</li>
-                    <li><b>31st August</b> - Semi-finals, Third Place Match, and Grand Final</li>
+                    <li><b>30th ${tournamentMonth}</b> - Quarter-finals (Top 8)</li>
+                    <li><b>31st ${tournamentMonth}</b> - Semi-finals, Third Place Match, and Grand Final</li>
                 </ul>
                 <p class="para-txt" style="margin-bottom: 1rem;">Due to broadcast and production requirements, all Finals fixtures must be played at their assigned times and are expected to be <b>live streamed on Twitch</b>.</p>
                 <p class="para-txt">Each day will follow a structured schedule:</p>
@@ -384,7 +384,7 @@ function populateRulesPage() {
                 <ul>
                     <li>Be available to schedule fixtures within the 2-day scheduling window</li>
                     <li>Be available to complete scheduled fixtures within the 4-day match window</li>
-                    <li>Be fully available on <b>30th and 31st August</b> if the qualify for Finals</li>
+                    <li>Be fully available on <b>30th and 31st ${tournamentMonth}</b> if the qualify for Finals</li>
                 </ul>
                 <p class="para-txt">Failure to meet these availability requirements may result in match forfeiture.</p>
             </div>
@@ -483,8 +483,8 @@ function populateRulesPage() {
                 <h3 style="margin-bottom: 0.5rem;">Finals Availability</h3>
                 <p class="para-txt">Contestants who qualify for the Finals must be fully available on:</p>
                 <ul>
-                    <li><b>30th August</b> for Quarter-finals</li>
-                    <li><b>31st August</b> for Semi-finals, Third Place Match, and Grand Final</li>
+                    <li><b>30th ${tournamentMonth}</b> for Quarter-finals</li>
+                    <li><b>31st ${tournamentMonth}</b> for Semi-finals, Third Place Match, and Grand Final</li>
                 </ul>
                 <p class="para-txt">As Finals fixtures follow a fixed schedule and are broadcast-focused, failure to attend may result in forfeiture.</p>
             </div>
@@ -833,7 +833,7 @@ async function populateCurrentChampionship() {
             <p class="para-txt"><strong>Format:</strong> 1v1 Best-of-3 Xeno Arena matches</p>
             <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
             <p class="para-txt"><strong>Schedule:</strong> Round completiong windows in UK time (UTC+01:00)</p>
-            <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout August</p>
+            <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout ${tournamentMonth}</p>
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
