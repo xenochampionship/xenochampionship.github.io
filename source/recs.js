@@ -7,7 +7,7 @@ const defaultCharity = {
 
 const records = [
     {
-        title: "XC 2026", dates: "01/08/2026 - 31/08/2026", 
+        title: "XC 2026", dates: "01/10/2026 - 31/10/2026", 
         past: false, // If current or upcoming, set past to false
         top3: ["TBC", "TBC", "TBC"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc26.json",
