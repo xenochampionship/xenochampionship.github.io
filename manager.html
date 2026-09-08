@@ -1786,6 +1786,7 @@
                 currentJsonPath: "",
                 currentJsonSha: "",
                 currentJsonData: null,
+                fixturePlayerOptions: [],
                 subscriberKeys: [],
                 lastNotificationPreferenceKind: "",
                 editorStep: 0,
@@ -2820,7 +2821,12 @@
                 state.currentJsonPath = file.path;
                 state.currentJsonSha = file.sha;
                 state.currentJsonData = parsed;
+                state.fixturePlayerOptions = [];
                 el.jsonTextArea.value = JSON.stringify(parsed, null, 2);
+
+                if (getCurrentEditorFileKind() === "xeno_fixtures") {
+                    await loadFixturePlayerOptions(parsed);
+                }
 
                 hydrateCrmFromCurrentJson();
                 updateCommitNotificationChoiceVisibility();
@@ -2919,8 +2925,8 @@
                             { key: "date", label: "Date", type: "date" },
                             { key: "time", label: "Time", type: "time" },
                             { key: "timeZone", label: "Time Zone", type: "text" },
-                            { key: "player1", label: "Player 1", type: "text" },
-                            { key: "player2", label: "Player 2", type: "text" },
+                            { key: "player1", label: "Player 1", type: "player-select" },
+                            { key: "player2", label: "Player 2", type: "player-select" },
                             { key: "platform1", label: "Player 1 Platform", type: "text" },
                             { key: "platform2", label: "Player 2 Platform", type: "text" },
                             { key: "umpire", label: "Umpire", type: "text" },
@@ -2933,6 +2939,44 @@
                     };
                 }
                 return null;
+            }
+
+            function resolveTournamentFilePath(tournamentReference) {
+                const reference = String(tournamentReference || "").trim();
+                if (!reference) {
+                    return "";
+                }
+                if (Object.prototype.hasOwnProperty.call(REPOSITORY_FILE_MAP, reference)) {
+                    return REPOSITORY_FILE_MAP[reference];
+                }
+                const configuredPath = Object.values(REPOSITORY_FILE_MAP).find(function(path) {
+                    return path === reference || path.endsWith("/" + reference) || path.endsWith("\\" + reference);
+                });
+                return configuredPath || (reference.includes("/") ? reference : "source/data/" + reference);
+            }
+
+            async function loadFixturePlayerOptions(fixturesData) {
+                state.fixturePlayerOptions = [];
+                if (!state.selectedRepo || !fixturesData || typeof fixturesData !== "object") {
+                    return;
+                }
+
+                const playerFilePath = resolveTournamentFilePath(fixturesData.tournament);
+                if (!playerFilePath) {
+                    return;
+                }
+
+                try {
+                    const loadedPlayers = await loadRepoJsonFile(state.selectedRepo.full_name, playerFilePath);
+                    const players = loadedPlayers.data && Array.isArray(loadedPlayers.data.players)
+                        ? loadedPlayers.data.players
+                        : [];
+                    state.fixturePlayerOptions = players
+                        .map(function(player) { return String(player && player.name || "").trim(); })
+                        .filter(Boolean);
+                } catch (error) {
+                    console.warn("Unable to load tournament players for fixture dropdowns:", error);
+                }
             }
 
             function getNestedRecordValue(record, key) {
@@ -5268,13 +5312,27 @@
                         wrapper.className = "crm-field-card";
                         const label = document.createElement("label");
                         label.textContent = field.label;
-                        const input = field.type === "select"
+                        const input = field.type === "select" || field.type === "player-select"
                             ? document.createElement("select")
                             : document.createElement("input");
                         input.type = field.type === "nullable" ? "text" : field.type;
                         const currentValue = getNestedRecordValue(record, field.key);
-                        if (field.type === "select") {
-                            field.options.forEach(function(optionDefinition) {
+                        if (field.type === "select" || field.type === "player-select") {
+                            const optionDefinitions = field.type === "player-select"
+                                ? state.fixturePlayerOptions.map(function(playerName) {
+                                    return { value: playerName, label: playerName };
+                                })
+                                : field.options;
+                            const currentOptionValue = String(currentValue ?? "");
+                            if (currentOptionValue && !optionDefinitions.some(function(optionDefinition) {
+                                return optionDefinition.value === currentOptionValue;
+                            })) {
+                                optionDefinitions.unshift({ value: currentOptionValue, label: currentOptionValue + " (current)" });
+                            }
+                            if (!optionDefinitions.length) {
+                                optionDefinitions.push({ value: "", label: "No tournament players loaded" });
+                            }
+                            optionDefinitions.forEach(function(optionDefinition) {
                                 const option = document.createElement("option");
                                 option.value = optionDefinition.value;
                                 option.textContent = optionDefinition.label;
@@ -5287,7 +5345,7 @@
                         const updateFieldValue = function(event) {
                             const rawValue = event.target.value;
                             let nextValue = rawValue;
-                            if (field.type === "select") {
+                            if (field.type === "select" || field.type === "player-select") {
                                 nextValue = rawValue;
                             } else if (field.type === "number") {
                                 nextValue = rawValue === "" ? 0 : Number(rawValue);
