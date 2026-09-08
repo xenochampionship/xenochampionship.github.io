@@ -822,17 +822,17 @@ async function populateCurrentChampionship() {
                 <div class="podium-item gold">
                     <span class="medal-badge">1</span>
                     <div>${currentRecord.top3[0]}</div>
-                    <div class="podium-label">Gold</div>
+                    <div class="podium-label">Xeno Champion</div>
                 </div>
                 <div class="podium-item silver">
                     <span class="medal-badge">2</span>
                     <div>${currentRecord.top3[1]}</div>
-                    <div class="podium-label">Silver</div>
+                    <div class="podium-label">Silver Medallist</div>
                 </div>
                 <div class="podium-item bronze">
                     <span class="medal-badge">3</span>
                     <div>${currentRecord.top3[2]}</div>
-                    <div class="podium-label">Bronze</div>
+                    <div class="podium-label">Bronze Medallist</div>
                 </div>
             </div>
         </div>
@@ -853,17 +853,17 @@ function renderPodium(top3) {
             <div class="podium-item gold">
                 <span class="medal-badge">1</span>
                 <div class="para-txt">${top3[0]}</div>
-                <div class="podium-label">Gold</div>
+                <div class="podium-label">Xeno Champion</div>
             </div>
             <div class="podium-item silver">
                 <span class="medal-badge">2</span>
                 <div class="para-txt">${top3[1]}</div>
-                <div class="podium-label">Silver</div>
+                <div class="podium-label">Silver Medallist</div>
             </div>
             <div class="podium-item bronze">
                 <span class="medal-badge">3</span>
                 <div class="para-txt">${top3[2]}</div>
-                <div class="podium-label">Bronze</div>
+                <div class="podium-label">Bronze Medallist</div>
             </div>
         </div>
     `;
