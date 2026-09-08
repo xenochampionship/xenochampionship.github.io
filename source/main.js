@@ -762,7 +762,7 @@ async function populateCurrentChampionship() {
         fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
     }
 
-    const registrationHtml = renderRegistrationCard(currentRecord);
+    const registrationHtml = renderRegistrationCard(currentRecord, data?.metadata);
     const donationHtml = renderDonationCard(currentRecord, data?.metadata);
     const registrationSection = (registrationHtml || donationHtml)
         ? `<div class="card-row ${registrationHtml && donationHtml ? 'two-cards' : 'one-card'}">${registrationHtml}${donationHtml}</div>`
@@ -869,7 +869,7 @@ function renderPodium(top3) {
     `;
 }
 
-function renderRegistrationCard(record) {
+function renderRegistrationCard(record, metadata) {
     if (!record || !record.dates) return '';
 
     const range = parseTournamentDateRange(record.dates);
@@ -887,13 +887,14 @@ function renderRegistrationCard(record) {
     let statusText = '';
     let buttonHtml = '';
     let extraLine = '';
+    const registrationLink = metadata?.registration?.registrationLink || '#';
 
     if (now < monthBefore) {
         statusText = 'Registration for this tournament is not open yet. Check back soon for more information.';
         extraLine = `<p class="para-txt"><strong>Registration Opens:</strong> ${monthBefore.toLocaleDateString('en-GB')}</p>`;
     } else if (now >= monthBefore && now < registrationClose) {
         statusText = 'Registration is now open. Secure your place in the current tournament before slots fill up.';
-        buttonHtml = `<a href="#" class="btn registration-btn" target="_blank" rel="noopener">Register Now</a>`;
+        buttonHtml = `<a href="${registrationLink}" class="btn registration-btn" target="_blank" rel="noopener">Register Now</a>`;
     } else if (now >= registrationClose && now < tournamentStart) {
         statusText = 'Registration is now closed. The tournament will begin soon!';
     } else {
