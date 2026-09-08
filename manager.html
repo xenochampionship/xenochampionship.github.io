@@ -979,6 +979,199 @@
                     position: static;
                 }
             }
+
+            /* Match the Xeno Championship site's visual language. */
+            @font-face {
+                font-family: "NMSFuturaProBook";
+                src: url("https://font.nmscd.com/assets/font/NMSFuturaProBook_Kerned/Web-TT/NMSFuturaProBook_Kerned.woff") format("woff");
+            }
+
+            :root {
+                --bg: #050505;
+                --card: rgba(255, 255, 255, 0.055);
+                --ink: #ffffff;
+                --muted: rgba(255, 255, 255, 0.72);
+                --line: rgba(215, 25, 32, 0.72);
+                --brand: #d71920;
+                --brand-strong: #a70f16;
+                --ok: #35d99a;
+                --warn: #ffb04a;
+                --bad: #ff6870;
+                --radius: 10px;
+                --shadow: 0 4px 24px rgba(0, 212, 255, 0.09);
+            }
+
+            html {
+                background: #050505;
+            }
+
+            body {
+                font-family: "NMSFuturaProBook", "Space Grotesk", sans-serif;
+                background:
+                    radial-gradient(circle at 12% 8%, rgba(215, 25, 32, 0.18), transparent 26%),
+                    radial-gradient(circle at 88% 18%, rgba(0, 212, 255, 0.12), transparent 24%),
+                    linear-gradient(135deg, #000000 0%, #111111 52%, #000000 100%);
+                color: #ffffff;
+            }
+
+            .shell {
+                max-width: 1240px;
+            }
+
+            header {
+                border-color: var(--brand);
+                background: rgba(0, 0, 0, 0.82);
+                box-shadow: 0 0 22px rgba(215, 25, 32, 0.16);
+            }
+
+            .brand h1,
+            h2,
+            h3,
+            .hero-title,
+            .mini-stat-value {
+                color: #ffffff;
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.38);
+            }
+
+            .brand p,
+            label,
+            .section-copy,
+            .feature-card p,
+            .about-card p,
+            .config-card p,
+            .step-body p,
+            footer {
+                color: var(--muted);
+            }
+
+            .card,
+            .wizard-shell,
+            .modal-card {
+                background: rgba(255, 255, 255, 0.055);
+                border-color: var(--brand);
+                box-shadow: var(--shadow);
+                backdrop-filter: blur(6px);
+            }
+
+            .hero-card {
+                background:
+                    radial-gradient(circle at top right, rgba(215, 25, 32, 0.2), transparent 30%),
+                    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 212, 255, 0.035));
+            }
+
+            .mini-stat,
+            .feature-card,
+            .about-card,
+            .workflow-step,
+            .config-card,
+            .crm-field-card,
+            .player-summary-card,
+            .crm-drag-item,
+            .node-item,
+            .repo-list,
+            input,
+            select,
+            textarea,
+            button {
+                background: rgba(0, 0, 0, 0.34);
+                color: #ffffff;
+                border-color: rgba(215, 25, 32, 0.62);
+            }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: rgba(255, 255, 255, 0.42);
+            }
+
+            button:hover,
+            .nav-link:hover,
+            .nav-link.active,
+            button.primary {
+                background: var(--brand);
+                border-color: var(--brand);
+                color: #ffffff;
+                box-shadow: 0 0 12px rgba(215, 25, 32, 0.32);
+            }
+
+            button.primary:hover {
+                background: var(--brand-strong);
+                border-color: var(--brand-strong);
+            }
+
+            button.warn {
+                background: rgba(255, 176, 74, 0.1);
+                border-color: rgba(255, 176, 74, 0.75);
+                color: #ffd08a;
+            }
+
+            .wizard-steps {
+                background: rgba(0, 0, 0, 0.46);
+                border-color: rgba(215, 25, 32, 0.5);
+            }
+
+            .wizard-step-pill.active,
+            .wizard-step-pill.done {
+                background: var(--brand);
+                border-color: var(--brand);
+                color: #ffffff;
+            }
+
+            .status {
+                background: rgba(0, 212, 255, 0.08);
+                border-left-color: #00c6ff;
+                color: #ffffff;
+            }
+
+            .status.ok {
+                background: rgba(53, 217, 154, 0.1);
+                border-left-color: var(--ok);
+            }
+
+            .status.bad {
+                background: rgba(255, 104, 112, 0.1);
+                border-left-color: var(--bad);
+            }
+
+            .eyebrow,
+            .pill,
+            .repo-badge,
+            .node-type-pill {
+                border-color: rgba(0, 212, 255, 0.48);
+                background: rgba(0, 212, 255, 0.08);
+                color: #b8f2ff;
+            }
+
+            .step-marker {
+                background: linear-gradient(135deg, var(--brand), #00a6c7);
+            }
+
+            .drop-zone {
+                border-color: rgba(0, 212, 255, 0.62);
+                background: rgba(0, 212, 255, 0.04);
+            }
+
+            .drop-zone.drag,
+            .crm-drag-item.active,
+            .node-item.active,
+            .repo-item.active {
+                border-color: #00c6ff;
+                background: rgba(0, 212, 255, 0.1);
+                box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+            }
+
+            .crm-drag-item.completed {
+                border-color: rgba(53, 217, 154, 0.72);
+                background: rgba(53, 217, 154, 0.08);
+            }
+
+            .modal-backdrop {
+                background: rgba(0, 0, 0, 0.78);
+                backdrop-filter: blur(4px);
+            }
+
+            a.site-link {
+                color: #00c6ff;
+            }
         </style>
     </head>
     <body>
