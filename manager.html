@@ -2980,15 +2980,16 @@
                 entries.forEach(function(entry, idx) {
                     const key = entry[0];
                     const path = entry[1];
+                    const safeKeyLabel = String(key[0]).toUpperCase() + String(key).slice(1)
 
                     const item = document.createElement("li");
                     item.className = "mono";
-                    item.textContent = String(key).toCapitalized() + " -> (" + path + ")";
+                    item.textContent = safeKeyLabel + " -> (" + path + ")";
                     el.configuredFilesList.appendChild(item);
 
                     const option = document.createElement("option");
                     option.value = path;
-                    option.textContent = String(key).toCapitalized();
+                    option.textContent = safeKeyLabel;
                     if (DEFAULT_FILE_KEY && key === DEFAULT_FILE_KEY) {
                         option.selected = true;
                     } else if (!DEFAULT_FILE_KEY && idx === 0) {
