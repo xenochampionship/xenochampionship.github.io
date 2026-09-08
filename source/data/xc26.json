@@ -10,26 +10,5 @@
       }
     }
   },
-  "players": [
-    {
-      "name": "Example Player 1",
-      "platform": "Xbox",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    },
-    {
-      "name": "Example Player 2",
-      "platform": "Xbox",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    }
-  ]
+  "players": []
 }
