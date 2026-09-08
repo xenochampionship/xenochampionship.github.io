@@ -12,6 +12,14 @@ const pageNames = {
     'umpire-thank-you': 'Thank You'
 };
 
+const allowedFixtureIds = [
+    "Qualifier", 
+    "Quarter-Final", 
+    "Semi-Final", 
+    "Third Place Match", 
+    "Grand Final"
+];
+
 function toggleRuleAccordion(button) {
     const card = button.closest('.accordion-rule-card');
     if (card) {

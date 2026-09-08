@@ -1156,7 +1156,7 @@
                                         <label>Reorder objects (drag and drop)</label>
                                         <ul id="crmDragList" class="crm-drag-list"></ul>
                                     </div>
-                                    <div id="crmFields" class="field-grid" style="margin-top:0.8rem;"></div>
+                                    <div id="crmFields" class="field-grid" style="display: none;"></div>
                                 </div>
 
                                 <div id="textMode" class="hidden" style="margin-top:0.8rem;">
@@ -1678,6 +1678,18 @@
             };
 
             const API_BASE = "https://api.github.com";
+            const ALLOWED_FIXTURE_IDS = [
+                "Qualifier",
+                "Quarter-Final",
+                "Semi-Final",
+                "Third Place Match",
+                "Grand Final"
+            ];
+            const FIXTURE_STATUS_OPTIONS = [
+                { value: "scheduled", label: "Scheduled" },
+                { value: "live", label: "Live" },
+                { value: "completed", label: "Completed" }
+            ];
             const TARGET_REPO_FULL_NAME = String(WEBEDITOR_CONFIG.repository.targetRepoFullName || "").toLowerCase();
             const REPOSITORY_FILE_MAP = (function resolveRepositoryFileMap() {
                 const configured = WEBEDITOR_CONFIG.repository && WEBEDITOR_CONFIG.repository.files;
@@ -2903,7 +2915,7 @@
                         dataKey: "fixtures",
                         label: "Fixtures",
                         fields: [
-                            { key: "fixtureId", label: "Fixture ID", type: "text" },
+                            { key: "fixtureId", label: "Fixture ID", type: "select", options: ALLOWED_FIXTURE_IDS.map(function(value) { return { value: value, label: value }; }) },
                             { key: "date", label: "Date", type: "date" },
                             { key: "time", label: "Time", type: "time" },
                             { key: "timeZone", label: "Time Zone", type: "text" },
@@ -2913,7 +2925,7 @@
                             { key: "platform2", label: "Player 2 Platform", type: "text" },
                             { key: "umpire", label: "Umpire", type: "text" },
                             { key: "streamLink", label: "Stream Link", type: "nullable" },
-                            { key: "status", label: "Status", type: "text" }
+                            { key: "status", label: "Status", type: "select", options: FIXTURE_STATUS_OPTIONS }
                         ],
                         create: function() {
                             return { fixtureId: "", date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "scheduled" };
@@ -5256,21 +5268,37 @@
                         wrapper.className = "crm-field-card";
                         const label = document.createElement("label");
                         label.textContent = field.label;
-                        const input = document.createElement("input");
+                        const input = field.type === "select"
+                            ? document.createElement("select")
+                            : document.createElement("input");
                         input.type = field.type === "nullable" ? "text" : field.type;
                         const currentValue = getNestedRecordValue(record, field.key);
-                        input.value = currentValue == null ? "" : String(currentValue);
-                        input.addEventListener("input", function(event) {
+                        if (field.type === "select") {
+                            field.options.forEach(function(optionDefinition) {
+                                const option = document.createElement("option");
+                                option.value = optionDefinition.value;
+                                option.textContent = optionDefinition.label;
+                                option.selected = String(optionDefinition.value) === String(currentValue ?? "");
+                                input.appendChild(option);
+                            });
+                        } else {
+                            input.value = currentValue == null ? "" : String(currentValue);
+                        }
+                        const updateFieldValue = function(event) {
                             const rawValue = event.target.value;
                             let nextValue = rawValue;
-                            if (field.type === "number") {
+                            if (field.type === "select") {
+                                nextValue = rawValue;
+                            } else if (field.type === "number") {
                                 nextValue = rawValue === "" ? 0 : Number(rawValue);
                             } else if (field.type === "nullable") {
                                 nextValue = rawValue.trim() === "" ? null : rawValue.trim();
                             }
                             setNestedRecordValue(record, field.key, nextValue);
                             syncCrmToJsonText();
-                        });
+                        };
+                        input.addEventListener("input", updateFieldValue);
+                        input.addEventListener("change", updateFieldValue);
                         wrapper.appendChild(label);
                         wrapper.appendChild(input);
                         targetContainer.appendChild(wrapper);
