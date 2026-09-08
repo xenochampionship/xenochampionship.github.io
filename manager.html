@@ -2983,12 +2983,12 @@
 
                     const item = document.createElement("li");
                     item.className = "mono";
-                    item.textContent = String(key).toUpperCase() + " -> (" + path + ")";
+                    item.textContent = String(key).toCapitalized() + " -> (" + path + ")";
                     el.configuredFilesList.appendChild(item);
 
                     const option = document.createElement("option");
                     option.value = path;
-                    option.textContent = String(key).toUpperCase();
+                    option.textContent = String(key).toCapitalized();
                     if (DEFAULT_FILE_KEY && key === DEFAULT_FILE_KEY) {
                         option.selected = true;
                     } else if (!DEFAULT_FILE_KEY && idx === 0) {
