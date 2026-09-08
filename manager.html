@@ -4395,9 +4395,14 @@
                 const kind = getCurrentEditorFileKind();
                 const xenoDefinition = getXenoRecordDefinition();
                 if (xenoDefinition) {
-                    const first = xenoDefinition.dataKey === "fixtures" ? record.fixtureId : record.name;
-                    const second = xenoDefinition.dataKey === "fixtures" ? [record.player1, record.player2].filter(Boolean).join(" vs ") : record.platform;
-                    return [first, second].filter(Boolean).join(" · ") || xenoDefinition.label.slice(0, -1) + " " + (index + 1);
+                    if (xenoDefinition.dataKey === "fixtures") {
+                        const fixtureLabel = [record.fixtureId, record.player1 + " vs " + record.player2]
+                            .filter(function(value) { return value && value !== " vs "; })
+                            .join(" · ");
+                        return fixtureLabel || "Fixture " + (index + 1);
+                    }
+
+                    return [record.name, record.platform].filter(Boolean).join(" · ") || "Player " + (index + 1);
                 }
                 if (kind === "games") {
                     const home = record.home_team || record.homeTeam || "";
