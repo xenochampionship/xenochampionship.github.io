@@ -2978,9 +2978,19 @@
                 }
 
                 entries.forEach(function(entry, idx) {
+                    function _getXcYearFromPath(path) {
+                        const match = String(path).match(/xc(\d{2})\.json$/i);
+                        if (match && match[1]) {
+                            return "20" + match[1];
+                        }
+                        return "";
+                    }
                     const key = entry[0];
                     const path = entry[1];
                     const safeKeyLabel = String(key[0]).toUpperCase() + String(key).slice(1);
+
+                    // 
+                    const xcYearFromPath = _getXcYearFromPath(path);
 
                     const item = document.createElement("li");
                     item.className = "mono";
@@ -2989,7 +2999,7 @@
 
                     const option = document.createElement("option");
                     option.value = path;
-                    option.textContent = safeKeyLabel;
+                    option.textContent = safeKeyLabel + (xcYearFromPath ? " (" + xcYearFromPath + ")" : "");
                     if (DEFAULT_FILE_KEY && key === DEFAULT_FILE_KEY) {
                         option.selected = true;
                     } else if (!DEFAULT_FILE_KEY && idx === 0) {
