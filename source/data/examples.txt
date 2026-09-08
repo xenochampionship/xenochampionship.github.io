@@ -1,0 +1,20 @@
+The below examples are to be used by the manager.html file to accurately structure the management of data to the respective files.
+
+
+
+Player Record Example (xc26.json)
+{
+    "name": "Test Player 1", "platform": "Xbox",
+    "results": {"played": 0, "wins": 0, "losses": 0, "omw": 0.0}
+}
+
+
+Fixture Record Example (fixtures.json)
+{
+    "fixtureId": "Qualifier",
+    "date": "2026-08-01", "time": "11:00", "timeZone": "UTC+01:00",
+    "player1": "Example Player 1", "player2": "Example Player 2",
+    "platform1": "Xbox", "platform2": "PC",
+    "umpire": "TBC",
+    "streamLink": null, "status": "scheduled"
+}

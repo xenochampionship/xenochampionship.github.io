@@ -1,0 +1,13 @@
+{
+    "site_data": {
+        "title": "Xeno Championship",
+        "url": "https://xenochampionship.github.io/"
+    }, 
+    "metadata": {
+        "last_updated": null
+    }, 
+    "json_files": {
+        "xeno_championship_2026": "source/data/xc26.json",
+        "fixtures": "source/data/fixtures.json"
+    }
+}
