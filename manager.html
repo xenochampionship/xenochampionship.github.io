@@ -76,6 +76,22 @@
                 z-index: 9;
             }
 
+            .brand {
+                display: inline-flex;
+            }
+
+            .brand-text {
+                display: block;
+            }
+
+            .brand-logo {
+                background-image: url(source/images/xc-new-t.png);
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 60px;
+                height: auto;
+            }
+
             .brand h1 {
                 margin: 0;
                 font-size: 1.2rem;
@@ -1178,8 +1194,11 @@
         <div class="shell">
             <header>
                 <div class="brand">
-                    <h1 id="brandTitle">Xeno Championship Manager</h1>
-                    <p id="brandTagline">WebEditor used for managing the Xeno Championship</p>
+                    <div class="brand-logo"></div>
+                    <div class="brand-text">
+                        <h1 id="brandTitle">Xeno Championship Manager</h1>
+                        <p id="brandTagline">WebEditor used for managing the Xeno Championship</p>
+                    </div>
                 </div>
                 <nav aria-label="Editor context">
                     <span class="pill">CRM editor</span>
