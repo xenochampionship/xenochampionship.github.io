@@ -5607,22 +5607,23 @@
                     : "Date TBC";
                 const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : "SCHEDULED";
                 const stage = fixture.fixtureId || "Xeno Championship";
+                const logoUrl = new URL("source/images/xc-logo.png", document.baseURI).href;
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
                     <defs><linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="0.55" stop-color="#161616"/><stop offset="1" stop-color="#050505"/></linearGradient></defs>
                     <rect width="1200" height="675" fill="url(#background)"/>
                     <rect x="28" y="28" width="1144" height="619" rx="12" fill="none" stroke="#d71920" stroke-width="3"/>
-                    <text x="70" y="92" fill="#00c6ff" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">NMS XENO CHAMPIONSHIP</text>
-                    <text x="70" y="170" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}</text>
-                    <text x="70" y="215" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "Time TBC")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
-                    <line x1="70" y1="270" x2="1130" y2="270" stroke="#d71920" stroke-width="2"/>
-                    <text x="270" y="380" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player1 || "TBC")}</text>
-                    <text x="600" y="380" fill="#d71920" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
-                    <text x="930" y="380" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player2 || "TBC")}</text>
-                    <text x="270" y="420" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform1 || "")}</text>
-                    <text x="930" y="420" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform2 || "")}</text>
-                    <rect x="500" y="475" width="200" height="54" rx="8" fill="#d71920"/>
-                    <text x="600" y="511" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle">${status}</text>
-                    <text x="70" y="595" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="22">Umpire: ${escapeFixtureCardText(fixture.umpire || "TBC")}</text>
+                    <image href="${logoUrl}" x="760" y="110" width="330" height="330" preserveAspectRatio="xMidYMid meet" opacity="0.16"/>
+                    <text x="70" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}</text>
+                    <text x="70" y="163" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "Time TBC")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
+                    <line x1="70" y1="205" x2="1130" y2="205" stroke="#d71920" stroke-width="2"/>
+                    <text x="270" y="325" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player1 || "TBC")}</text>
+                    <text x="600" y="325" fill="#d71920" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
+                    <text x="930" y="325" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player2 || "TBC")}</text>
+                    <text x="270" y="365" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform1 || "")}</text>
+                    <text x="930" y="365" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform2 || "")}</text>
+                    <rect x="500" y="420" width="200" height="54" rx="8" fill="#d71920"/>
+                    <text x="600" y="456" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle">${status}</text>
+                    <text x="70" y="575" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="22">Umpire: ${escapeFixtureCardText(fixture.umpire || "TBC")}</text>
                 </svg>`;
             }
 
@@ -5768,11 +5769,28 @@
                 }
             }
 
+            function getCurrentFixtureCardRecord(record, recordIndex) {
+                const snapshot = deepClone(record || {});
+                if (!el.crmModalFields || getCurrentEditorFileKind() !== "xeno_fixtures") {
+                    return snapshot;
+                }
+
+                el.crmModalFields.querySelectorAll("[data-fixture-field]").forEach(function(input) {
+                    const fieldKey = input.dataset.fixtureField;
+                    if (!fieldKey) {
+                        return;
+                    }
+                    setNestedRecordValue(snapshot, fieldKey, input.value);
+                });
+                return snapshot;
+            }
+
             function openFixtureCardModal(recordIndex) {
-                const fixture = state.crmModel.records[recordIndex];
-                if (!fixture || getCurrentEditorFileKind() !== "xeno_fixtures" || !el.fixtureCardModalBody) {
+                const sourceFixture = state.crmModel.records[recordIndex];
+                if (!sourceFixture || getCurrentEditorFileKind() !== "xeno_fixtures" || !el.fixtureCardModalBody) {
                     return;
                 }
+                const fixture = getCurrentFixtureCardRecord(sourceFixture, recordIndex);
 
                 if (el.fixtureCardModalTitle) {
                     el.fixtureCardModalTitle.textContent = "Fixture Card · " + getRecordLabel(fixture, recordIndex);
@@ -5841,6 +5859,9 @@
                         };
                         input.addEventListener("input", updateFieldValue);
                         input.addEventListener("change", updateFieldValue);
+                        if (kind === "xeno_fixtures") {
+                            input.dataset.fixtureField = field.key;
+                        }
                         wrapper.appendChild(label);
                         wrapper.appendChild(input);
                         targetContainer.appendChild(wrapper);
