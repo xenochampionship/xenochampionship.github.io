@@ -353,7 +353,6 @@
             .fixture-card-tools {
                 display: grid;
                 gap: 0.65rem;
-                grid-column: 1 / -1;
                 border: 1px solid var(--line);
                 border-radius: 10px;
                 padding: 0.8rem;
@@ -1707,6 +1706,19 @@
                 </div>
             </div>
 
+            <div id="fixtureCardModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="fixtureCardModalTitle">
+                <div class="modal-card" style="width:min(100%, 980px);">
+                    <div class="modal-head">
+                        <h3 id="fixtureCardModalTitle">Fixture Card</h3>
+                        <button id="fixtureCardModalCloseBtn" type="button" class="warn">Close</button>
+                    </div>
+                    <div class="stack modal-body-scroll">
+                        <div id="fixtureCardModalPath" class="pill mono">Fixture</div>
+                        <div id="fixtureCardModalBody"></div>
+                    </div>
+                </div>
+            </div>
+
             <div id="teamPlayersModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="teamPlayersModalTitle">
                 <div class="modal-card" style="width:min(100%, 980px);">
                     <div class="modal-head">
@@ -2207,6 +2219,11 @@
                 crmRecordModalSaveBtn: document.getElementById("crmRecordModalSaveBtn"),
                 crmRecordModalCancelBtn: document.getElementById("crmRecordModalCancelBtn"),
                 crmRecordModalCloseBtn: document.getElementById("crmRecordModalCloseBtn"),
+                fixtureCardModal: document.getElementById("fixtureCardModal"),
+                fixtureCardModalTitle: document.getElementById("fixtureCardModalTitle"),
+                fixtureCardModalPath: document.getElementById("fixtureCardModalPath"),
+                fixtureCardModalBody: document.getElementById("fixtureCardModalBody"),
+                fixtureCardModalCloseBtn: document.getElementById("fixtureCardModalCloseBtn"),
                 teamPlayersModal: document.getElementById("teamPlayersModal"),
                 teamPlayersModalTitle: document.getElementById("teamPlayersModalTitle"),
                 teamPlayersModalBody: document.getElementById("teamPlayersModalBody"),
@@ -5685,7 +5702,11 @@
                     reader.readAsDataURL(blob);
                 });
                 const headers = { "Content-Type": "application/json" };
-                const authToken = String(fixtureCardConfig.authToken || "").trim();
+                const configuredAuthToken = String(fixtureCardConfig.authToken || "").trim();
+                const authToken = configuredAuthToken || String(window.prompt("Enter the fixture card worker token to post this image:") || "").trim();
+                if (!authToken) {
+                    throw new Error("A fixture card worker token is required to post.");
+                }
                 if (authToken) {
                     headers.Authorization = "Bearer " + authToken;
                 }
@@ -5699,6 +5720,69 @@
                     throw new Error("Discord post failed with HTTP " + postResponse.status + ".");
                 }
                 statusEl.textContent = "Fixture card posted.";
+            }
+
+            function renderFixtureCardTools(fixture) {
+                const actionPanel = document.createElement("div");
+                actionPanel.className = "fixture-card-tools";
+                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">No image generated.</div>`;
+                const previewImage = actionPanel.querySelector(".fixture-card-preview");
+                const generateButton = actionPanel.querySelector(".fixture-generate-btn");
+                const downloadButton = actionPanel.querySelector(".fixture-download-btn");
+                const postButton = actionPanel.querySelector(".fixture-post-btn");
+                const statusEl = actionPanel.querySelector(".fixture-card-status");
+
+                generateButton.addEventListener("click", async function() {
+                    statusEl.classList.remove("bad");
+                    try {
+                        await generateFixtureCardImage(fixture, previewImage, downloadButton, postButton, statusEl);
+                    } catch (error) {
+                        statusEl.textContent = error.message;
+                        statusEl.classList.add("bad");
+                    }
+                });
+                downloadButton.addEventListener("click", function() {
+                    downloadFixtureCardImage(previewImage, fixture);
+                });
+                postButton.addEventListener("click", async function() {
+                    postButton.disabled = true;
+                    statusEl.classList.remove("bad");
+                    try {
+                        await postFixtureCardImage(fixture, previewImage, statusEl);
+                    } catch (error) {
+                        statusEl.textContent = error.message;
+                        statusEl.classList.add("bad");
+                    } finally {
+                        postButton.disabled = false;
+                    }
+                });
+                return actionPanel;
+            }
+
+            function closeFixtureCardModal() {
+                if (el.fixtureCardModal) {
+                    el.fixtureCardModal.classList.add("hidden");
+                }
+                if (el.fixtureCardModalBody) {
+                    el.fixtureCardModalBody.innerHTML = "";
+                }
+            }
+
+            function openFixtureCardModal(recordIndex) {
+                const fixture = state.crmModel.records[recordIndex];
+                if (!fixture || getCurrentEditorFileKind() !== "xeno_fixtures" || !el.fixtureCardModalBody) {
+                    return;
+                }
+
+                if (el.fixtureCardModalTitle) {
+                    el.fixtureCardModalTitle.textContent = "Fixture Card · " + getRecordLabel(fixture, recordIndex);
+                }
+                if (el.fixtureCardModalPath) {
+                    el.fixtureCardModalPath.textContent = "Fixture " + (recordIndex + 1);
+                }
+                el.fixtureCardModalBody.innerHTML = "";
+                el.fixtureCardModalBody.appendChild(renderFixtureCardTools(fixture));
+                el.fixtureCardModal.classList.remove("hidden");
             }
 
 
@@ -5761,38 +5845,15 @@
                         wrapper.appendChild(input);
                         targetContainer.appendChild(wrapper);
                     });
-                    if (kind === "xeno_fixtures") {
-                        const actionPanel = document.createElement("div");
-                        actionPanel.className = "fixture-card-tools";
-                        actionPanel.innerHTML = `<h3>Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">No image generated.</div>`;
-                        const previewImage = actionPanel.querySelector(".fixture-card-preview");
-                        const generateButton = actionPanel.querySelector(".fixture-generate-btn");
-                        const downloadButton = actionPanel.querySelector(".fixture-download-btn");
-                        const postButton = actionPanel.querySelector(".fixture-post-btn");
-                        const statusEl = actionPanel.querySelector(".fixture-card-status");
-                        generateButton.addEventListener("click", async function() {
-                            try {
-                                await generateFixtureCardImage(record, previewImage, downloadButton, postButton, statusEl);
-                            } catch (error) {
-                                statusEl.textContent = error.message;
-                                statusEl.classList.add("bad");
-                            }
+                    if (kind === "xeno_fixtures" && targetContainer === el.crmModalFields) {
+                        const fixtureCardButton = document.createElement("button");
+                        fixtureCardButton.type = "button";
+                        fixtureCardButton.className = "primary";
+                        fixtureCardButton.textContent = "Open Fixture Card";
+                        fixtureCardButton.addEventListener("click", function() {
+                            openFixtureCardModal(recordIndex);
                         });
-                        downloadButton.addEventListener("click", function() {
-                            downloadFixtureCardImage(previewImage, record);
-                        });
-                        postButton.addEventListener("click", async function() {
-                            postButton.disabled = true;
-                            try {
-                                await postFixtureCardImage(record, previewImage, statusEl);
-                            } catch (error) {
-                                statusEl.textContent = error.message;
-                                statusEl.classList.add("bad");
-                            } finally {
-                                postButton.disabled = false;
-                            }
-                        });
-                        targetContainer.appendChild(actionPanel);
+                        targetContainer.appendChild(fixtureCardButton);
                     }
                     return true;
                 }
@@ -7058,6 +7119,20 @@
                         closeCrmRecordModal();
                     }
                 });
+
+                if (el.fixtureCardModalCloseBtn) {
+                    el.fixtureCardModalCloseBtn.addEventListener("click", function() {
+                        closeFixtureCardModal();
+                    });
+                }
+
+                if (el.fixtureCardModal) {
+                    el.fixtureCardModal.addEventListener("click", function(event) {
+                        if (event.target === el.fixtureCardModal) {
+                            closeFixtureCardModal();
+                        }
+                    });
+                }
 
                 el.teamPlayersModalCloseBtn.addEventListener("click", function() {
                     closeTeamPlayersModal();
