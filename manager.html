@@ -350,6 +350,48 @@
                 align-content: start;
             }
 
+            .fixture-card-tools {
+                display: grid;
+                gap: 0.65rem;
+                grid-column: 1 / -1;
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                padding: 0.8rem;
+                background: rgba(0, 0, 0, 0.2);
+            }
+
+            .fixture-card-tools h3,
+            .fixture-card-tools p {
+                margin: 0;
+            }
+
+            .fixture-card-tools p {
+                color: var(--muted);
+                font-size: 0.86rem;
+            }
+
+            .fixture-card-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .fixture-card-actions button:disabled {
+                cursor: not-allowed;
+                opacity: 0.45;
+            }
+
+            .fixture-card-preview {
+                width: min(100%, 720px);
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: #050505;
+            }
+
+            .fixture-card-status {
+                margin: 0;
+            }
+
             .crm-field-head {
                 display: flex;
                 align-items: center;
@@ -1877,6 +1919,10 @@
                     siteId: "",
                     siteBaseUrl: "",
                     delayMs: 75000
+                },
+                fixtureCards: {
+                    postEndpoint: "https://fixture-card-worker.oakshiftsoftware.workers.dev",
+                    authToken: "0eKUb86nF5bFGnO7lYa0/kexHKxNR4fMpq504KIRAQVTKiL2zQBu6tiOyWxKV/Lu"
                 }
             }; 
 
@@ -5530,6 +5576,132 @@
             }
 
 
+            function escapeFixtureCardText(value) {
+                return String(value ?? "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\"/g, "&quot;");
+            }
+
+            function buildFixtureCardSvg(fixture) {
+                const fixtureDate = fixture.date
+                    ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
+                    : "Date TBC";
+                const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : "SCHEDULED";
+                const stage = fixture.fixtureId || "Xeno Championship";
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+                    <defs><linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="0.55" stop-color="#161616"/><stop offset="1" stop-color="#050505"/></linearGradient></defs>
+                    <rect width="1200" height="675" fill="url(#background)"/>
+                    <rect x="28" y="28" width="1144" height="619" rx="12" fill="none" stroke="#d71920" stroke-width="3"/>
+                    <text x="70" y="92" fill="#00c6ff" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">NMS XENO CHAMPIONSHIP</text>
+                    <text x="70" y="170" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}</text>
+                    <text x="70" y="215" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "Time TBC")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
+                    <line x1="70" y1="270" x2="1130" y2="270" stroke="#d71920" stroke-width="2"/>
+                    <text x="270" y="380" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player1 || "TBC")}</text>
+                    <text x="600" y="380" fill="#d71920" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
+                    <text x="930" y="380" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player2 || "TBC")}</text>
+                    <text x="270" y="420" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform1 || "")}</text>
+                    <text x="930" y="420" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform2 || "")}</text>
+                    <rect x="500" y="475" width="200" height="54" rx="8" fill="#d71920"/>
+                    <text x="600" y="511" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle">${status}</text>
+                    <text x="70" y="595" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="22">Umpire: ${escapeFixtureCardText(fixture.umpire || "TBC")}</text>
+                </svg>`;
+            }
+
+            async function fixtureCardSvgToPng(svgText) {
+                const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                try {
+                    const image = new Image();
+                    image.decoding = "async";
+                    image.src = svgUrl;
+                    await new Promise(function(resolve, reject) {
+                        image.onload = resolve;
+                        image.onerror = reject;
+                    });
+                    const canvas = document.createElement("canvas");
+                    canvas.width = 1200;
+                    canvas.height = 675;
+                    canvas.getContext("2d").drawImage(image, 0, 0);
+                    return await new Promise(function(resolve, reject) {
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error("The fixture card image could not be created."));
+                            }
+                        }, "image/png");
+                    });
+                } finally {
+                    URL.revokeObjectURL(svgUrl);
+                }
+            }
+
+            function fixtureCardFileName(fixture) {
+                const stage = String(fixture.fixtureId || "fixture").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                const date = String(fixture.date || "date-tbc").replace(/[^0-9-]/g, "");
+                return "xeno-" + stage + "-" + date + ".png";
+            }
+
+            async function generateFixtureCardImage(fixture, previewImage, downloadButton, postButton, statusEl) {
+                statusEl.textContent = "Generating fixture card...";
+                const blob = await fixtureCardSvgToPng(buildFixtureCardSvg(fixture));
+                const imageUrl = URL.createObjectURL(blob);
+                if (previewImage.dataset.objectUrl) {
+                    URL.revokeObjectURL(previewImage.dataset.objectUrl);
+                }
+                previewImage.dataset.objectUrl = imageUrl;
+                previewImage.src = imageUrl;
+                previewImage.classList.remove("hidden");
+                downloadButton.disabled = false;
+                postButton.disabled = false;
+                statusEl.textContent = "Fixture card ready.";
+                return blob;
+            }
+
+            function downloadFixtureCardImage(previewImage, fixture) {
+                if (!previewImage.src) {
+                    return;
+                }
+                const link = document.createElement("a");
+                link.href = previewImage.src;
+                link.download = fixtureCardFileName(fixture);
+                link.click();
+            }
+
+            async function postFixtureCardImage(fixture, previewImage, statusEl) {
+                const fixtureCardConfig = WEBEDITOR_CONFIG.fixtureCards || {};
+                const endpoint = String(fixtureCardConfig.postEndpoint || "").trim();
+                if (!endpoint) {
+                    throw new Error("Discord posting is not configured. Add a worker endpoint in WEBEDITOR_CONFIG.fixtureCards.postEndpoint.");
+                }
+                const response = await fetch(previewImage.src);
+                const blob = await response.blob();
+                const imageDataUrl = await new Promise(function(resolve, reject) {
+                    const reader = new FileReader();
+                    reader.onload = function() { resolve(String(reader.result || "")); };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+                const headers = { "Content-Type": "application/json" };
+                const authToken = String(fixtureCardConfig.authToken || "").trim();
+                if (authToken) {
+                    headers.Authorization = "Bearer " + authToken;
+                }
+                statusEl.textContent = "Posting fixture card...";
+                const postResponse = await fetch(endpoint, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify({ fixture: fixture, imageDataUrl: imageDataUrl })
+                });
+                if (!postResponse.ok) {
+                    throw new Error("Discord post failed with HTTP " + postResponse.status + ".");
+                }
+                statusEl.textContent = "Fixture card posted.";
+            }
+
+
             function renderSpecializedCrmFields(targetContainer, record, recordIndex) {
                 const kind = getCurrentEditorFileKind();
 
@@ -5589,6 +5761,39 @@
                         wrapper.appendChild(input);
                         targetContainer.appendChild(wrapper);
                     });
+                    if (kind === "xeno_fixtures") {
+                        const actionPanel = document.createElement("div");
+                        actionPanel.className = "fixture-card-tools";
+                        actionPanel.innerHTML = `<h3>Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">No image generated.</div>`;
+                        const previewImage = actionPanel.querySelector(".fixture-card-preview");
+                        const generateButton = actionPanel.querySelector(".fixture-generate-btn");
+                        const downloadButton = actionPanel.querySelector(".fixture-download-btn");
+                        const postButton = actionPanel.querySelector(".fixture-post-btn");
+                        const statusEl = actionPanel.querySelector(".fixture-card-status");
+                        generateButton.addEventListener("click", async function() {
+                            try {
+                                await generateFixtureCardImage(record, previewImage, downloadButton, postButton, statusEl);
+                            } catch (error) {
+                                statusEl.textContent = error.message;
+                                statusEl.classList.add("bad");
+                            }
+                        });
+                        downloadButton.addEventListener("click", function() {
+                            downloadFixtureCardImage(previewImage, record);
+                        });
+                        postButton.addEventListener("click", async function() {
+                            postButton.disabled = true;
+                            try {
+                                await postFixtureCardImage(record, previewImage, statusEl);
+                            } catch (error) {
+                                statusEl.textContent = error.message;
+                                statusEl.classList.add("bad");
+                            } finally {
+                                postButton.disabled = false;
+                            }
+                        });
+                        targetContainer.appendChild(actionPanel);
+                    }
                     return true;
                 }
 

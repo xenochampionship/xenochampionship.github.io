@@ -1047,42 +1047,92 @@ function renderUpcomingFixtures(fixturesData) {
         return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
     }
 
-    const fixtures = fixturesData.fixtures;
+    const fixtures = fixturesData.fixtures.slice();
+    const qualifiers = fixtures
+        .filter(fixture => fixture.fixtureId === 'Qualifier')
+        .sort((a, b) => new Date(`${a.date}T${a.time || '00:00'}`) - new Date(`${b.date}T${b.time || '00:00'}`));
+    const knockoutRoundOrder = ['Quarter-Final', 'Quarter-Finals', 'Semi-Final', 'Semi-Finals', 'Third Place Match', 'Grand Final'];
+    const knockoutRounds = knockoutRoundOrder
+        .filter((round, index, rounds) => rounds.indexOf(round) === index)
+        .map(round => ({
+            name: round,
+            fixtures: fixtures.filter(fixture => fixture.fixtureId === round)
+        }))
+        .filter(round => round.fixtures.length > 0);
+
+    const qualifierHtml = qualifiers.length > 0
+        ? `<div class="fixture-stage fixture-stage-qualification">
+            <div class="fixture-stage-heading">
+                <span class="fixture-stage-kicker">Stage 1</span>
+                <h3>Swiss Qualification</h3>
+                <p>Five rounds, with the top eight advancing to the championship bracket.</p>
+            </div>
+            <div class="fixtures-list">
+                ${qualifiers.map(renderFixtureCard).join('')}
+            </div>
+        </div>`
+        : '';
+
+    const bracketHtml = knockoutRounds.length > 0
+        ? `<div class="fixture-stage fixture-stage-knockout">
+            <div class="fixture-stage-heading">
+                <span class="fixture-stage-kicker">Stage 2</span>
+                <h3>Championship Bracket</h3>
+                <p>Single elimination from the quarter-finals to the Grand Final.</p>
+            </div>
+            <div class="fixture-bracket" aria-label="Championship bracket">
+                ${knockoutRounds.map(round => `<section class="fixture-bracket-round">
+                    <h4>${round.name}</h4>
+                    <div class="fixture-bracket-matches">${round.fixtures.map(renderFixtureCard).join('')}</div>
+                </section>`).join('')}
+            </div>
+        </div>`
+        : '';
+
+    if (!qualifierHtml && !bracketHtml) {
+        return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
+    }
+
     return `
-        <div class="fixtures-list">
-            ${fixtures.map(fixture => `
-                <div class="fixture-card">
-                    <div class="fixture-details">
-                        <div class="fixture-datetime">
-                            <div class="fixture-dt-box">
-                                <span><i class="fas fa-gamepad" style="margin-right: 0.25rem;"></i> ${fixture.fixtureId}</span>
-                                <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${new Date(fixture.date).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                                <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time}</span>
-                            </div>
-                        </div>
-                        <div class="fixture-matchup">
-                            <div class="fixture-player">
-                                <span class="player-name">${fixture.player1}</span>
-                                <span class="player-platform">${fixture.platform1}</span>
-                            </div>
-                            <div class="vs-text">VS</div>
-                            <div class="fixture-player">
-                                <span class="player-name">${fixture.player2}</span>
-                                <span class="player-platform">${fixture.platform2}</span>
-                            </div>
-                        </div>
-                        <div class="fixture-umpire">
-                            <div class="fixture-ump-box">
-                                <i class="fas fa-user-tie"></i> Umpire: ${fixture.umpire}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fixture-status ${fixture.status}">
-                        ${fixture.status === 'scheduled' ? 'Scheduled' : fixture.status === 'live' ? 'LIVE' : 'Completed'}
+        <div class="fixtures-by-stage">
+            ${qualifierHtml}
+            ${bracketHtml}
+        </div>
+    `;
+}
+
+function renderFixtureCard(fixture) {
+    const fixtureDate = fixture.date
+        ? new Date(`${fixture.date}T${fixture.time || '00:00'}`).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
+        : 'Date TBC';
+    const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : 'Scheduled';
+
+    return `
+        <article class="fixture-card">
+            <div class="fixture-details">
+                <div class="fixture-datetime">
+                    <div class="fixture-dt-box">
+                        <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${fixtureDate}</span>
+                        <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time || 'Time TBC'}</span>
                     </div>
                 </div>
-            `).join('')}
-        </div>
+                <div class="fixture-matchup">
+                    <div class="fixture-player">
+                        <span class="player-name">${fixture.player1 || 'TBC'}</span>
+                        <span class="player-platform">${fixture.platform1 || ''}</span>
+                    </div>
+                    <div class="vs-text">VS</div>
+                    <div class="fixture-player">
+                        <span class="player-name">${fixture.player2 || 'TBC'}</span>
+                        <span class="player-platform">${fixture.platform2 || ''}</span>
+                    </div>
+                </div>
+                <div class="fixture-umpire">
+                    <div class="fixture-ump-box"><i class="fas fa-user-tie"></i> Umpire: ${fixture.umpire || 'TBC'}</div>
+                </div>
+            </div>
+            <div class="fixture-status ${fixture.status || 'scheduled'}">${statusLabel}</div>
+        </article>
     `;
 }
 

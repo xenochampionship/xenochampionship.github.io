@@ -831,6 +831,88 @@ select.select option {
     gap: 1rem;
 }
 
+.fixtures-by-stage {
+    display: grid;
+    gap: 2rem;
+}
+
+.fixture-stage-heading {
+    margin-bottom: 1rem;
+}
+
+.fixture-stage-heading h3 {
+    margin: 0.15rem 0 0.35rem;
+    color: var(--nms-light);
+}
+
+.fixture-stage-heading p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.fixture-stage-kicker {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.fixture-bracket {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(190px, 1fr));
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.fixture-bracket-round {
+    min-width: 190px;
+}
+
+.fixture-bracket-round h4 {
+    margin: 0 0 0.75rem;
+    color: var(--nms-light);
+    text-align: center;
+}
+
+.fixture-bracket-matches {
+    display: grid;
+    gap: 1rem;
+    align-content: space-around;
+    min-height: 100%;
+}
+
+.fixture-bracket .fixture-card {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.fixture-bracket .fixture-dt-box {
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.fixture-bracket .fixture-matchup {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+}
+
+.fixture-bracket .fixture-matchup > .fixture-player:first-child,
+.fixture-bracket .fixture-matchup > .fixture-player:last-child {
+    justify-self: stretch;
+    text-align: center;
+}
+
+.fixture-bracket .vs-text {
+    font-size: 0.75rem;
+}
+
+.fixture-bracket .fixture-umpire {
+    justify-content: center;
+}
+
 .fixture-card {
     background: rgba(52, 165, 251, 0.05);
     border: 1px solid rgba(52, 165, 251, 0.3);
