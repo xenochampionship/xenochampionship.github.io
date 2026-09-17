@@ -5618,6 +5618,7 @@
                 });
             }
 
+            // Fixture Card SVG Generation
             function buildFixtureCardSvg(fixture, logoDataUrl) {
                 const fixtureDate = fixture.date
                     ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
