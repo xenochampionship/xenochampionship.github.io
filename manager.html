@@ -5601,18 +5601,34 @@
                     .replace(/\"/g, "&quot;");
             }
 
-            function buildFixtureCardSvg(fixture) {
+            async function getFixtureCardLogoDataUrl() {
+                const logoUrl = new URL("source/images/xc-new-t.png", document.baseURI).href;
+                const response = await fetch(logoUrl);
+                if (!response.ok) {
+                    throw new Error("The fixture card logo could not be loaded.");
+                }
+                const logoBlob = await response.blob();
+                return await new Promise(function(resolve, reject) {
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        resolve(String(reader.result || ""));
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(logoBlob);
+                });
+            }
+
+            function buildFixtureCardSvg(fixture, logoDataUrl) {
                 const fixtureDate = fixture.date
                     ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
                     : "Date TBC";
                 const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : "SCHEDULED";
                 const stage = fixture.fixtureId || "Xeno Championship";
-                const logoUrl = new URL("source/images/xc-new-t.png", document.baseURI).href;
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
                     <defs><linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="0.55" stop-color="#161616"/><stop offset="1" stop-color="#050505"/></linearGradient></defs>
                     <rect width="1200" height="675" fill="url(#background)"/>
                     <rect x="28" y="28" width="1144" height="619" rx="12" fill="none" stroke="#d71920" stroke-width="3"/>
-                    <image href="${logoUrl}" x="760" y="110" width="330" height="330" preserveAspectRatio="xMidYMid meet" opacity="0.16"/>
+                    <image href="${logoDataUrl}" x="760" y="110" width="330" height="330" preserveAspectRatio="xMidYMid meet" opacity="0.16"/>
                     <text x="70" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}</text>
                     <text x="70" y="163" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "Time TBC")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
                     <line x1="70" y1="205" x2="1130" y2="205" stroke="#d71920" stroke-width="2"/>
@@ -5664,7 +5680,8 @@
 
             async function generateFixtureCardImage(fixture, previewImage, downloadButton, postButton, statusEl) {
                 statusEl.textContent = "Generating fixture card...";
-                const blob = await fixtureCardSvgToPng(buildFixtureCardSvg(fixture));
+                const logoDataUrl = await getFixtureCardLogoDataUrl();
+                const blob = await fixtureCardSvgToPng(buildFixtureCardSvg(fixture, logoDataUrl));
                 const imageUrl = URL.createObjectURL(blob);
                 if (previewImage.dataset.objectUrl) {
                     URL.revokeObjectURL(previewImage.dataset.objectUrl);
