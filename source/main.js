@@ -654,7 +654,7 @@ function populateHallOfFame() {
             `).join('')}
         </div>`
         : `<div class="card" style="text-align: center; padding: 2rem;">
-            <i class="fas fa-trophy" style="font-size: 4rem; color: rgba(255, 215, 0, 1); margin-bottom: 1.5rem;"></i>
+            <i class="fas fa-trophy" style="font-size: 4rem; color: rgba(255, 215, 0, 1); margin-bottom: 2rem;"></i>
             <h2 class="para-h1" style="margin-bottom: 2rem;">Champions Will Be Immortalized Here</h2>
             <p class="para-txt">The Hall of Fame will showcase the champions of each Xeno Championship tournament.<br><br>Check back after the completion of future tournaments to see the winners celebrated here.</p>
         </div>`;
