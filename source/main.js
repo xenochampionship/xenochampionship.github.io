@@ -407,7 +407,7 @@ function populateRulesPage() {
                 <p class="para-txt" style="margin-bottom: 1rem;">Participartion in the Xeno Championship is limited to <b>32 contestants</b>, with places being allocated on a <b>first come, first serve</b> basis.</p>
                 <p class="para-txt">There is <b>no registration fee</b> required to enter.</p>
                 <h3 style="margin-bottom: 0.5rem;">Registration Window</h3>
-                <p class="para-txt" style="margin-bottom: 1rem;">Registration will open automatically on <b>1st July</b> and will close <b>4 days prior to the start of the tournament</b>.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">Registration will open automatically on <b>the first day of the month prior to the tournament</b> and will close <b>the day before the tournament begins</b>.</p>
                 <p class="para-txt">Once registration is open, a <b>"Register Now"</b> button will become available on the tournament's main page.</p>
                 <h3 style="margin-bottom: 0.5rem;">How to Register</h3>
                 <p class="para-txt">To register for the Xeno Championship:</p>
@@ -882,7 +882,6 @@ function renderRegistrationCard(record, metadata) {
     const monthBefore = new Date(tournamentStart.getFullYear(), tournamentStart.getMonth() - 1, 1);
     
     const registrationClose = new Date(tournamentStart);
-    registrationClose.setDate(registrationClose.getDate() - 4);
 
     let statusText = '';
     let buttonHtml = '';
