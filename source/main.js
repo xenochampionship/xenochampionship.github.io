@@ -1108,7 +1108,7 @@ function renderFixtureCard(fixture) {
     const parsedDate = fixture.date ? new Date(`${fixture.date}T${fixture.time || '00:00'}`) : null;
     const fixtureDate = parsedDate && !Number.isNaN(parsedDate.getTime())
         ? parsedDate.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
-        : 'Date TBC';
+        : 'TBC';
     const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : fixture.status === 'scheduled' ? 'Scheduled' : 'Planning';
 
     return `
@@ -1117,7 +1117,7 @@ function renderFixtureCard(fixture) {
                 <div class="fixture-datetime">
                     <div class="fixture-dt-box">
                         <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${fixtureDate}</span>
-                        <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time || 'Time TBC'}</span>
+                        <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time || 'TBC'}</span>
                     </div>
                 </div>
                 <div class="fixture-matchup">
