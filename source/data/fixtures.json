@@ -1,4 +1,18 @@
 {
-    "tournament": "xc26.json",
-    "fixtures": []
+  "tournament": "xc26.json",
+  "fixtures": [
+    {
+      "fixtureId": "",
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "mattmaintenance",
+      "player2": "ZackaryDoland",
+      "platform1": "Nintendo Switch",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning"
+    }
+  ]
 }
