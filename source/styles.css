@@ -1021,13 +1021,22 @@ select.select option {
     align-content: center;
 }
 
+.fixture-status.planning {
+    /* Orange */
+    background: rgb(255 165 0 / 0.1);
+    border-color: rgb(255 165 0 / 0.5);
+    color: rgb(255 165 0 / 0.5);
+}
+
 .fixture-status.scheduled {
+    /* Grey */
     background: rgb(210 210 210 / 0.2);
     border-color: rgb(210 210 210 / 0.75);
     color: rgb(210 210 210 / 0.75);
 }
 
 .fixture-status.live {
+    /* Green */
     background: rgb(0 216 32 / 0.2);
     border-color: rgb(76 199 94);
     color: rgb(76 199 94);
@@ -1035,6 +1044,7 @@ select.select option {
 }
 
 .fixture-status.completed {
+    /* Green */
     background: rgb(60 228 85 / 0.1);
     border-color: rgb(76 199 94 / 0.5);
     color: rgb(76 199 94 / 0.5);

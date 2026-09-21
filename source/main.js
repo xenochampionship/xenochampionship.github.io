@@ -1109,7 +1109,7 @@ function renderFixtureCard(fixture) {
     const fixtureDate = parsedDate && !Number.isNaN(parsedDate.getTime())
         ? parsedDate.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
         : 'Date TBC';
-    const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : 'Scheduled';
+    const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : fixture.status === 'scheduled' ? 'Scheduled' : 'Planning';
 
     return `
         <article class="fixture-card">
@@ -1135,7 +1135,7 @@ function renderFixtureCard(fixture) {
                     <div class="fixture-ump-box"><i class="fas fa-user-tie"></i> Umpire: ${fixture.umpire || 'TBC'}</div>
                 </div>
             </div>
-            <div class="fixture-status ${fixture.status || 'scheduled'}">${statusLabel}</div>
+            <div class="fixture-status ${fixture.status || 'planning'}">${statusLabel}</div>
         </article>
     `;
 }

@@ -1956,6 +1956,7 @@
                 "Grand Final"
             ];
             const FIXTURE_STATUS_OPTIONS = [
+                { value: "planning", label: "Planning" },
                 { value: "scheduled", label: "Scheduled" },
                 { value: "live", label: "Live" },
                 { value: "completed", label: "Completed" }
@@ -3220,7 +3221,7 @@
                             { key: "status", label: "Status", type: "select", options: FIXTURE_STATUS_OPTIONS }
                         ],
                         create: function() {
-                            return { fixtureId: "", date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "scheduled" };
+                            return { fixtureId: "", date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning" };
                         }
                     };
                 }
@@ -5623,8 +5624,8 @@
             function buildFixtureCardSvg(fixture, logoDataUrl) {
                 const fixtureDate = fixture.date
                     ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
-                    : "TBC";
-                const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : "SCHEDULED";
+                    : "Scheduling To Be Confirmed";
+                const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : fixture.status === "scheduled" ? "SCHEDULED" : "PLANNING";
                 const stage = fixture.fixtureId || "Xeno Championship";
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
                     <defs><linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="0.55" stop-color="#161616"/><stop offset="1" stop-color="#050505"/></linearGradient></defs>
