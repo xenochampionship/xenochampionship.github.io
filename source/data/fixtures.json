@@ -2,7 +2,7 @@
   "tournament": "xc26.json",
   "fixtures": [
     {
-      "fixtureId": "",
+      "fixtureId": "Qualifier",
       "date": "",
       "time": "",
       "timeZone": "UTC+01:00",
