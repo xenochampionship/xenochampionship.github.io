@@ -4685,7 +4685,8 @@
                         const fixtureLabel = [record.fixtureId, record.player1 + " vs " + record.player2]
                             .filter(function(value) { return value && value !== " vs "; })
                             .join(" · ");
-                        return fixtureLabel || "Fixture " + (index + 1);
+                        const scheduleLabel = (record.date || "Date TBC") + " · " + (record.time || "Time TBC");
+                        return [fixtureLabel || "Fixture " + (index + 1), scheduleLabel].join(" · ");
                     }
 
                     return [record.name, record.platform].filter(Boolean).join(" · ") || "Player " + (index + 1);

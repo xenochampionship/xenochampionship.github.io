@@ -1049,7 +1049,11 @@ function renderUpcomingFixtures(fixturesData) {
     const fixtures = fixturesData.fixtures.slice();
     const qualifiers = fixtures
         .filter(fixture => fixture.fixtureId === 'Qualifier')
-        .sort((a, b) => new Date(`${a.date}T${a.time || '00:00'}`) - new Date(`${b.date}T${b.time || '00:00'}`));
+        .sort((a, b) => {
+            const dateA = a.date ? new Date(`${a.date}T${a.time || '00:00'}`).getTime() : Number.POSITIVE_INFINITY;
+            const dateB = b.date ? new Date(`${b.date}T${b.time || '00:00'}`).getTime() : Number.POSITIVE_INFINITY;
+            return (Number.isNaN(dateA) ? Number.POSITIVE_INFINITY : dateA) - (Number.isNaN(dateB) ? Number.POSITIVE_INFINITY : dateB);
+        });
     const knockoutRoundOrder = ['Quarter-Final', 'Quarter-Finals', 'Semi-Final', 'Semi-Finals', 'Third Place Match', 'Grand Final'];
     const knockoutRounds = knockoutRoundOrder
         .filter((round, index, rounds) => rounds.indexOf(round) === index)
@@ -1101,8 +1105,9 @@ function renderUpcomingFixtures(fixturesData) {
 }
 
 function renderFixtureCard(fixture) {
-    const fixtureDate = fixture.date
-        ? new Date(`${fixture.date}T${fixture.time || '00:00'}`).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
+    const parsedDate = fixture.date ? new Date(`${fixture.date}T${fixture.time || '00:00'}`) : null;
+    const fixtureDate = parsedDate && !Number.isNaN(parsedDate.getTime())
+        ? parsedDate.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
         : 'Date TBC';
     const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : 'Scheduled';
 
