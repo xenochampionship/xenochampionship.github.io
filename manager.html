@@ -5623,7 +5623,7 @@
             function buildFixtureCardSvg(fixture, logoDataUrl) {
                 const fixtureDate = fixture.date
                     ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
-                    : "Date TBC";
+                    : "TBC";
                 const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : "SCHEDULED";
                 const stage = fixture.fixtureId || "Xeno Championship";
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
@@ -5632,7 +5632,7 @@
                     <rect x="28" y="28" width="1144" height="544" rx="12" fill="none" stroke="#d71920" stroke-width="3"/>
                     <image href="${logoDataUrl}" x="435" y="110.5" width="330" height="330" preserveAspectRatio="xMidYMid meet" opacity="0.16"/>
                     <text x="70" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}</text>
-                    <text x="70" y="163" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "Time TBC")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
+                    <text x="70" y="163" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
                     <line x1="70" y1="205" x2="1130" y2="205" stroke="#d71920" stroke-width="2"/>
                     <text x="270" y="325" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player1 || "TBC")}</text>
                     <text x="600" y="325" fill="#d71920" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
