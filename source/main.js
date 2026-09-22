@@ -1066,7 +1066,7 @@ function renderUpcomingFixtures(fixturesData) {
     const qualifierHtml = qualifiers.length > 0
         ? `<div class="fixture-stage fixture-stage-qualification">
             <div class="fixture-stage-heading">
-                <span class="fixture-stage-kicker">Stage 1</span>
+                <span class="fixture-stage-kicker">First Stage</span>
                 <h3>Swiss Qualification</h3>
                 <p>Five rounds, with the top eight advancing to the championship bracket.</p>
             </div>
@@ -1079,9 +1079,9 @@ function renderUpcomingFixtures(fixturesData) {
     const bracketHtml = knockoutRounds.length > 0
         ? `<div class="fixture-stage fixture-stage-knockout">
             <div class="fixture-stage-heading">
-                <span class="fixture-stage-kicker">Stage 2</span>
+                <span class="fixture-stage-kicker">Final Stage</span>
                 <h3>Championship Bracket</h3>
-                <p>Single elimination from the quarter-finals to the Grand Final.</p>
+                <p>Single elimination from the Quarter-Finals to the Grand Final.</p>
             </div>
             <div class="fixture-bracket" aria-label="Championship bracket">
                 ${knockoutRounds.map(round => `<section class="fixture-bracket-round">
