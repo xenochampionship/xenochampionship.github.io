@@ -1111,7 +1111,8 @@ function renderFixtureCard(fixture) {
         : 'TBC';
     const statusKey = ['planning', 'scheduled', 'live', 'completed'].includes(fixture.status) ? fixture.status : 'planning';
     const statusLabel = statusKey === 'live' ? 'LIVE' : statusKey === 'completed' ? 'Completed' : statusKey === 'scheduled' ? 'Scheduled' : 'Planning';
-    const fixtureTime = `${fixture.time} (${fixture.timezone || 'UTC+01:00'})` || 'TBC';
+    const fixtureTimeZone = fixture.timezone || 'UTC+01:00';
+    const fixtureTime = `${fixture.time} (${fixtureTimeZone})` || 'TBC';
 
     return `
         <article class="fixture-card fixture-card-${statusKey}">
