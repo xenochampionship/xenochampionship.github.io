@@ -1111,6 +1111,7 @@ function renderFixtureCard(fixture) {
         : 'TBC';
     const statusKey = ['planning', 'scheduled', 'live', 'completed'].includes(fixture.status) ? fixture.status : 'planning';
     const statusLabel = statusKey === 'live' ? 'LIVE' : statusKey === 'completed' ? 'Completed' : statusKey === 'scheduled' ? 'Scheduled' : 'Planning';
+    const fixtureTime = `${fixture.time} ($${fixture.timezone || 'UTC+01:00'})` || 'TBC';
 
     return `
         <article class="fixture-card fixture-card-${statusKey}">
@@ -1134,7 +1135,7 @@ function renderFixtureCard(fixture) {
             </div>
             <div class="fixture-card-footer">
                 <span><i class="fas fa-calendar"></i> ${fixtureDate}</span>
-                <span><i class="fas fa-clock"></i> ${fixture.time || 'TBC'}</span>
+                <span><i class="fas fa-clock"></i> ${fixtureTime}</span>
                 <span><i class="fas fa-user-tie"></i> ${fixture.umpire || 'Umpire TBC'}</span>
             </div>
         </article>
