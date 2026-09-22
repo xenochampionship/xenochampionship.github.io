@@ -1109,33 +1109,34 @@ function renderFixtureCard(fixture) {
     const fixtureDate = parsedDate && !Number.isNaN(parsedDate.getTime())
         ? parsedDate.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })
         : 'TBC';
-    const statusLabel = fixture.status === 'live' ? 'LIVE' : fixture.status === 'completed' ? 'Completed' : fixture.status === 'scheduled' ? 'Scheduled' : 'Planning';
+    const statusKey = ['planning', 'scheduled', 'live', 'completed'].includes(fixture.status) ? fixture.status : 'planning';
+    const statusLabel = statusKey === 'live' ? 'LIVE' : statusKey === 'completed' ? 'Completed' : statusKey === 'scheduled' ? 'Scheduled' : 'Planning';
 
     return `
-        <article class="fixture-card">
-            <div class="fixture-details">
-                <div class="fixture-datetime">
-                    <div class="fixture-dt-box">
-                        <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i> ${fixtureDate}</span>
-                        <span><i class="fas fa-clock" style="margin-right: 0.25rem;"></i> ${fixture.time || 'TBC'}</span>
-                    </div>
+        <article class="fixture-card fixture-card-${statusKey}">
+            <div class="fixture-card-header">
+                <span class="fixture-card-stage">${fixture.fixtureId || 'Fixture'}</span>
+                <span class="fixture-status ${statusKey}">${statusLabel}</span>
+            </div>
+            <div class="fixture-matchup">
+                <div class="fixture-player">
+                    <span class="player-name">${fixture.player1 || 'TBC'}</span>
+                    <span class="player-platform">${fixture.platform1 || 'Platform TBC'}</span>
                 </div>
-                <div class="fixture-matchup">
-                    <div class="fixture-player">
-                        <span class="player-name">${fixture.player1 || 'TBC'}</span>
-                        <span class="player-platform">${fixture.platform1 || ''}</span>
-                    </div>
-                    <div class="vs-text">VS</div>
-                    <div class="fixture-player">
-                        <span class="player-name">${fixture.player2 || 'TBC'}</span>
-                        <span class="player-platform">${fixture.platform2 || ''}</span>
-                    </div>
+                <div class="fixture-versus">
+                    <span class="vs-text">VS</span>
+                    <span class="fixture-format">Best of 3</span>
                 </div>
-                <div class="fixture-umpire">
-                    <div class="fixture-ump-box"><i class="fas fa-user-tie"></i> Umpire: ${fixture.umpire || 'TBC'}</div>
+                <div class="fixture-player">
+                    <span class="player-name">${fixture.player2 || 'TBC'}</span>
+                    <span class="player-platform">${fixture.platform2 || 'Platform TBC'}</span>
                 </div>
             </div>
-            <div class="fixture-status ${fixture.status || 'planning'}">${statusLabel}</div>
+            <div class="fixture-card-footer">
+                <span><i class="fas fa-calendar"></i> ${fixtureDate}</span>
+                <span><i class="fas fa-clock"></i> ${fixture.time || 'TBC'}</span>
+                <span><i class="fas fa-user-tie"></i> ${fixture.umpire || 'Umpire TBC'}</span>
+            </div>
         </article>
     `;
 }
