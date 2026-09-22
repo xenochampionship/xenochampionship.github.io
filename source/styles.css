@@ -566,7 +566,7 @@ button i.fas {
 .player-card {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 14px;
+    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -906,7 +906,7 @@ select.select option {
 .fixture-card {
     background: linear-gradient(145deg, rgba(52, 165, 251, 0.09), rgba(255, 255, 255, 0.025));
     border: 1px solid rgba(52, 165, 251, 0.3);
-    border-radius: 14px;
+    border-radius: 8px;
     padding: 1.15rem 1.25rem 0.9rem;
     display: grid;
     gap: 1rem;
