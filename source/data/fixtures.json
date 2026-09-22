@@ -13,6 +13,19 @@
       "umpire": "JamieHarperUK",
       "streamLink": null,
       "status": "planning"
+    },
+    {
+      "fixtureId": "Qualifier",
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "Tiger",
+      "player2": "ItIsYeOwl",
+      "platform1": "PC",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning"
     }
   ]
 }
