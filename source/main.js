@@ -1067,7 +1067,7 @@ function renderUpcomingFixtures(fixturesData) {
         ? `<div class="fixture-stage fixture-stage-qualification">
             <div class="fixture-stage-heading">
                 <span class="fixture-stage-kicker">First Stage</span>
-                <h3>Swiss Qualification</h3>
+                <h3>Swiss-Style Qualification</h3>
                 <p>Five rounds, with the top eight advancing to the championship bracket.</p>
             </div>
             <div class="fixtures-list">
