@@ -16,8 +16,8 @@
     },
     {
       "fixtureId": "Qualifier",
-      "date": "",
-      "time": "",
+      "date": "2026-10-03",
+      "time": "19:00",
       "timeZone": "UTC+01:00",
       "player1": "Tiger",
       "player2": "ItIsYeOwl",
@@ -25,7 +25,7 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning"
+      "status": "scheduled"
     }
   ]
 }
