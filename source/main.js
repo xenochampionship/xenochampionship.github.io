@@ -569,7 +569,7 @@ function populateUmpiresPage() {
             <p class="para-txt" style="margin-bottom: 1rem;"><strong>Important:</strong> Umpire status is confirmed only after direct approval by an Organizer via Discord. We'll contact you through our server to discuss next steps and training.</p>
             <div class="home-card-buttons">
                 <a class="btn site-btn" href="https://tally.so/r/81jZZ5" target="_blank" rel="noopener">Register Interest</a>
-                <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Join Discord</a>
+                <a class="btn site-btn" href="https://dc.gg/xenochampionship" target="_blank" rel="noopener">Join Discord</a>
             </div>
         </div>
     `;
@@ -632,7 +632,7 @@ function populateHomePage(data, record) {
             <p class="para-txt" style="margin-bottom: 1rem;">This is a fan-driven event built for the No Man's Sky community. Whether you compete, spectate, or help organise, the championship aims to connects players across the world with shared rules, scheduled fixtures, and a focus on fair play and mutual support.</p>
             <div class="home-card-buttons">
                 <a class="btn site-btn" href="https://x.com/NMSXenoChamp" target="_blank" rel="noopener">Twitter (X)</a>
-                <a class="btn site-btn" href="https://discord.gg/mS25zRggz2" target="_blank" rel="noopener">Discord Server</a>
+                <a class="btn site-btn" href="https://dc.gg/xenochampionship" target="_blank" rel="noopener">Discord Server</a>
             </div>
         </div>
     `;
