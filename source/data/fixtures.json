@@ -26,6 +26,19 @@
       "umpire": "JamieHarperUK",
       "streamLink": null,
       "status": "scheduled"
+    },
+    {
+      "fixtureId": "",
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "JimmyM7",
+      "player2": "Scarecr0w",
+      "platform1": "PlayStation",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning"
     }
   ]
 }
