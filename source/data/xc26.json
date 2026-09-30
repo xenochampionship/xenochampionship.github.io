@@ -70,6 +70,16 @@
         "losses": 0,
         "omw": 0
       }
+    },
+    {
+      "name": "AjZed",
+      "platform": "PlayStation",
+      "results": {
+        "played": 0,
+        "wins": 0,
+        "losses": 0,
+        "omw": 0
+      }
     }
   ]
 }
