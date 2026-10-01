@@ -1114,6 +1114,7 @@ function renderFixtureCard(fixture) {
         : 'TBC';
     const statusKey = ['planning', 'scheduled', 'live', 'completed'].includes(fixture.status) ? fixture.status : 'planning';
     const statusLabel = statusKey === 'live' ? 'LIVE' : statusKey === 'completed' ? 'Completed' : statusKey === 'scheduled' ? 'Scheduled' : 'Planning';
+    const fixtureRound = fixture.fixtureId === 'Qualifier' && fixture.round != null ? ` · Round ${fixture.round}` : '';
     const fixtureTimeZone = fixture.timezone || 'UTC+01:00';
     let fixtureTime = fixture.time || 'TBC';
     if (fixture.time !== "") {
@@ -1124,7 +1125,7 @@ function renderFixtureCard(fixture) {
     return `
         <article class="fixture-card fixture-card-${statusKey}">
             <div class="fixture-card-header">
-                <span class="fixture-card-stage">${fixture.fixtureId || 'Fixture'}</span>
+                <span class="fixture-card-stage">${fixture.fixtureId || 'Fixture'}${fixtureRound}</span>
                 <span class="fixture-status ${statusKey}">${statusLabel}</span>
             </div>
             <div class="fixture-matchup">

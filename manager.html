@@ -3209,6 +3209,7 @@
                         label: "Fixtures",
                         fields: [
                             { key: "fixtureId", label: "Fixture ID", type: "select", options: ALLOWED_FIXTURE_IDS.map(function(value) { return { value: value, label: value }; }) },
+                            { key: "round", label: "Round", type: "nullable-number" },
                             { key: "date", label: "Date", type: "date" },
                             { key: "time", label: "Time", type: "time" },
                             { key: "timeZone", label: "Time Zone", type: "text" },
@@ -3221,7 +3222,7 @@
                             { key: "status", label: "Status", type: "select", options: FIXTURE_STATUS_OPTIONS }
                         ],
                         create: function() {
-                            return { fixtureId: "", date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning" };
+                            return { fixtureId: "", round: null, date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning" };
                         }
                     };
                 }
@@ -5838,7 +5839,7 @@
                         const input = field.type === "select" || field.type === "player-select"
                             ? document.createElement("select")
                             : document.createElement("input");
-                        input.type = field.type === "nullable" ? "text" : field.type;
+                        input.type = field.type === "nullable" ? "text" : field.type === "nullable-number" ? "number" : field.type;
                         const currentValue = getNestedRecordValue(record, field.key);
                         if (field.type === "select" || field.type === "player-select") {
                             const optionDefinitions = field.type === "player-select"
@@ -5872,16 +5873,34 @@
                                 nextValue = rawValue;
                             } else if (field.type === "number") {
                                 nextValue = rawValue === "" ? 0 : Number(rawValue);
+                            } else if (field.type === "nullable-number") {
+                                nextValue = rawValue === "" ? null : Number(rawValue);
                             } else if (field.type === "nullable") {
                                 nextValue = rawValue.trim() === "" ? null : rawValue.trim();
                             }
                             setNestedRecordValue(record, field.key, nextValue);
+                            if (kind === "xeno_fixtures" && field.key === "fixtureId") {
+                                const roundValue = nextValue === "Qualifier"
+                                    ? getNestedRecordValue(record, "round") ?? 1
+                                    : null;
+                                setNestedRecordValue(record, "round", roundValue);
+                                const roundInput = targetContainer.querySelector('[data-fixture-field="round"]');
+                                if (roundInput) {
+                                    roundInput.value = roundValue == null ? "" : String(roundValue);
+                                    roundInput.disabled = nextValue !== "Qualifier";
+                                }
+                            }
                             syncCrmToJsonText();
                         };
                         input.addEventListener("input", updateFieldValue);
                         input.addEventListener("change", updateFieldValue);
                         if (kind === "xeno_fixtures") {
                             input.dataset.fixtureField = field.key;
+                            if (field.key === "round") {
+                                input.min = "1";
+                                input.step = "1";
+                                input.disabled = getNestedRecordValue(record, "fixtureId") !== "Qualifier";
+                            }
                         }
                         wrapper.appendChild(label);
                         wrapper.appendChild(input);

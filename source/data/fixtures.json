@@ -3,6 +3,7 @@
   "fixtures": [
     {
       "fixtureId": "Qualifier",
+      "round": 1,
       "date": "2026-10-03",
       "time": "19:00",
       "timeZone": "UTC+01:00",
@@ -16,6 +17,7 @@
     },
     {
       "fixtureId": "Qualifier",
+      "round": 1,
       "date": "2026-10-04",
       "time": "01:00",
       "timeZone": "UTC+01:00",
@@ -29,6 +31,7 @@
     },
     {
       "fixtureId": "Qualifier",
+      "round": 1,
       "date": "2026-10-04",
       "time": "18:00",
       "timeZone": "UTC+01:00",
@@ -42,6 +45,7 @@
     },
     {
       "fixtureId": "Qualifier",
+      "round": 1,
       "date": "",
       "time": "",
       "timeZone": "UTC+01:00",
