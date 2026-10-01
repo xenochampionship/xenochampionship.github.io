@@ -756,7 +756,7 @@ async function populateCurrentChampionship() {
     try {
         const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json');
         const fixturesData = await fixturesResponse.json();
-        fixturesHtml = renderUpcomingFixtures(fixturesData);
+        fixturesHtml = renderUpcomingFixtures(fixturesData, data?.players?.length || 32);
     } catch (error) {
         console.log('No fixtures data available');
         fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
@@ -774,10 +774,11 @@ async function populateCurrentChampionship() {
         ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
         : (() => {
             const hasScores = data.players.some(p => p.results.wins > 0 || p.results.played > 0);
+            const advancingCount = data.players.length <= 8 ? 4 : 8;
             return `
                 <div class="standings-accordion">
                     ${sortPlayersByStandings(data.players).map((player, index) => `
-                        <div class="player-card" id="player-card-${index}">
+                        <div class="player-card${hasScores && index < advancingCount ? ' advancing' : ''}" id="player-card-${index}">
                             <button class="player-summary" type="button" onclick="togglePlayerDetails(${index})" aria-expanded="false" style="grid-template-columns: ${hasScores ? 'auto 1fr auto' : '1fr auto'};">
                                 ${hasScores ? `<span class="rank-badge">${index + 1}</span>` : ''}
                                 <span class="player-title">
@@ -1041,7 +1042,7 @@ function renderAllPastRecords(records) {
     `).join('');
 }
 
-function renderUpcomingFixtures(fixturesData) {
+function renderUpcomingFixtures(fixturesData, playerCount = 32) {
     if (!fixturesData || !fixturesData.fixtures || fixturesData.fixtures.length === 0) {
         return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
     }
@@ -1054,7 +1055,9 @@ function renderUpcomingFixtures(fixturesData) {
             const dateB = b.date ? new Date(`${b.date}T${b.time || '00:00'}`).getTime() : Number.POSITIVE_INFINITY;
             return (Number.isNaN(dateA) ? Number.POSITIVE_INFINITY : dateA) - (Number.isNaN(dateB) ? Number.POSITIVE_INFINITY : dateB);
         });
-    const knockoutRoundOrder = ['Quarter-Final', 'Quarter-Finals', 'Semi-Final', 'Semi-Finals', 'Third Place Match', 'Grand Final'];
+    const advancingCount = playerCount <= 8 ? 4 : 8;
+    const openingRound = advancingCount === 4 ? 'Semi-Final' : 'Quarter-Final';
+    const knockoutRoundOrder = [openingRound, `${openingRound}s`, 'Third Place Match', 'Grand Final'];
     const knockoutRounds = knockoutRoundOrder
         .filter((round, index, rounds) => rounds.indexOf(round) === index)
         .map(round => ({
@@ -1068,7 +1071,7 @@ function renderUpcomingFixtures(fixturesData) {
             <div class="fixture-stage-heading">
                 <span class="fixture-stage-kicker">First Stage</span>
                 <h3>Swiss-Style Qualification</h3>
-                <p>Five rounds, with the top eight advancing to the championship bracket.</p>
+                <p>Five rounds, with the top ${advancingCount} advancing to the championship bracket.</p>
             </div>
             <div class="fixtures-list">
                 ${qualifiers.map(renderFixtureCard).join('')}
@@ -1081,7 +1084,7 @@ function renderUpcomingFixtures(fixturesData) {
             <div class="fixture-stage-heading">
                 <span class="fixture-stage-kicker">Final Stage</span>
                 <h3>Championship Bracket</h3>
-                <p>Single elimination from the Quarter-Finals to the Grand Final.</p>
+                <p>Single elimination from the ${advancingCount === 4 ? 'Semi-Finals' : 'Quarter-Finals'} to the Grand Final.</p>
             </div>
             <div class="fixture-bracket" aria-label="Championship bracket">
                 ${knockoutRounds.map(round => `<section class="fixture-bracket-round">
