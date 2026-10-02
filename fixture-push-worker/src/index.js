@@ -47,14 +47,14 @@ function verifyNotifyAuth(request, env) {
 	return Boolean(expected && supplied && supplied === expected);
 }
 
-function buildVapid(env) {
+function buildVapid(env, pushClient = webpush) {
 	const subject = String(env.VAPID_SUBJECT || "").trim();
 	const publicKey = String(env.VAPID_PUBLIC_KEY || "").trim();
 	const privateKey = String(env.VAPID_PRIVATE_KEY || "").trim();
 	if (!subject || !publicKey || !privateKey) {
 		throw requestError("Push delivery is not configured on the Worker.", 503);
 	}
-	webpush.setVapidDetails(subject, publicKey, privateKey);
+	pushClient.setVapidDetails(subject, publicKey, privateKey);
 	return publicKey;
 }
 
@@ -164,24 +164,29 @@ async function listSubscriptions(env) {
 	return records;
 }
 
-async function handleNotifyFixture(request, env) {
+export async function handleNotifyFixture(request, env, pushClient = webpush) {
 	if (!verifyNotifyAuth(request, env)) {
 		throw requestError("Unauthorized.", 401);
 	}
 	const body = await readJson(request);
 	const payload = buildFixturePayload(body, env);
-	buildVapid(env);
+	buildVapid(env, pushClient);
 	const records = await listSubscriptions(env);
 	let sent = 0;
 	let failed = 0;
 	let removed = 0;
+	const failures = [];
 
 	for (const record of records) {
 		try {
-			await webpush.sendNotification(record.subscription, JSON.stringify(payload), { TTL: 86400, urgency: "high" });
+			await pushClient.sendNotification(record.subscription, JSON.stringify(payload), { TTL: 86400, urgency: "high" });
 			sent += 1;
 		} catch (error) {
 			failed += 1;
+			failures.push({
+				statusCode: Number(error?.statusCode || 0),
+				message: String(error?.message || "Unknown push provider error.").slice(0, 300)
+			});
 			if (Number(error?.statusCode || 0) === 404 || Number(error?.statusCode || 0) === 410) {
 				await env.SUBSCRIPTIONS.delete(record.key);
 				removed += 1;
@@ -189,7 +194,11 @@ async function handleNotifyFixture(request, env) {
 		}
 	}
 
-	return { ok: true, total: records.length, sent, failed, removed };
+	const ok = sent > 0 || failed === 0;
+	const error = !ok
+		? "Push delivery failed for all " + failed + " subscription(s)."
+		: undefined;
+	return { ok, error, total: records.length, sent, failed, removed, failures };
 }
 
 export default {
@@ -215,7 +224,8 @@ export default {
 				return jsonResponse(200, await handleUnsubscribe(request, env), headers);
 			}
 			if (request.method === "POST" && url.pathname === "/notify-fixture") {
-				return jsonResponse(200, await handleNotifyFixture(request, env), headers);
+				const result = await handleNotifyFixture(request, env);
+				return jsonResponse(result.ok ? 200 : 502, result, headers);
 			}
 			return jsonResponse(404, { ok: false, error: "Not found." }, headers);
 		} catch (error) {
