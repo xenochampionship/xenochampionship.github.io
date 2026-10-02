@@ -11,7 +11,11 @@
         </script>
 
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <meta name="theme-color" content="#050505">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Xeno Championship">
 
         <meta property="og:title" content="Xeno Championship" />
         <meta property="og:description" content="The official website for the Xeno Championship, featuring information about the competition, past results, and the Hall of Fame." />
@@ -23,6 +27,9 @@
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+        <link rel="manifest" href="manifest.webmanifest">
+        <link rel="apple-touch-icon" sizes="192x192" href="source/images/app-icon-192.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="source/images/app-icon-192.png">
         <link rel="shortcut icon" href="source/images/xc-new-t.png" type="image/png">
         <title>Xeno Championship</title>
         <link rel="stylesheet" href="source/styles.css">
@@ -32,6 +39,10 @@
             <a href="#home" style="text-decoration: none; color: inherit;">
                 <div class="brand"></div>
             </a>
+            <button id="install-app-button" class="install-app-button" type="button" aria-label="Install Xeno Championship app">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                <span>Install App</span>
+            </button>
             <button id="hamburger-menu" class="hamburger-menu">
                 <span></span>
                 <span></span>
@@ -86,6 +97,11 @@
                 </ul>
             </nav>
         </div>
+        <dialog id="install-app-dialog" class="install-app-dialog" aria-labelledby="install-app-title" aria-describedby="install-app-instructions">
+            <h2 id="install-app-title">Install Xeno Championship</h2>
+            <ol id="install-app-instructions"></ol>
+            <button id="install-app-close" class="btn site-btn" type="button">Close</button>
+        </dialog>
         <main>
             <div id="page-home" class="page"></div>
             <div id="page-about" class="page"></div>
@@ -172,5 +188,12 @@
         </footer>
         <script src="source/recs.js"></script>
         <script src="source/main.js"></script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(function(error) {
+                    console.error('Service worker registration failed:', error);
+                });
+            }
+        </script>
     </body>
 </html>

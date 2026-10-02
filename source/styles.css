@@ -1481,3 +1481,94 @@ select.select option {
         padding: 0.4rem;
     }
 }
+
+.install-app-button {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 42px;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    background: rgb(215 25 32 / 0.14);
+    color: var(--nms-light);
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.install-app-button:focus-visible,
+.install-app-dialog button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.install-app-button i {
+    color: var(--nms-light);
+}
+
+.app-installed .install-app-button {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    .install-app-button {
+        display: inline-flex;
+    }
+}
+
+.install-app-dialog {
+    width: min(440px, calc(100% - 2rem));
+    padding: 1.5rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    background: #080808;
+    color: var(--nms-light);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.7);
+}
+
+.install-app-dialog::backdrop {
+    background: rgb(0 0 0 / 0.76);
+    backdrop-filter: blur(4px);
+}
+
+.install-app-dialog h2 {
+    margin: 0 0 1rem;
+}
+
+.install-app-dialog ol {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0 0 1.25rem;
+    padding-left: 1.5rem;
+    line-height: 1.5;
+}
+
+.install-app-dialog .site-btn {
+    width: 100%;
+}
+
+@media (display-mode: standalone) and (max-width: 900px) {
+    header {
+        padding-top: calc(0.75rem + env(safe-area-inset-top));
+    }
+
+    main {
+        margin-top: calc(74px + env(safe-area-inset-top));
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+}
+
+@media (display-mode: standalone) and (max-width: 480px) {
+    header {
+        padding-top: calc(0.5rem + env(safe-area-inset-top));
+    }
+
+    main {
+        margin-top: calc(76px + env(safe-area-inset-top));
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    }
+}

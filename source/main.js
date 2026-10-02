@@ -29,6 +29,7 @@ function toggleRuleAccordion(button) {
 
 document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
+    initAppInstallation();
 
     const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
     navLinks.forEach(link => {
@@ -119,6 +120,70 @@ function initMobileMenu() {
             hamburger.classList.remove('active');
             mobileModal.classList.remove('active');
         }
+    });
+}
+
+function initAppInstallation() {
+    const installButton = document.getElementById('install-app-button');
+    const installDialog = document.getElementById('install-app-dialog');
+    const installInstructions = document.getElementById('install-app-instructions');
+    const closeButton = document.getElementById('install-app-close');
+    let deferredInstallPrompt = null;
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    if (isStandalone) {
+        document.body.classList.add('app-installed');
+    }
+
+    window.addEventListener('beforeinstallprompt', function(event) {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+    });
+
+    window.addEventListener('appinstalled', function() {
+        deferredInstallPrompt = null;
+        document.body.classList.add('app-installed');
+    });
+
+    installButton.addEventListener('click', async function() {
+        if (deferredInstallPrompt) {
+            await deferredInstallPrompt.prompt();
+            const choice = await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            if (choice.outcome === 'accepted') {
+                document.body.classList.add('app-installed');
+            }
+            return;
+        }
+
+        const userAgent = navigator.userAgent;
+        const isAppleMobile = /iPhone|iPad|iPod/i.test(userAgent)
+            || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (isAppleMobile) {
+            installInstructions.innerHTML = `
+                <li>Tap the Share button in Safari.</li>
+                <li>Choose <strong>Add to Home Screen</strong>.</li>
+                <li>Tap <strong>Add</strong> to install the app.</li>
+            `;
+        } else if (/Android/i.test(userAgent)) {
+            installInstructions.innerHTML = `
+                <li>Open your browser menu.</li>
+                <li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
+                <li>Confirm to add Xeno Championship to your device.</li>
+            `;
+        } else {
+            installInstructions.innerHTML = `
+                <li>Open your browser menu.</li>
+                <li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
+            `;
+        }
+
+        installDialog.showModal();
+    });
+
+    closeButton.addEventListener('click', function() {
+        installDialog.close();
     });
 }
 
