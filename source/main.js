@@ -1058,10 +1058,10 @@ async function populateCurrentChampionship() {
                 </div>
                 <div class="fixture-push-actions">
                     <button id="enable-fixture-push" class="fixture-push-button" type="button">
-                        <i class="fas fa-bell" aria-hidden="true"></i> Enable alerts
+                        <i class="fas fa-bell" aria-hidden="true"></i> Enable Alerts
                     </button>
                     <button id="disable-fixture-push" class="fixture-push-button" type="button" hidden>
-                        <i class="fas fa-bell-slash" aria-hidden="true"></i> Turn off
+                        <i class="fas fa-bell-slash" aria-hidden="true"></i> Disable Alerts
                     </button>
                 </div>
             </div>
