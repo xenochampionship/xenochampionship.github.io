@@ -375,7 +375,8 @@
                 gap: 0.5rem;
             }
 
-            .fixture-card-actions button:disabled {
+            .fixture-card-actions button:disabled,
+            .fixture-notify-btn:disabled {
                 cursor: not-allowed;
                 opacity: 0.45;
             }
@@ -5757,7 +5758,7 @@
                     && [fixture.player1, fixture.player2].includes(fixture.winner);
             }
 
-            async function sendFixtureResultPush(fixture, statusEl) {
+            async function sendFixtureResultPush(fixture) {
                 const pushConfig = WEBEDITOR_CONFIG.fixturePush || {};
                 const workerBaseUrl = String(pushConfig.workerBaseUrl || "").trim().replace(/\/+$/, "");
                 if (!workerBaseUrl) {
@@ -5796,13 +5797,15 @@
                 const failed = Number(result.failed || 0);
                 const firstFailure = result.failures && result.failures[0];
                 if (!total) {
-                    statusEl.textContent = "No active push subscriptions were found.";
-                } else {
-                    statusEl.textContent = "Push provider accepted " + sent + " of " + total
+                    return { message: "No active push subscriptions were found.", type: "bad" };
+                }
+                return {
+                    message: "Push provider accepted " + sent + " of " + total
                         + " notification request(s). Device display is not confirmed."
                         + (failed ? " " + failed + " request(s) failed." : "")
-                        + (firstFailure && firstFailure.message ? " Provider error: " + firstFailure.message : "");
-                }
+                        + (firstFailure && firstFailure.message ? " Provider error: " + firstFailure.message : ""),
+                    type: failed ? "bad" : "ok"
+                };
             }
 
             function updateFixtureResultPushControls(record, recordIndex, isSending) {
@@ -5810,20 +5813,7 @@
                     const input = el.crmModalFields && el.crmModalFields.querySelector('[data-fixture-field="' + fieldName + '"]');
                     return input ? input.value : String(record[fieldName] ?? "");
                 };
-                const fixture = {
-                    status: readFixtureField("status"),
-                    winner: readFixtureField("winner"),
-                    player1: readFixtureField("player1"),
-                    player2: readFixtureField("player2")
-                };
-                const hasWinner = hasValidFixtureResult(fixture);
-                const message = fixture.status !== "completed"
-                    ? "Set Status to Completed to enable result notifications."
-                    : !fixture.winner
-                        ? "Select a fixture winner to enable result notifications."
-                        : ![fixture.player1, fixture.player2].includes(fixture.winner)
-                            ? "The winner must be one of the listed fixture players."
-                            : "Sends the current modal fixture details to all subscribers.";
+                const isCompleted = readFixtureField("status") === "completed";
 
                 document.querySelectorAll("[data-fixture-push-record]").forEach(function(button) {
                     if (button.dataset.fixturePushRecord !== String(recordIndex)) {
@@ -5832,40 +5822,30 @@
                     if (isSending !== undefined) {
                         button.dataset.pushSending = isSending ? "true" : "false";
                     }
-                    button.disabled = !hasWinner || button.dataset.pushSending === "true";
-                });
-                document.querySelectorAll("[data-fixture-push-status]").forEach(function(status) {
-                    if (status.dataset.fixturePushStatus === String(recordIndex)) {
-                        status.textContent = message;
-                    }
+                    button.disabled = !isCompleted || button.dataset.pushSending === "true";
                 });
             }
 
-            async function handleFixtureResultPushClick(button, statusEl, record, recordIndex) {
+            async function handleFixtureResultPushClick(button, record, recordIndex) {
+                const originalLabel = button.textContent;
                 updateFixtureResultPushControls(record, recordIndex, true);
-                statusEl.classList.remove("bad");
-                statusEl.textContent = "Sending result notification...";
+                button.textContent = "Sending...";
                 try {
                     const currentFixture = getCurrentFixtureCardRecord(record, recordIndex);
-                    await sendFixtureResultPush(currentFixture, statusEl);
+                    const result = await sendFixtureResultPush(currentFixture);
+                    showNotificationModal(result.message, result.type, "Fixture Result Push");
                 } catch (error) {
-                    statusEl.textContent = error.message;
-                    statusEl.classList.add("bad");
+                    showNotificationModal(error.message, "bad", "Push Notification Error");
                 } finally {
-                    const resultMessage = statusEl.textContent;
-                    const resultWasError = statusEl.classList.contains("bad");
+                    button.textContent = originalLabel;
                     updateFixtureResultPushControls(record, recordIndex, false);
-                    statusEl.textContent = resultMessage;
-                    if (resultWasError) {
-                        statusEl.classList.add("bad");
-                    }
                 }
             }
 
             function renderFixtureCardTools(fixture, recordIndex) {
                 const actionPanel = document.createElement("div");
                 actionPanel.className = "fixture-card-tools";
-                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button><button type="button" class="primary fixture-notify-btn" data-fixture-push-record="${recordIndex}" ${hasValidFixtureResult(fixture) ? "" : "disabled"}>Send Result Push</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status" data-fixture-push-status="${recordIndex}">Set Status to Completed and select a fixture winner to enable result notifications.</div>`;
+                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button><button type="button" class="primary fixture-notify-btn" data-fixture-push-record="${recordIndex}" ${fixture.status === "completed" ? "" : "disabled"}>Send Result Push</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status" aria-live="polite"></div>`;
                 const previewImage = actionPanel.querySelector(".fixture-card-preview");
                 const generateButton = actionPanel.querySelector(".fixture-generate-btn");
                 const downloadButton = actionPanel.querySelector(".fixture-download-btn");
@@ -5898,7 +5878,7 @@
                     }
                 });
                 notifyButton.addEventListener("click", function() {
-                    handleFixtureResultPushClick(notifyButton, statusEl, state.crmModel.records[recordIndex], recordIndex);
+                    handleFixtureResultPushClick(notifyButton, state.crmModel.records[recordIndex], recordIndex);
                 });
                 return actionPanel;
             }
@@ -6074,17 +6054,11 @@
                         fixturePushButton.className = "primary fixture-notify-btn";
                         fixturePushButton.dataset.fixturePushRecord = String(recordIndex);
                         fixturePushButton.textContent = "Send Result Push";
-                        fixturePushButton.disabled = true;
+                        fixturePushButton.disabled = getNestedRecordValue(record, "status") !== "completed";
                         fixturePushButton.addEventListener("click", function() {
-                            const statusEl = targetContainer.querySelector("[data-fixture-push-status='" + recordIndex + "']");
-                            handleFixtureResultPushClick(fixturePushButton, statusEl, record, recordIndex);
+                            handleFixtureResultPushClick(fixturePushButton, record, recordIndex);
                         });
                         targetContainer.appendChild(fixturePushButton);
-
-                        const fixturePushStatus = document.createElement("div");
-                        fixturePushStatus.className = "status";
-                        fixturePushStatus.dataset.fixturePushStatus = String(recordIndex);
-                        targetContainer.appendChild(fixturePushStatus);
                         updateFixtureResultPushControls(record, recordIndex);
 
                         const fixtureCardButton = document.createElement("button");
