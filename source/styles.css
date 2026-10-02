@@ -862,6 +862,109 @@ select.select option {
     gap: 1rem;
 }
 
+.fixtures-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.fixtures-section-header .para-h1 {
+    margin: 0;
+}
+
+.completed-fixtures-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    background: rgb(215 25 32 / 0.14);
+    color: var(--nms-light);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.completed-fixtures-trigger:hover {
+    background: rgb(215 25 32 / 0.28);
+}
+
+.completed-fixtures-trigger:focus-visible,
+.completed-fixtures-close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.completed-fixtures-trigger > i {
+    color: var(--primary-color);
+}
+
+.completed-fixtures-count {
+    min-width: 1.5rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 999px;
+    background: var(--primary-color);
+    text-align: center;
+    font-size: 0.78rem;
+}
+
+.completed-fixtures-dialog {
+    width: min(760px, calc(100% - 2rem));
+    max-height: 88vh;
+    padding: 1.25rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    background: #080808;
+    color: var(--nms-light);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.7);
+}
+
+.completed-fixtures-dialog::backdrop {
+    background: rgb(0 0 0 / 0.76);
+    backdrop-filter: blur(4px);
+}
+
+.completed-fixtures-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.completed-fixtures-dialog-header h2 {
+    margin: 0;
+}
+
+.completed-fixtures-close {
+    display: grid;
+    place-items: center;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--nms-light);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.completed-fixtures-content {
+    max-height: calc(88vh - 6rem);
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.completed-fixtures-list {
+    padding-bottom: 0.25rem;
+}
+
 .fixtures-by-stage {
     display: grid;
     gap: 2rem;

@@ -30,6 +30,7 @@ function toggleRuleAccordion(button) {
 document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initAppInstallation();
+    initCompletedFixturesDialog();
 
     const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
     navLinks.forEach(link => {
@@ -184,6 +185,28 @@ function initAppInstallation() {
 
     closeButton.addEventListener('click', function() {
         installDialog.close();
+    });
+}
+
+function initCompletedFixturesDialog() {
+    const dialog = document.getElementById('completed-fixtures-dialog');
+    const closeButton = document.getElementById('completed-fixtures-close');
+
+    document.addEventListener('click', function(event) {
+        const openButton = event.target.closest('[data-open-completed-fixtures]');
+        if (openButton && !dialog.open) {
+            dialog.showModal();
+        }
+    });
+
+    closeButton.addEventListener('click', function() {
+        dialog.close();
+    });
+
+    dialog.addEventListener('click', function(event) {
+        if (event.target === dialog) {
+            dialog.close();
+        }
     });
 }
 
@@ -818,14 +841,20 @@ async function populateCurrentChampionship() {
     }
 
     let fixturesHtml = '';
+    let completedFixturesHtml = '<p class="para-txt">No completed fixtures yet.</p>';
+    let completedFixturesCount = 0;
     try {
         const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json');
         const fixturesData = await fixturesResponse.json();
+        const completedFixtures = fixturesData.fixtures.filter(fixture => fixture.status === 'completed');
+        completedFixturesCount = completedFixtures.length;
+        completedFixturesHtml = renderCompletedFixtures(completedFixtures);
         fixturesHtml = renderUpcomingFixtures(fixturesData, data?.players?.length || 32);
     } catch (error) {
         console.log('No fixtures data available');
         fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
     }
+    document.getElementById('completed-fixtures-content').innerHTML = completedFixturesHtml;
 
     const registrationHtml = renderRegistrationCard(currentRecord, data?.metadata);
     const tournamentRange = parseTournamentDateRange(currentRecord.dates);
@@ -886,7 +915,14 @@ async function populateCurrentChampionship() {
             ${standingsHtml}
         </div>
         <div class="card">
-            <h2 class="para-h1">Upcoming Fixtures</h2>
+            <div class="fixtures-section-header">
+                <h2 class="para-h1">Upcoming Fixtures</h2>
+                ${completedFixturesCount ? `<button class="completed-fixtures-trigger" type="button" data-open-completed-fixtures>
+                    <i class="fas fa-flag-checkered" aria-hidden="true"></i>
+                    <span>Completed fixtures</span>
+                    <span class="completed-fixtures-count">${completedFixturesCount}</span>
+                </button>` : ''}
+            </div>
             ${fixturesHtml}
         </div>
         <div class="card podium-card">
@@ -1119,7 +1155,7 @@ function renderUpcomingFixtures(fixturesData, playerCount = 32) {
         return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
     }
 
-    const fixtures = fixturesData.fixtures.slice();
+    const fixtures = fixturesData.fixtures.filter(fixture => fixture.status !== 'completed');
     const qualifiers = fixtures
         .filter(fixture => fixture.fixtureId === 'Qualifier')
         .sort((a, b) => {
@@ -1177,6 +1213,22 @@ function renderUpcomingFixtures(fixturesData, playerCount = 32) {
             ${bracketHtml}
         </div>
     `;
+}
+
+function renderCompletedFixtures(fixtures) {
+    if (!fixtures.length) {
+        return '<p class="para-txt">No completed fixtures yet.</p>';
+    }
+
+    const sortedFixtures = fixtures.slice().sort((a, b) => {
+        const dateA = a.date ? new Date(`${a.date}T${a.time || '00:00'}`).getTime() : Number.NEGATIVE_INFINITY;
+        const dateB = b.date ? new Date(`${b.date}T${b.time || '00:00'}`).getTime() : Number.NEGATIVE_INFINITY;
+        const timeA = Number.isNaN(dateA) ? Number.NEGATIVE_INFINITY : dateA;
+        const timeB = Number.isNaN(dateB) ? Number.NEGATIVE_INFINITY : dateB;
+        return timeB - timeA;
+    });
+
+    return `<div class="fixtures-list completed-fixtures-list">${sortedFixtures.map(renderFixtureCard).join('')}</div>`;
 }
 
 function renderFixtureCard(fixture) {
