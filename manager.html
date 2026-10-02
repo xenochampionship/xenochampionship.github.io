@@ -5733,9 +5733,9 @@
                 });
                 const headers = { "Content-Type": "application/json" };
                 const configuredAuthToken = String(fixtureCardConfig.authToken || "").trim();
-                const authToken = configuredAuthToken || String(window.prompt("Enter the fixture card worker token to post this image:") || "").trim();
+                const authToken = configuredAuthToken;
                 if (!authToken) {
-                    throw new Error("A fixture card worker token is required to post.");
+                    throw new Error("Discord card posting is not configured with a worker token.");
                 }
                 if (authToken) {
                     headers.Authorization = "Bearer " + authToken;
@@ -5784,9 +5784,16 @@
                 if (!response.ok) {
                     throw new Error(result.error || "Push Worker returned HTTP " + response.status + ".");
                 }
-                statusEl.textContent = result.sent
-                    ? "Result notification sent to " + result.sent + " subscriber(s)."
-                    : "No active push subscriptions received this notification.";
+                const total = Number(result.total || 0);
+                const sent = Number(result.sent || 0);
+                const failed = Number(result.failed || 0);
+                if (!total) {
+                    statusEl.textContent = "No active push subscriptions were found.";
+                } else {
+                    statusEl.textContent = "Push provider accepted " + sent + " of " + total
+                        + " notification request(s). Device display is not confirmed."
+                        + (failed ? " " + failed + " request(s) failed." : "");
+                }
             }
 
             function updateFixtureResultPushControls(fixture, recordIndex) {
