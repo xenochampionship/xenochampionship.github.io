@@ -223,6 +223,121 @@ function initCompletedFixturesDialog() {
     });
 }
 
+async function initFixturePushControls() {
+    const enableButton = document.getElementById('enable-fixture-push');
+    const disableButton = document.getElementById('disable-fixture-push');
+    const statusElement = document.getElementById('fixture-push-status');
+    if (!enableButton || !disableButton || !statusElement) {
+        return;
+    }
+
+    let registration = null;
+    const setStatus = (message, isError = false) => {
+        statusElement.textContent = message;
+        statusElement.classList.toggle('error', isError);
+    };
+    const setSubscribed = subscribed => {
+        enableButton.hidden = subscribed;
+        disableButton.hidden = !subscribed;
+    };
+    const syncSubscription = async subscription => {
+        const response = await fetch(fixturePushConfig.workerBaseUrl + '/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ siteId: fixturePushConfig.siteId, subscription })
+        });
+        if (!response.ok) {
+            throw new Error('The push service could not save this subscription.');
+        }
+    };
+
+    enableButton.addEventListener('click', async () => {
+        enableButton.disabled = true;
+        try {
+            if (Notification.permission === 'denied') {
+                throw new Error('Notifications are blocked in your browser settings.');
+            }
+            const permission = Notification.permission === 'granted'
+                ? 'granted'
+                : await Notification.requestPermission();
+            if (permission !== 'granted') {
+                throw new Error('Notification permission was not granted.');
+            }
+
+            registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
+            let subscription = await registration.pushManager.getSubscription();
+            if (!subscription) {
+                const keyResponse = await fetch(fixturePushConfig.workerBaseUrl + '/vapid-public-key');
+                if (!keyResponse.ok) {
+                    throw new Error('The push service is not available yet.');
+                }
+                const keyPayload = await keyResponse.json();
+                if (!keyPayload.publicKey) {
+                    throw new Error('The push service did not return a VAPID public key.');
+                }
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(keyPayload.publicKey)
+                });
+            }
+            await syncSubscription(subscription);
+            setSubscribed(true);
+            setStatus('Result notifications are enabled on this browser.');
+        } catch (error) {
+            setStatus(error.message || 'Unable to enable result notifications.', true);
+        } finally {
+            enableButton.disabled = false;
+        }
+    });
+
+    disableButton.addEventListener('click', async () => {
+        disableButton.disabled = true;
+        try {
+            registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
+            const subscription = await registration.pushManager.getSubscription();
+            if (subscription) {
+                const response = await fetch(fixturePushConfig.workerBaseUrl + '/unsubscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ siteId: fixturePushConfig.siteId, endpoint: subscription.endpoint })
+                });
+                if (!response.ok) {
+                    throw new Error('The push service could not remove this subscription.');
+                }
+                await subscription.unsubscribe();
+            }
+            setSubscribed(false);
+            setStatus('Result notifications are disabled on this browser.');
+        } catch (error) {
+            setStatus(error.message || 'Unable to disable result notifications.', true);
+        } finally {
+            disableButton.disabled = false;
+        }
+    });
+
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
+        enableButton.disabled = true;
+        setStatus('Push notifications are not supported by this browser.', true);
+        return;
+    }
+
+    try {
+        registration = await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
+        const subscription = await registration.pushManager.getSubscription();
+        setSubscribed(Boolean(subscription));
+        if (subscription) {
+            await syncSubscription(subscription);
+            setStatus('Result notifications are enabled on this browser.');
+        } else if (Notification.permission === 'denied') {
+            setStatus('Notifications are blocked in your browser settings.', true);
+        } else {
+            setStatus('Get an alert when a fixture result is announced.');
+        }
+    } catch (error) {
+        setStatus(error.message || 'Unable to connect to the push service.', true);
+    }
+}
+
 function navigateToPage(pageId) {
     window.location.hash = '#' + pageId;
     showPage(pageId);
