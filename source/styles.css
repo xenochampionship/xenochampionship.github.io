@@ -1010,6 +1010,10 @@ select.select option {
     color: var(--nms-light);
 }
 
+.fixture-player .player-name.winner {
+    color: #67d68a;
+}
+
 .fixture-player .player-platform {
     font-size: 0.85rem;
     opacity: 0.8;

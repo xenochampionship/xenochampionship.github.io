@@ -3219,10 +3219,11 @@
                             { key: "platform2", label: "Player 2 Platform", type: "text" },
                             { key: "umpire", label: "Umpire", type: "text" },
                             { key: "streamLink", label: "Stream Link", type: "nullable" },
-                            { key: "status", label: "Status", type: "select", options: FIXTURE_STATUS_OPTIONS }
+                            { key: "status", label: "Status", type: "select", options: FIXTURE_STATUS_OPTIONS },
+                            { key: "winner", label: "Winner", type: "fixture-winner-select" }
                         ],
                         create: function() {
-                            return { fixtureId: "", round: null, date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning" };
+                            return { fixtureId: "", round: null, date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning", winner: null };
                         }
                     };
                 }
@@ -5837,17 +5838,24 @@
                         wrapper.className = "crm-field-card";
                         const label = document.createElement("label");
                         label.textContent = field.label;
-                        const input = field.type === "select" || field.type === "player-select"
+                        const input = field.type === "select" || field.type === "player-select" || field.type === "fixture-winner-select"
                             ? document.createElement("select")
                             : document.createElement("input");
                         input.type = field.type === "nullable" ? "text" : field.type === "nullable-number" ? "number" : field.type;
                         const currentValue = getNestedRecordValue(record, field.key);
-                        if (field.type === "select" || field.type === "player-select") {
+                        if (field.key === "winner" && currentValue === undefined) {
+                            setNestedRecordValue(record, field.key, null);
+                        }
+                        if (field.type === "select" || field.type === "player-select" || field.type === "fixture-winner-select") {
                             const optionDefinitions = field.type === "player-select"
                                 ? state.fixturePlayerOptions.map(function(playerName) {
                                     return { value: playerName, label: playerName };
                                 })
-                                : field.options;
+                                : field.type === "fixture-winner-select"
+                                    ? [{ value: "", label: "Select winner" }].concat([record.player1, record.player2]
+                                        .filter(function(playerName, index, players) { return Boolean(playerName) && players.indexOf(playerName) === index; })
+                                        .map(function(playerName) { return { value: playerName, label: playerName }; }))
+                                    : field.options.map(function(optionDefinition) { return Object.assign({}, optionDefinition); });
                             const currentOptionValue = String(currentValue ?? "");
                             if (currentOptionValue && !optionDefinitions.some(function(optionDefinition) {
                                 return optionDefinition.value === currentOptionValue;
@@ -5870,7 +5878,9 @@
                         const updateFieldValue = function(event) {
                             const rawValue = event.target.value;
                             let nextValue = rawValue;
-                            if (field.type === "select" || field.type === "player-select") {
+                            if (field.type === "fixture-winner-select") {
+                                nextValue = rawValue || null;
+                            } else if (field.type === "select" || field.type === "player-select") {
                                 nextValue = rawValue;
                             } else if (field.type === "number") {
                                 nextValue = rawValue === "" ? 0 : Number(rawValue);
@@ -5880,6 +5890,33 @@
                                 nextValue = rawValue.trim() === "" ? null : rawValue.trim();
                             }
                             setNestedRecordValue(record, field.key, nextValue);
+                            if (kind === "xeno_fixtures" && (field.key === "player1" || field.key === "player2")) {
+                                const winnerInput = targetContainer.querySelector('[data-fixture-field="winner"]');
+                                if (winnerInput) {
+                                    const participantNames = [record.player1, record.player2]
+                                        .filter(function(playerName, index, players) { return Boolean(playerName) && players.indexOf(playerName) === index; });
+                                    if (record.winner && participantNames.indexOf(record.winner) === -1) {
+                                        record.winner = null;
+                                    }
+                                    winnerInput.innerHTML = "";
+                                    [{ value: "", label: "Select winner" }].concat(participantNames.map(function(playerName) {
+                                        return { value: playerName, label: playerName };
+                                    })).forEach(function(optionDefinition) {
+                                        const option = document.createElement("option");
+                                        option.value = optionDefinition.value;
+                                        option.textContent = optionDefinition.label;
+                                        option.selected = optionDefinition.value === (record.winner || "");
+                                        winnerInput.appendChild(option);
+                                    });
+                                    winnerInput.disabled = record.status !== "completed";
+                                }
+                            }
+                            if (kind === "xeno_fixtures" && field.key === "status") {
+                                const winnerInput = targetContainer.querySelector('[data-fixture-field="winner"]');
+                                if (winnerInput) {
+                                    winnerInput.disabled = nextValue !== "completed";
+                                }
+                            }
                             if (kind === "xeno_fixtures" && field.key === "fixtureId") {
                                 const roundValue = nextValue === "Qualifier"
                                     ? getNestedRecordValue(record, "round") ?? 1
@@ -5901,6 +5938,8 @@
                                 input.min = "1";
                                 input.step = "1";
                                 input.disabled = getNestedRecordValue(record, "fixtureId") !== "Qualifier";
+                            } else if (field.key === "winner") {
+                                input.disabled = getNestedRecordValue(record, "status") !== "completed";
                             }
                         }
                         wrapper.appendChild(label);

@@ -1202,7 +1202,7 @@ function renderFixtureCard(fixture) {
             </div>
             <div class="fixture-matchup">
                 <div class="fixture-player">
-                    <span class="player-name">${fixture.player1 || 'TBC'}</span>
+                    <span class="player-name${fixture.winner && fixture.winner === fixture.player1 ? ' winner' : ''}">${fixture.player1 || 'TBC'}</span>
                     <span class="player-platform">${fixture.platform1 || 'Platform TBC'}</span>
                 </div>
                 <div class="fixture-versus">
@@ -1210,7 +1210,7 @@ function renderFixtureCard(fixture) {
                     <span class="fixture-format">Best of 3</span>
                 </div>
                 <div class="fixture-player">
-                    <span class="player-name">${fixture.player2 || 'TBC'}</span>
+                    <span class="player-name${fixture.winner && fixture.winner === fixture.player2 ? ' winner' : ''}">${fixture.player2 || 'TBC'}</span>
                     <span class="player-platform">${fixture.platform2 || 'Platform TBC'}</span>
                 </div>
             </div>
