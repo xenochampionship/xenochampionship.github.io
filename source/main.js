@@ -763,7 +763,13 @@ async function populateCurrentChampionship() {
     }
 
     const registrationHtml = renderRegistrationCard(currentRecord, data?.metadata);
-    const donationHtml = renderDonationCard(currentRecord, data?.metadata);
+    const tournamentRange = parseTournamentDateRange(currentRecord.dates);
+    const now = new Date();
+    const isTournamentActive = tournamentRange && now >= tournamentRange.start && now <= tournamentRange.end;
+    const donationOverlayHtml = isTournamentActive
+        ? renderDonationCard(currentRecord, data?.metadata, true)
+        : '';
+    const donationHtml = isTournamentActive ? '' : renderDonationCard(currentRecord, data?.metadata);
     const registrationSection = (registrationHtml || donationHtml)
         ? `<div class="card-row ${registrationHtml && donationHtml ? 'two-cards' : 'one-card'}">${registrationHtml}${donationHtml}</div>`
         : '';
@@ -805,8 +811,9 @@ async function populateCurrentChampionship() {
     currentChampionshipPage.innerHTML = `
         <h1 style="margin-bottom: 0;">${tournamentName}</h1>
         <p class="para-txt" style="margin-top: 0; margin-bottom: 1rem; font-style: italic;">${currentRecord.dates}</p>
-        <div class="card hero-card">
+        <div class="card hero-card current-championship-hero${donationOverlayHtml ? ' has-donation-overlay' : ''}">
             <img src="https://www.nomanssky.com/media/eegigxne/spectators03.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+            ${donationOverlayHtml}
         </div>
         ${registrationSection}
         <div class="card">
@@ -911,7 +918,7 @@ function renderRegistrationCard(record, metadata) {
     `;
 }
 
-function renderDonationCard(record, metadata) {
+function renderDonationCard(record, metadata, overlay = false) {
     if (!record || !record.dates) return '';
 
     const range = parseTournamentDateRange(record.dates);
@@ -936,7 +943,7 @@ function renderDonationCard(record, metadata) {
     const progressHtml = renderDonationProgress(record);
 
     return `
-        <div class="card registration-card donation-card">
+        <div class="card registration-card donation-card${overlay ? ' current-donation-overlay' : ''}">
             <h2 class="para-h1">Charitable Donation</h2>
             <p class="para-txt">${donationMessage}</p>
             ${progressHtml}

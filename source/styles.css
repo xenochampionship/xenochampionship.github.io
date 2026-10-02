@@ -296,6 +296,32 @@ button i.fas {
     justify-content: center;
 }
 
+.current-championship-hero.has-donation-overlay {
+    position: relative;
+    display: grid;
+    --current-hero-inset: 0.5rem;
+    padding: var(--current-hero-inset) !important;
+}
+
+.current-championship-hero.has-donation-overlay .home-hero-image-secondary {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    object-fit: cover;
+}
+
+.current-donation-overlay {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    backdrop-filter: blur(8px);
+}
+
 .card {
     background: var(--card-bg);
     border: 1px solid var(--primary-color);
@@ -329,7 +355,7 @@ button i.fas {
 
 .donation-card {
     border-color: var(--charity-box-border);
-    background: var(--charity-box-bg);
+    background: #0f364a7a;
     display: flex;
     flex-direction: column;
 }
