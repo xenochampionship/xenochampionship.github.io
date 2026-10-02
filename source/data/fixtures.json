@@ -13,7 +13,8 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "scheduled"
+      "status": "scheduled",
+      "winner": null
     },
     {
       "fixtureId": "Qualifier",
@@ -27,7 +28,8 @@
       "platform2": "Nintendo Switch",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "scheduled"
+      "status": "scheduled",
+      "winner": null
     },
     {
       "fixtureId": "Qualifier",
@@ -41,7 +43,8 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "scheduled"
+      "status": "scheduled",
+      "winner": null
     },
     {
       "fixtureId": "Qualifier",
@@ -55,7 +58,8 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "scheduled"
+      "status": "scheduled",
+      "winner": null
     }
   ]
 }
