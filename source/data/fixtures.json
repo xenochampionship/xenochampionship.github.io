@@ -18,6 +18,20 @@
     {
       "fixtureId": "Qualifier",
       "round": 1,
+      "date": "2026-10-03",
+      "time": "21:00",
+      "timeZone": "UTC+01:00",
+      "player1": "AjZed",
+      "player2": "Bread God",
+      "platform1": "PlayStation",
+      "platform2": "Nintendo Switch",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "scheduled"
+    },
+    {
+      "fixtureId": "Qualifier",
+      "round": 1,
       "date": "2026-10-04",
       "time": "01:00",
       "timeZone": "UTC+01:00",
@@ -39,20 +53,6 @@
       "player2": "Scarecr0w",
       "platform1": "PlayStation",
       "platform2": "PC",
-      "umpire": "JamieHarperUK",
-      "streamLink": null,
-      "status": "scheduled"
-    },
-    {
-      "fixtureId": "Qualifier",
-      "round": 1,
-      "date": "2026-10-03",
-      "time": "21:00",
-      "timeZone": "UTC+01:00",
-      "player1": "AjZed",
-      "player2": "Bread God",
-      "platform1": "PlayStation",
-      "platform2": "Nintendo Switch",
       "umpire": "JamieHarperUK",
       "streamLink": null,
       "status": "scheduled"
