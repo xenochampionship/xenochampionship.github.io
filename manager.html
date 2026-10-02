@@ -5796,7 +5796,8 @@
                 }
             }
 
-            function updateFixtureResultPushControls(fixture, recordIndex) {
+            function updateFixtureResultPushControls(record, recordIndex, targetContainer) {
+                const fixture = getCurrentFixtureCardRecord(record, recordIndex);
                 const hasWinner = fixture.status === "completed" && fixture.winner
                     && [fixture.player1, fixture.player2].includes(fixture.winner);
                 const message = fixture.status !== "completed"
@@ -5807,29 +5808,24 @@
                             ? "The winner must be one of the listed fixture players."
                             : "Sends the current modal fixture details to all subscribers.";
 
-                document.querySelectorAll("[data-fixture-push-record]").forEach(function(button) {
-                    if (button.dataset.fixturePushRecord === String(recordIndex)) {
-                        button.disabled = !hasWinner;
-                    }
-                });
-                document.querySelectorAll("[data-fixture-push-status]").forEach(function(status) {
-                    if (status.dataset.fixturePushStatus === String(recordIndex)) {
-                        status.textContent = message;
-                    }
-                });
+                const button = targetContainer.querySelector("[data-fixture-push-record]");
+                const status = targetContainer.querySelector("[data-fixture-push-status]");
+                if (button) {
+                    button.disabled = !hasWinner;
+                }
+                if (status) {
+                    status.textContent = message;
+                }
             }
 
-            function renderFixtureCardTools(fixture, recordIndex) {
+            function renderFixtureCardTools(fixture) {
                 const actionPanel = document.createElement("div");
                 actionPanel.className = "fixture-card-tools";
-                const hasWinner = fixture.status === "completed" && fixture.winner
-                    && [fixture.player1, fixture.player2].includes(fixture.winner);
-                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button><button type="button" class="primary fixture-notify-btn" data-fixture-push-record="${recordIndex}" ${hasWinner ? "" : "disabled"}>Send Result Push</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status" data-fixture-push-status="${recordIndex}"></div>`;
+                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">No image generated.</div>`;
                 const previewImage = actionPanel.querySelector(".fixture-card-preview");
                 const generateButton = actionPanel.querySelector(".fixture-generate-btn");
                 const downloadButton = actionPanel.querySelector(".fixture-download-btn");
                 const postButton = actionPanel.querySelector(".fixture-post-btn");
-                const notifyButton = actionPanel.querySelector(".fixture-notify-btn");
                 const statusEl = actionPanel.querySelector(".fixture-card-status");
 
                 generateButton.addEventListener("click", async function() {
@@ -5856,21 +5852,6 @@
                         postButton.disabled = false;
                     }
                 });
-                if (notifyButton) {
-                    notifyButton.addEventListener("click", async function() {
-                        notifyButton.disabled = true;
-                        statusEl.classList.remove("bad");
-                        try {
-                            const currentFixture = getCurrentFixtureCardRecord(state.crmModel.records[recordIndex], recordIndex);
-                            await sendFixtureResultPush(currentFixture, statusEl);
-                        } catch (error) {
-                            statusEl.textContent = error.message;
-                            statusEl.classList.add("bad");
-                        } finally {
-                            notifyButton.disabled = false;
-                        }
-                    });
-                }
                 return actionPanel;
             }
 
@@ -5913,7 +5894,7 @@
                     el.fixtureCardModalPath.textContent = "Fixture " + (recordIndex + 1);
                 }
                 el.fixtureCardModalBody.innerHTML = "";
-                el.fixtureCardModalBody.appendChild(renderFixtureCardTools(fixture, recordIndex));
+                el.fixtureCardModalBody.appendChild(renderFixtureCardTools(fixture));
                 el.fixtureCardModal.classList.remove("hidden");
             }
 
@@ -6020,7 +6001,7 @@
                             }
                             syncCrmToJsonText();
                             if (kind === "xeno_fixtures") {
-                                updateFixtureResultPushControls(record, recordIndex);
+                                updateFixtureResultPushControls(record, recordIndex, targetContainer);
                             }
                         };
                         input.addEventListener("input", updateFieldValue);
@@ -6060,7 +6041,7 @@
                             } finally {
                                 const resultMessage = statusEl.textContent;
                                 const resultWasError = statusEl.classList.contains("bad");
-                                updateFixtureResultPushControls(record, recordIndex);
+                                updateFixtureResultPushControls(record, recordIndex, targetContainer);
                                 statusEl.textContent = resultMessage;
                                 if (resultWasError) {
                                     statusEl.classList.add("bad");
@@ -6073,7 +6054,7 @@
                         fixturePushStatus.className = "status";
                         fixturePushStatus.dataset.fixturePushStatus = String(recordIndex);
                         targetContainer.appendChild(fixturePushStatus);
-                        updateFixtureResultPushControls(record, recordIndex);
+                        updateFixtureResultPushControls(record, recordIndex, targetContainer);
 
                         const fixtureCardButton = document.createElement("button");
                         fixtureCardButton.type = "button";
