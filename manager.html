@@ -1938,7 +1938,8 @@
                 },
                 fixturePush: {
                     workerBaseUrl: "https://xeno-fixture-push-worker.oakshiftsoftware.workers.dev",
-                    siteId: "xeno-championship"
+                    siteId: "xeno-championship",
+                    authToken: "K5holhRqBiJZV/Jx/hH/iFsynFm2i6nuuO/nhw7HfKY="
                 }
             }; 
 
@@ -5763,13 +5764,9 @@
                     throw new Error("Set Status to Completed and select one of the fixture players as the winner.");
                 }
 
-                if (!window.confirm("Send this fixture result to every subscribed browser and installed app?")) {
-                    statusEl.textContent = "Notification not sent.";
-                    return;
-                }
-                const authToken = String(window.prompt("Enter the fixture push Worker bearer token:") || "").trim();
-                if (!authToken) {
-                    throw new Error("A fixture push Worker token is required to send.");
+                const authToken = String(pushConfig.authToken || "").trim();
+                if (!authToken || authToken === "REPLACE_WITH_FIXTURE_PUSH_BEARER_TOKEN") {
+                    throw new Error("Set fixturePush.authToken in the manager configuration before sending.");
                 }
 
                 const response = await fetch(workerBaseUrl + "/notify-fixture", {
