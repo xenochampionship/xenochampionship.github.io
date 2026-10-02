@@ -1,0 +1,28 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "xeno-fixture-push-worker",
+	"main": "src/index.js",
+	"compatibility_date": "2026-09-16",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"kv_namespaces": [
+		{
+			"binding": "SUBSCRIPTIONS",
+			"id": "98811ab24d924677aa6b2bd9aaf96afe"
+		},
+		{
+			"binding": "XENO_FIXTURE_PUSH_SUBSCRIPTIONS",
+			"id": "98811ab24d924677aa6b2bd9aaf96afe",
+			"remote": true
+		}
+	],
+	"vars": {
+		"ALLOWED_ORIGINS": "https://xenochampionship.co.uk",
+		"SITE_BASE_URL": "https://xenochampionship.co.uk/",
+		"SITE_ICON_URL": "https://xenochampionship.co.uk/source/images/app-icon-192.png"
+	}
+}

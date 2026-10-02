@@ -1935,6 +1935,10 @@
                 fixtureCards: {
                     postEndpoint: "https://fixture-card-worker.oakshiftsoftware.workers.dev",
                     authToken: "0eKUb86nF5bFGnO7lYa0/kexHKxNR4fMpq504KIRAQVTKiL2zQBu6tiOyWxKV/Lu"
+                },
+                fixturePush: {
+                    workerBaseUrl: "https://xeno-fixture-push-worker.oakshiftsoftware.workers.dev",
+                    siteId: "xeno-championship"
                 }
             }; 
 
@@ -5747,14 +5751,74 @@
                 statusEl.textContent = "Fixture card posted.";
             }
 
-            function renderFixtureCardTools(fixture) {
+            async function sendFixtureResultPush(fixture, recordIndex, statusEl) {
+                const pushConfig = WEBEDITOR_CONFIG.fixturePush || {};
+                const workerBaseUrl = String(pushConfig.workerBaseUrl || "").trim().replace(/\/+$/, "");
+                if (!workerBaseUrl) {
+                    throw new Error("Fixture push notifications are not configured.");
+                }
+                if (!state.selectedRepo || !state.currentJsonPath) {
+                    throw new Error("Connect and load the fixtures file before sending.");
+                }
+
+                statusEl.textContent = "Checking the committed fixture result...";
+                const savedFile = await loadRepoJsonFile(state.selectedRepo.full_name, state.currentJsonPath);
+                const savedFixtures = savedFile.data && Array.isArray(savedFile.data.fixtures) ? savedFile.data.fixtures : [];
+                const savedFixture = savedFixtures[recordIndex];
+                if (!savedFixture || savedFixture.status !== "completed" || savedFixture.winner !== fixture.winner
+                    || savedFixture.fixtureId !== fixture.fixtureId
+                    || String(savedFixture.round ?? "") !== String(fixture.round ?? "")
+                    || savedFixture.player1 !== fixture.player1 || savedFixture.player2 !== fixture.player2) {
+                    throw new Error("Commit this completed fixture and winner before sending a notification.");
+                }
+
+                if (!window.confirm("Send this fixture result to every subscribed browser and installed app?")) {
+                    statusEl.textContent = "Notification not sent.";
+                    return;
+                }
+                const authToken = String(window.prompt("Enter the fixture push Worker bearer token:") || "").trim();
+                if (!authToken) {
+                    throw new Error("A fixture push Worker token is required to send.");
+                }
+
+                const response = await fetch(workerBaseUrl + "/notify-fixture", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + authToken
+                    },
+                    body: JSON.stringify({
+                        siteId: String(pushConfig.siteId || "xeno-championship"),
+                        fixture: {
+                            fixtureId: fixture.fixtureId,
+                            round: fixture.round,
+                            status: fixture.status,
+                            player1: fixture.player1,
+                            player2: fixture.player2,
+                            winner: fixture.winner
+                        }
+                    })
+                });
+                const result = await response.json().catch(function() { return {}; });
+                if (!response.ok) {
+                    throw new Error(result.error || "Push Worker returned HTTP " + response.status + ".");
+                }
+                statusEl.textContent = result.sent
+                    ? "Result notification sent to " + result.sent + " subscriber(s)."
+                    : "No active push subscriptions received this notification.";
+            }
+
+            function renderFixtureCardTools(fixture, recordIndex) {
                 const actionPanel = document.createElement("div");
                 actionPanel.className = "fixture-card-tools";
-                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">No image generated.</div>`;
+                const hasWinner = fixture.status === "completed" && fixture.winner
+                    && [fixture.player1, fixture.player2].includes(fixture.winner);
+                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button>${hasWinner ? '<button type="button" class="primary fixture-notify-btn">Send Result Push</button>' : ''}</div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">${hasWinner ? 'Commit this result before sending a push notification.' : 'No image generated.'}</div>`;
                 const previewImage = actionPanel.querySelector(".fixture-card-preview");
                 const generateButton = actionPanel.querySelector(".fixture-generate-btn");
                 const downloadButton = actionPanel.querySelector(".fixture-download-btn");
                 const postButton = actionPanel.querySelector(".fixture-post-btn");
+                const notifyButton = actionPanel.querySelector(".fixture-notify-btn");
                 const statusEl = actionPanel.querySelector(".fixture-card-status");
 
                 generateButton.addEventListener("click", async function() {
@@ -5781,6 +5845,20 @@
                         postButton.disabled = false;
                     }
                 });
+                if (notifyButton) {
+                    notifyButton.addEventListener("click", async function() {
+                        notifyButton.disabled = true;
+                        statusEl.classList.remove("bad");
+                        try {
+                            await sendFixtureResultPush(fixture, recordIndex, statusEl);
+                        } catch (error) {
+                            statusEl.textContent = error.message;
+                            statusEl.classList.add("bad");
+                        } finally {
+                            notifyButton.disabled = false;
+                        }
+                    });
+                }
                 return actionPanel;
             }
 
@@ -5823,7 +5901,7 @@
                     el.fixtureCardModalPath.textContent = "Fixture " + (recordIndex + 1);
                 }
                 el.fixtureCardModalBody.innerHTML = "";
-                el.fixtureCardModalBody.appendChild(renderFixtureCardTools(fixture));
+                el.fixtureCardModalBody.appendChild(renderFixtureCardTools(fixture, recordIndex));
                 el.fixtureCardModal.classList.remove("hidden");
             }
 

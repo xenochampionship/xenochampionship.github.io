@@ -875,6 +875,69 @@ select.select option {
     margin: 0;
 }
 
+.fixture-push-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.035);
+}
+
+.fixture-push-controls p {
+    margin: 0.25rem 0 0;
+    color: rgb(255 255 255 / 0.68);
+    font-size: 0.85rem;
+}
+
+#fixture-push-status.error {
+    color: #ff9292;
+}
+
+.fixture-push-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.fixture-push-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 40px;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    background: rgb(215 25 32 / 0.14);
+    color: var(--nms-light);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.fixture-push-button:hover {
+    background: rgb(215 25 32 / 0.28);
+}
+
+.fixture-push-button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.fixture-push-button:disabled {
+    cursor: wait;
+    opacity: 0.55;
+}
+
+.fixture-push-button[hidden] {
+    display: none;
+}
+
 .completed-fixtures-trigger {
     display: inline-flex;
     align-items: center;

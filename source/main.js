@@ -20,6 +20,19 @@ const allowedFixtureIds = [
     "Grand Final"
 ];
 
+const fixturePushConfig = {
+    workerBaseUrl: "https://xeno-fixture-push-worker.oakshiftsoftware.workers.dev",
+    siteId: "xeno-championship",
+    serviceWorkerPath: "./sw.js"
+};
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    return Uint8Array.from(rawData, character => character.charCodeAt(0));
+}
+
 function toggleRuleAccordion(button) {
     const card = button.closest('.accordion-rule-card');
     if (card) {
@@ -923,6 +936,20 @@ async function populateCurrentChampionship() {
                     <span class="completed-fixtures-count">${completedFixturesCount}</span>
                 </button>` : ''}
             </div>
+            <div class="fixture-push-controls">
+                <div>
+                    <strong>Fixture result alerts</strong>
+                    <p id="fixture-push-status" role="status" aria-live="polite">Get an alert when a fixture result is announced.</p>
+                </div>
+                <div class="fixture-push-actions">
+                    <button id="enable-fixture-push" class="fixture-push-button" type="button">
+                        <i class="fas fa-bell" aria-hidden="true"></i> Enable alerts
+                    </button>
+                    <button id="disable-fixture-push" class="fixture-push-button" type="button" hidden>
+                        <i class="fas fa-bell-slash" aria-hidden="true"></i> Turn off
+                    </button>
+                </div>
+            </div>
             ${fixturesHtml}
         </div>
         <div class="card podium-card">
@@ -954,6 +981,7 @@ async function populateCurrentChampionship() {
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
+    initFixturePushControls();
 }
 
 function renderPodium(top3) {
