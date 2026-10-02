@@ -5813,7 +5813,14 @@
                 actionPanel.className = "fixture-card-tools";
                 const hasWinner = fixture.status === "completed" && fixture.winner
                     && [fixture.player1, fixture.player2].includes(fixture.winner);
-                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button>${hasWinner ? '<button type="button" class="primary fixture-notify-btn">Send Result Push</button>' : ''}</div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">${hasWinner ? 'Commit this result before sending a push notification.' : 'No image generated.'}</div>`;
+                const pushHelpText = fixture.status !== "completed"
+                    ? "Set Status to Completed to enable result notifications."
+                    : !fixture.winner
+                        ? "Select a fixture winner to enable result notifications."
+                        : ![fixture.player1, fixture.player2].includes(fixture.winner)
+                            ? "The winner must be one of the listed fixture players."
+                            : "Commit this result before sending a push notification.";
+                actionPanel.innerHTML = `<h3>Generate Fixture Card</h3><p>Generate an image for this fixture, download it, or post this single fixture to the configured Discord worker.</p><div class="fixture-card-actions"><button type="button" class="primary fixture-generate-btn">Generate Image</button><button type="button" class="fixture-download-btn" disabled>Download PNG</button><button type="button" class="fixture-post-btn" disabled>Post to Discord</button><button type="button" class="primary fixture-notify-btn" ${hasWinner ? "" : "disabled"}>Send Result Push</button></div><img class="fixture-card-preview hidden" alt="Generated fixture card preview"><div class="fixture-card-status status">${pushHelpText}</div>`;
                 const previewImage = actionPanel.querySelector(".fixture-card-preview");
                 const generateButton = actionPanel.querySelector(".fixture-generate-btn");
                 const downloadButton = actionPanel.querySelector(".fixture-download-btn");
