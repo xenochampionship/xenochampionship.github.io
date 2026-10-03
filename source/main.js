@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initAppInstallation();
     initCompletedFixturesDialog();
+    initFixturePushControls();
 
     const navLinks = document.querySelectorAll('.nav-menu a:not(.dropbtn)');
     navLinks.forEach(link => {
@@ -224,21 +225,27 @@ function initCompletedFixturesDialog() {
 }
 
 async function initFixturePushControls() {
-    const enableButton = document.getElementById('enable-fixture-push');
-    const disableButton = document.getElementById('disable-fixture-push');
+    const toggleButton = document.getElementById('fixture-push-toggle');
+    const labelElement = document.getElementById('fixture-push-label');
+    const indicatorElement = document.querySelector('.fixture-push-indicator');
     const statusElement = document.getElementById('fixture-push-status');
-    if (!enableButton || !disableButton || !statusElement) {
+    if (!toggleButton || !labelElement || !indicatorElement || !statusElement) {
         return;
     }
 
     let registration = null;
+    let subscribed = false;
     const setStatus = (message, isError = false) => {
         statusElement.textContent = message;
         statusElement.classList.toggle('error', isError);
+        toggleButton.title = message;
     };
-    const setSubscribed = subscribed => {
-        enableButton.hidden = subscribed;
-        disableButton.hidden = !subscribed;
+    const setSubscribed = isSubscribed => {
+        subscribed = isSubscribed;
+        toggleButton.setAttribute('aria-pressed', String(isSubscribed));
+        toggleButton.setAttribute('aria-label', `${isSubscribed ? 'Disable' : 'Enable'} fixture result alerts. Alerts are currently ${isSubscribed ? 'on' : 'off'}.`);
+        labelElement.textContent = isSubscribed ? 'Disable Alerts' : 'Enable Alerts';
+        indicatorElement.classList.toggle('is-enabled', isSubscribed);
     };
     const syncSubscription = async subscription => {
         const response = await fetch(fixturePushConfig.workerBaseUrl + '/subscribe', {
@@ -251,72 +258,65 @@ async function initFixturePushControls() {
         }
     };
 
-    enableButton.addEventListener('click', async () => {
-        enableButton.disabled = true;
+    toggleButton.addEventListener('click', async () => {
+        toggleButton.disabled = true;
         try {
-            if (Notification.permission === 'denied') {
-                throw new Error('Notifications are blocked in your browser settings.');
-            }
-            const permission = Notification.permission === 'granted'
-                ? 'granted'
-                : await Notification.requestPermission();
-            if (permission !== 'granted') {
-                throw new Error('Notification permission was not granted.');
-            }
+            if (subscribed) {
+                registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
+                const subscription = await registration.pushManager.getSubscription();
+                if (subscription) {
+                    const response = await fetch(fixturePushConfig.workerBaseUrl + '/unsubscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ siteId: fixturePushConfig.siteId, endpoint: subscription.endpoint })
+                    });
+                    if (!response.ok) {
+                        throw new Error('The push service could not remove this subscription.');
+                    }
+                    await subscription.unsubscribe();
+                }
+                setSubscribed(false);
+                setStatus('Result notifications are disabled on this browser.');
+            } else {
+                if (Notification.permission === 'denied') {
+                    throw new Error('Notifications are blocked in your browser settings.');
+                }
+                const permission = Notification.permission === 'granted'
+                    ? 'granted'
+                    : await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    throw new Error('Notification permission was not granted.');
+                }
 
-            registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
-            let subscription = await registration.pushManager.getSubscription();
-            if (!subscription) {
-                const keyResponse = await fetch(fixturePushConfig.workerBaseUrl + '/vapid-public-key');
-                if (!keyResponse.ok) {
-                    throw new Error('The push service is not available yet.');
+                registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
+                let subscription = await registration.pushManager.getSubscription();
+                if (!subscription) {
+                    const keyResponse = await fetch(fixturePushConfig.workerBaseUrl + '/vapid-public-key');
+                    if (!keyResponse.ok) {
+                        throw new Error('The push service is not available yet.');
+                    }
+                    const keyPayload = await keyResponse.json();
+                    if (!keyPayload.publicKey) {
+                        throw new Error('The push service did not return a VAPID public key.');
+                    }
+                    subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(keyPayload.publicKey)
+                    });
                 }
-                const keyPayload = await keyResponse.json();
-                if (!keyPayload.publicKey) {
-                    throw new Error('The push service did not return a VAPID public key.');
-                }
-                subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(keyPayload.publicKey)
-                });
+                await syncSubscription(subscription);
+                setSubscribed(true);
+                setStatus('Result notifications are enabled on this browser.');
             }
-            await syncSubscription(subscription);
-            setSubscribed(true);
-            setStatus('Result notifications are enabled on this browser.');
         } catch (error) {
-            setStatus(error.message || 'Unable to enable result notifications.', true);
+            setStatus(error.message || 'Unable to update result notifications.', true);
         } finally {
-            enableButton.disabled = false;
-        }
-    });
-
-    disableButton.addEventListener('click', async () => {
-        disableButton.disabled = true;
-        try {
-            registration = registration || await navigator.serviceWorker.register(fixturePushConfig.serviceWorkerPath, { scope: './' });
-            const subscription = await registration.pushManager.getSubscription();
-            if (subscription) {
-                const response = await fetch(fixturePushConfig.workerBaseUrl + '/unsubscribe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ siteId: fixturePushConfig.siteId, endpoint: subscription.endpoint })
-                });
-                if (!response.ok) {
-                    throw new Error('The push service could not remove this subscription.');
-                }
-                await subscription.unsubscribe();
-            }
-            setSubscribed(false);
-            setStatus('Result notifications are disabled on this browser.');
-        } catch (error) {
-            setStatus(error.message || 'Unable to disable result notifications.', true);
-        } finally {
-            disableButton.disabled = false;
+            toggleButton.disabled = false;
         }
     });
 
     if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
-        enableButton.disabled = true;
+        toggleButton.disabled = true;
         setStatus('Push notifications are not supported by this browser.', true);
         return;
     }
@@ -1051,20 +1051,6 @@ async function populateCurrentChampionship() {
                     <span class="completed-fixtures-count">${completedFixturesCount}</span>
                 </button>` : ''}
             </div>
-            <div class="fixture-push-controls">
-                <div>
-                    <strong>Fixture result alerts</strong>
-                    <p id="fixture-push-status" role="status" aria-live="polite">Get an alert when a fixture result is announced.</p>
-                </div>
-                <div class="fixture-push-actions">
-                    <button id="enable-fixture-push" class="fixture-push-button" type="button">
-                        <i class="fas fa-bell" aria-hidden="true"></i> Enable Alerts
-                    </button>
-                    <button id="disable-fixture-push" class="fixture-push-button" type="button" hidden>
-                        <i class="fas fa-bell-slash" aria-hidden="true"></i> Disable Alerts
-                    </button>
-                </div>
-            </div>
             ${fixturesHtml}
         </div>
         <div class="card podium-card">
@@ -1096,7 +1082,6 @@ async function populateCurrentChampionship() {
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
-    initFixturePushControls();
 }
 
 function renderPodium(top3) {

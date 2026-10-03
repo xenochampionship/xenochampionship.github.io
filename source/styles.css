@@ -875,44 +875,38 @@ select.select option {
     margin: 0;
 }
 
-.fixture-push-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.75rem 1rem;
-    margin-bottom: 1.25rem;
-    padding: 0.8rem 0.9rem;
-    border: 1px solid rgb(255 255 255 / 0.14);
-    border-radius: 6px;
-    background: rgb(255 255 255 / 0.035);
+.fixture-alert-control {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 1000;
 }
 
-.fixture-push-controls p {
-    margin: 0.25rem 0 0;
-    color: rgb(255 255 255 / 0.68);
-    font-size: 0.85rem;
+.fixture-push-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-#fixture-push-status.error {
+.fixture-push-status.error {
     color: #ff9292;
-}
-
-.fixture-push-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
 }
 
 .fixture-push-button {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    min-height: 40px;
-    padding: 0.45rem 0.7rem;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0.55rem 0.85rem;
     border: 1px solid var(--primary-color);
     border-radius: 6px;
-    background: rgb(215 25 32 / 0.14);
+    background: rgb(0 0 0 / 0.88);
     color: var(--nms-light);
     font: inherit;
     font-size: 0.85rem;
@@ -924,6 +918,20 @@ select.select option {
     background: rgb(215 25 32 / 0.28);
 }
 
+.fixture-push-indicator {
+    width: 0.65rem;
+    height: 0.65rem;
+    flex: 0 0 0.65rem;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 8px rgb(239 68 68 / 0.6);
+}
+
+.fixture-push-indicator.is-enabled {
+    background: #22c55e;
+    box-shadow: 0 0 8px rgb(34 197 94 / 0.65);
+}
+
 .fixture-push-button:focus-visible {
     outline: 2px solid #fff;
     outline-offset: 3px;
@@ -932,10 +940,6 @@ select.select option {
 .fixture-push-button:disabled {
     cursor: wait;
     opacity: 0.55;
-}
-
-.fixture-push-button[hidden] {
-    display: none;
 }
 
 .completed-fixtures-trigger {
