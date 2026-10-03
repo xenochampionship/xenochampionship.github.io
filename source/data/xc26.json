@@ -75,20 +75,20 @@
       "name": "AjZed",
       "platform": "PlayStation",
       "results": {
-        "played": 0,
+        "played": 1,
         "wins": 0,
-        "losses": 0,
-        "omw": 0
+        "losses": 1,
+        "omw": 100
       }
     },
     {
       "name": "Bread God",
       "platform": "Nintendo Switch",
       "results": {
-        "played": 0,
-        "wins": 0,
+        "played": 1,
+        "wins": 1,
         "losses": 0,
-        "omw": 0
+        "omw": 33.33
       }
     }
   ]
