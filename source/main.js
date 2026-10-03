@@ -1381,6 +1381,17 @@ function renderFixtureCard(fixture) {
         : 'TBC';
     const statusKey = ['planning', 'scheduled', 'live', 'completed'].includes(fixture.status) ? fixture.status : 'planning';
     const statusLabel = statusKey === 'live' ? 'LIVE' : statusKey === 'completed' ? 'Completed' : statusKey === 'scheduled' ? 'Scheduled' : 'Planning';
+    let streamLinkHtml = '';
+    if (['scheduled', 'live'].includes(statusKey) && fixture.streamLink) {
+        try {
+            const streamUrl = new URL(fixture.streamLink, window.location.href);
+            if (streamUrl.protocol === 'http:' || streamUrl.protocol === 'https:') {
+                streamLinkHtml = `<a class="fixture-stream-link" href="${streamUrl.href}" target="_blank" rel="noopener noreferrer"><i class="fas fa-play" aria-hidden="true"></i> Watch Live</a>`;
+            }
+        } catch (error) {
+            streamLinkHtml = '';
+        }
+    }
     const fixtureRound = fixture.fixtureId === 'Qualifier' && fixture.round != null ? ` · Round ${fixture.round}` : '';
     const fixtureTimeZone = fixture.timezone || 'UTC+01:00';
     let fixtureTime = fixture.time || 'TBC';
@@ -1393,7 +1404,10 @@ function renderFixtureCard(fixture) {
         <article class="fixture-card fixture-card-${statusKey}">
             <div class="fixture-card-header">
                 <span class="fixture-card-stage">${fixture.fixtureId || 'Fixture'}${fixtureRound}</span>
-                <span class="fixture-status ${statusKey}">${statusLabel}</span>
+                <div class="fixture-card-header-actions">
+                    <span class="fixture-status ${statusKey}">${statusLabel}</span>
+                    ${streamLinkHtml}
+                </div>
             </div>
             <div class="fixture-matchup">
                 <div class="fixture-player">

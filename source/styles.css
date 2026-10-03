@@ -1122,9 +1122,37 @@ select.select option {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 1rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fixture-card-header-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.fixture-stream-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 999px;
+    padding: 0.28rem 0.7rem;
+    color: var(--primary-color);
+    font-size: 0.72rem;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fixture-stream-link:hover,
+.fixture-stream-link:focus-visible {
+    background: var(--primary-color);
+    color: #111;
 }
 
 .fixture-card-stage {
