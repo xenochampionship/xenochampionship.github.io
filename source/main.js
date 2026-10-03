@@ -1405,8 +1405,8 @@ function renderFixtureCard(fixture) {
             <div class="fixture-card-header">
                 <span class="fixture-card-stage">${fixture.fixtureId || 'Fixture'}${fixtureRound}</span>
                 <div class="fixture-card-header-actions">
-                    <span class="fixture-status ${statusKey}">${statusLabel}</span>
                     ${streamLinkHtml}
+                    <span class="fixture-status ${statusKey}">${statusLabel}</span>
                 </div>
             </div>
             <div class="fixture-matchup">

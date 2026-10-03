@@ -1152,7 +1152,12 @@ select.select option {
 .fixture-stream-link:hover,
 .fixture-stream-link:focus-visible {
     background: var(--primary-color);
-    color: #111;
+    color: #fff;
+}
+
+.fixture-stream-link:hover i.fas, 
+.fixture-stream-link:focus-visible i.fas {
+    color: #fff;
 }
 
 .fixture-card-stage {
