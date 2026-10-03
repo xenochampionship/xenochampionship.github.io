@@ -12,7 +12,7 @@ const records = [
         past: false, // If current or upcoming, set past to false
         top3: ["TBC", "TBC", "TBC"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc26.json",
-        charity: {current: 160.00, goal: 200.00, showOnHome: true} // GBP (£)
+        charity: {current: 165.00, goal: 200.00, showOnHome: true} // GBP (£)
     }
 ];
 
