@@ -378,7 +378,7 @@ async function loadCurrentChampionship() {
     });
 
     try {
-        const response = await fetch(currentRecord.resultsJson);
+        const response = await fetch(currentRecord.resultsJson, { cache: 'no-store' });
         const data = await response.json();
         populateHomePage(data, currentRecord);
     } catch (error) {
@@ -961,7 +961,7 @@ async function populateCurrentChampionship() {
     let data = null;
     if (currentRecord.resultsJson) {
         try {
-            const response = await fetch(currentRecord.resultsJson);
+            const response = await fetch(currentRecord.resultsJson, { cache: 'no-store' });
             data = await response.json();
         } catch (error) {
             console.error('Error loading Current Championship data:', error);
@@ -972,7 +972,7 @@ async function populateCurrentChampionship() {
     let completedFixturesHtml = '<p class="para-txt">No completed fixtures yet.</p>';
     let completedFixturesCount = 0;
     try {
-        const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json');
+        const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json', { cache: 'no-store' });
         const fixturesData = await fixturesResponse.json();
         const completedFixtures = fixturesData.fixtures.filter(fixture => fixture.status === 'completed');
         completedFixturesCount = completedFixtures.length;
@@ -1433,7 +1433,7 @@ async function showPastResults(record) {
 
     if (record.resultsJson) {
         try {
-            const response = await fetch(record.resultsJson);
+            const response = await fetch(record.resultsJson, { cache: 'no-store' });
             const data = await response.json();
             resultsDiv.innerHTML = `
                 <div class="card">

@@ -206,9 +206,22 @@
         <script src="source/main.js"></script>
         <script>
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').catch(function(error) {
-                    console.error('Service worker registration failed:', error);
+                let hasController = Boolean(navigator.serviceWorker.controller);
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                    if (hasController) {
+                        window.location.reload();
+                        return;
+                    }
+                    hasController = true;
                 });
+
+                navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+                    .then(function(registration) {
+                        return registration.update();
+                    })
+                    .catch(function(error) {
+                        console.error('Service worker update failed:', error);
+                    });
             }
         </script>
     </body>

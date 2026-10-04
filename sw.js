@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xeno-championship-shell-v2';
+const CACHE_NAME = 'xeno-championship-shell-v3';
 const APP_SHELL_ASSETS = [
     './',
     './index.html',
@@ -14,7 +14,9 @@ const APP_SHELL_ASSETS = [
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(APP_SHELL_ASSETS))
+            .then(cache => cache.addAll(APP_SHELL_ASSETS.map(asset =>
+                new Request(new URL(asset, self.registration.scope), { cache: 'reload' })
+            )))
             .then(() => self.skipWaiting())
     );
 });
@@ -86,20 +88,24 @@ self.addEventListener('fetch', event => {
 
     if (request.mode === 'navigate') {
         event.respondWith(
-            fetch(request)
+            fetch(new Request(request, { cache: 'no-cache' }))
                 .catch(() => caches.match('./index.html'))
         );
         return;
     }
 
     event.respondWith(
-        caches.match(request)
-            .then(cachedResponse => cachedResponse || fetch(request).then(response => {
+        fetch(new Request(request, { cache: request.cache === 'no-store' ? 'no-store' : 'no-cache' }))
+            .then(response => {
                 if (response.ok && response.type === 'basic') {
-                    const responseCopy = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(request, responseCopy));
+                    if (request.cache !== 'no-store') {
+                        return caches.open(CACHE_NAME)
+                            .then(cache => cache.put(request, response.clone()))
+                            .then(() => response);
+                    }
                 }
                 return response;
-            }))
+            })
+            .catch(() => caches.match(request))
     );
 });
