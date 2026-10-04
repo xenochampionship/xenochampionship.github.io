@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const initialHash = window.location.hash.substring(1) || 'home';
     showPage(initialHash);
-    trackPageView(initialHash); // Track initial load
+    trackPageView(initialHash);
 
     populateAboutPage();
     populateRulesPage();
