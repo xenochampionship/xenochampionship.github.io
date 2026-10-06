@@ -19,8 +19,8 @@
     {
       "fixtureId": "Qualifier",
       "round": 2,
-      "date": "",
-      "time": "",
+      "date": "2026-10-08",
+      "time": "01:00",
       "timeZone": "UTC+01:00",
       "player1": "mattmaintenance",
       "player2": "Tiger",
@@ -28,7 +28,7 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
