@@ -34,8 +34,8 @@
     {
       "fixtureId": "Qualifier",
       "round": 2,
-      "date": "",
-      "time": "",
+      "date": "2026-10-09",
+      "time": "19:00",
       "timeZone": "UTC+01:00",
       "player1": "AjZed",
       "player2": "ItIsYeOwl",
@@ -43,7 +43,7 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
