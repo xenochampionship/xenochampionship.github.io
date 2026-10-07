@@ -4,8 +4,8 @@
     {
       "fixtureId": "Qualifier",
       "round": 2,
-      "date": "",
-      "time": "",
+      "date": "2026-10-08",
+      "time": "23:00",
       "timeZone": "UTC+01:00",
       "player1": "Bread God",
       "player2": "JimmyM7",
@@ -13,7 +13,7 @@
       "platform2": "PlayStation",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
