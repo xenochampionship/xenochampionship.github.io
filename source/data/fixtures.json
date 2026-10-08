@@ -19,21 +19,6 @@
     {
       "fixtureId": "Qualifier",
       "round": 2,
-      "date": "2026-10-08",
-      "time": "01:00",
-      "timeZone": "UTC+01:00",
-      "player1": "mattmaintenance",
-      "player2": "Tiger",
-      "platform1": "Nintendo Switch",
-      "platform2": "PC",
-      "umpire": "JamieHarperUK",
-      "streamLink": "https://twitch.tv/mattjvgc",
-      "status": "scheduled",
-      "winner": null
-    },
-    {
-      "fixtureId": "Qualifier",
-      "round": 2,
       "date": "2026-10-09",
       "time": "19:00",
       "timeZone": "UTC+01:00",
@@ -60,6 +45,21 @@
       "streamLink": null,
       "status": "scheduled",
       "winner": null
+    },
+    {
+      "fixtureId": "Qualifier",
+      "round": 2,
+      "date": "2026-10-08",
+      "time": "01:00",
+      "timeZone": "UTC+01:00",
+      "player1": "mattmaintenance",
+      "player2": "Tiger",
+      "platform1": "Nintendo Switch",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": "https://twitch.tv/mattjvgc",
+      "status": "completed",
+      "winner": "mattmaintenance"
     },
     {
       "fixtureId": "Qualifier",
