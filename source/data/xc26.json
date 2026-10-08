@@ -27,8 +27,8 @@
       "results": {
         "played": 1,
         "wins": 0,
-        "losses": 1,
-        "omw": 100
+        "losses": 2,
+        "omw": 75
       }
     },
     {
@@ -66,9 +66,9 @@
       "platform": "PC",
       "results": {
         "played": 1,
-        "wins": 0,
+        "wins": 1,
         "losses": 1,
-        "omw": 100
+        "omw": 41.67
       }
     },
     {
