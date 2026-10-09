@@ -45,10 +45,10 @@
       "name": "ItIsYeOwl",
       "platform": "PC",
       "results": {
-        "played": 1,
-        "wins": 0,
+        "played": 2,
+        "wins": 1,
         "losses": 1,
-        "omw": 100
+        "omw": 41.67
       }
     },
     {
@@ -75,10 +75,10 @@
       "name": "AjZed",
       "platform": "PlayStation",
       "results": {
-        "played": 1,
+        "played": 2,
         "wins": 0,
-        "losses": 1,
-        "omw": 100
+        "losses": 2,
+        "omw": 50
       }
     },
     {
