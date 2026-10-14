@@ -19,21 +19,6 @@
     {
       "fixtureId": "Qualifier",
       "round": 3,
-      "date": "2026-10-14",
-      "time": "00:30",
-      "timeZone": "UTC+01:00",
-      "player1": "Bread God",
-      "player2": "Tiger",
-      "platform1": "Nintendo Switch",
-      "platform2": "PC",
-      "umpire": "JamieHarperUK",
-      "streamLink": null,
-      "status": "scheduled",
-      "winner": null
-    },
-    {
-      "fixtureId": "Qualifier",
-      "round": 3,
       "date": "2026-10-15",
       "time": "19:20",
       "timeZone": "UTC+01:00",
@@ -60,6 +45,21 @@
       "streamLink": null,
       "status": "scheduled",
       "winner": null
+    },
+    {
+      "fixtureId": "Qualifier",
+      "round": 3,
+      "date": "2026-10-14",
+      "time": "00:30",
+      "timeZone": "UTC+01:00",
+      "player1": "Bread God",
+      "player2": "Tiger",
+      "platform1": "Nintendo Switch",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "completed",
+      "winner": "Bread God"
     },
     {
       "fixtureId": "Qualifier",
