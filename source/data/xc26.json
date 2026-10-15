@@ -25,20 +25,10 @@
       "name": "ZackaryDoland",
       "platform": "PC",
       "results": {
-        "played": 2,
-        "wins": 0,
-        "losses": 2,
-        "omw": 75
-      }
-    },
-    {
-      "name": "Tiger",
-      "platform": "PC",
-      "results": {
         "played": 3,
-        "wins": 1,
-        "losses": 2,
-        "omw": 55.56
+        "wins": 0,
+        "losses": 3,
+        "omw": 44.44
       }
     },
     {
@@ -75,10 +65,10 @@
       "name": "AjZed",
       "platform": "PlayStation",
       "results": {
-        "played": 2,
-        "wins": 0,
+        "played": 3,
+        "wins": 1,
         "losses": 2,
-        "omw": 50
+        "omw": 44.44
       }
     },
     {
@@ -89,6 +79,16 @@
         "wins": 2,
         "losses": 1,
         "omw": 44.44
+      }
+    },
+    {
+      "name": "Tiger",
+      "platform": "PC",
+      "results": {
+        "played": 3,
+        "wins": 1,
+        "losses": 2,
+        "omw": 55.56
       }
     }
   ]
