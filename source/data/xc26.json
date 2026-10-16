@@ -15,10 +15,10 @@
       "name": "mattmaintenance",
       "platform": "Nintendo Switch",
       "results": {
-        "played": 2,
+        "played": 3,
         "wins": 2,
-        "losses": 0,
-        "omw": 41.67
+        "losses": 1,
+        "omw": 55.55
       }
     },
     {
@@ -45,10 +45,10 @@
       "name": "JimmyM7",
       "platform": "PlayStation",
       "results": {
-        "played": 2,
-        "wins": 2,
+        "played": 3,
+        "wins": 3,
         "losses": 0,
-        "omw": 50
+        "omw": 66.67
       }
     },
     {
