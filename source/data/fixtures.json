@@ -19,8 +19,8 @@
     {
       "fixtureId": "Qualifier",
       "round": 4,
-      "date": "2026-10-19",
-      "time": "22:00",
+      "date": "",
+      "time": "",
       "timeZone": "UTC+01:00",
       "player1": "Scarecr0w",
       "player2": "AjZed",
@@ -28,7 +28,7 @@
       "platform2": "PlayStation",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "scheduled",
+      "status": "planning",
       "winner": null
     },
     {
