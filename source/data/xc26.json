@@ -65,10 +65,10 @@
       "name": "AjZed",
       "platform": "PlayStation",
       "results": {
-        "played": 4,
-        "wins": 1,
+        "played": 5,
+        "wins": 2,
         "losses": 3,
-        "omw": 58.33
+        "omw": 45.33
       }
     },
     {
@@ -85,9 +85,9 @@
       "name": "Tiger",
       "platform": "PC",
       "results": {
-        "played": 3,
+        "played": 5,
         "wins": 0,
-        "losses": 3,
+        "losses": 5,
         "omw": 0
       }
     }
