@@ -12,36 +12,6 @@
   },
   "players": [
     {
-      "name": "mattmaintenance",
-      "platform": "Nintendo Switch",
-      "results": {
-        "played": 4,
-        "wins": 3,
-        "losses": 1,
-        "omw": 47.22
-      }
-    },
-    {
-      "name": "ZackaryDoland",
-      "platform": "PC",
-      "results": {
-        "played": 4,
-        "wins": 1,
-        "losses": 3,
-        "omw": 41.67
-      }
-    },
-    {
-      "name": "ItIsYeOwl",
-      "platform": "PC",
-      "results": {
-        "played": 4,
-        "wins": 3,
-        "losses": 1,
-        "omw": 41.67
-      }
-    },
-    {
       "name": "JimmyM7",
       "platform": "PlayStation",
       "results": {
@@ -62,13 +32,23 @@
       }
     },
     {
-      "name": "AjZed",
-      "platform": "PlayStation",
+      "name": "mattmaintenance",
+      "platform": "Nintendo Switch",
       "results": {
-        "played": 5,
-        "wins": 2,
-        "losses": 3,
-        "omw": 45.33
+        "played": 4,
+        "wins": 3,
+        "losses": 1,
+        "omw": 47.22
+      }
+    },
+    {
+      "name": "ItIsYeOwl",
+      "platform": "PC",
+      "results": {
+        "played": 4,
+        "wins": 3,
+        "losses": 1,
+        "omw": 41.67
       }
     },
     {
@@ -79,6 +59,26 @@
         "wins": 2,
         "losses": 2,
         "omw": 54.17
+      }
+    },
+    {
+      "name": "AjZed",
+      "platform": "PlayStation",
+      "results": {
+        "played": 5,
+        "wins": 2,
+        "losses": 3,
+        "omw": 45.33
+      }
+    },
+    {
+      "name": "ZackaryDoland",
+      "platform": "PC",
+      "results": {
+        "played": 4,
+        "wins": 1,
+        "losses": 3,
+        "omw": 41.67
       }
     },
     {
