@@ -4,8 +4,8 @@
     {
       "fixtureId": "Qualifier",
       "round": 5,
-      "date": "",
-      "time": "",
+      "date": "2026-10-27",
+      "time": "00:30",
       "timeZone": "UTC+01:00",
       "player1": "Bread God",
       "player2": "ZackaryDoland",
@@ -13,7 +13,7 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
