@@ -12,82 +12,82 @@
   },
   "players": [
     {
-      "name": "mattmaintenance",
-      "platform": "Nintendo Switch",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    },
-    {
-      "name": "ZackaryDoland",
-      "platform": "PC",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    },
-    {
-      "name": "Tiger",
-      "platform": "PC",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    },
-    {
-      "name": "ItIsYeOwl",
-      "platform": "PC",
-      "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
-      }
-    },
-    {
       "name": "JimmyM7",
       "platform": "PlayStation",
       "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
+        "played": 5,
+        "wins": 4,
+        "losses": 1,
+        "omw": 60
       }
     },
     {
       "name": "Scarecr0w",
       "platform": "PC",
       "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
+        "played": 5,
+        "wins": 3,
+        "losses": 2,
+        "omw": 53.33
       }
     },
     {
-      "name": "AjZed",
-      "platform": "PlayStation",
+      "name": "mattmaintenance",
+      "platform": "Nintendo Switch",
       "results": {
-        "played": 0,
-        "wins": 0,
-        "losses": 0,
-        "omw": 0
+        "played": 5,
+        "wins": 4,
+        "losses": 1,
+        "omw": 46.67
+      }
+    },
+    {
+      "name": "ItIsYeOwl",
+      "platform": "PC",
+      "results": {
+        "played": 5,
+        "wins": 3,
+        "losses": 2,
+        "omw": 50.67
       }
     },
     {
       "name": "Bread God",
       "platform": "Nintendo Switch",
       "results": {
-        "played": 0,
+        "played": 5,
+        "wins": 3,
+        "losses": 2,
+        "omw": 49.33
+      }
+    },
+    {
+      "name": "AjZed",
+      "platform": "PlayStation",
+      "results": {
+        "played": 5,
+        "wins": 2,
+        "losses": 3,
+        "omw": 45.33
+      }
+    },
+    {
+      "name": "ZackaryDoland",
+      "platform": "PC",
+      "results": {
+        "played": 5,
+        "wins": 1,
+        "losses": 4,
+        "omw": 54.67
+      }
+    },
+    {
+      "name": "Tiger",
+      "platform": "PC",
+      "results": {
+        "played": 5,
         "wins": 0,
-        "losses": 0,
+        "losses": 5,
         "omw": 0
       }
     }
