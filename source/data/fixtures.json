@@ -2,6 +2,36 @@
   "tournament": "xc26.json",
   "fixtures": [
     {
+      "fixtureId": "Semi-Final",
+      "round": null,
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "JimmyM7",
+      "player2": "mattmaintenance",
+      "platform1": "PlayStation",
+      "platform2": "Nintendo Switch",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning",
+      "winner": null
+    },
+    {
+      "fixtureId": "Semi-Final",
+      "round": null,
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "Scarecr0w",
+      "player2": "ItIsYeOwl",
+      "platform1": "PC",
+      "platform2": "PC",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning",
+      "winner": null
+    },
+    {
       "fixtureId": "Qualifier",
       "round": 5,
       "date": "2026-10-27",
