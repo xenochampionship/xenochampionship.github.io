@@ -1061,10 +1061,12 @@ select.select option {
 
 .fixture-bracket {
     display: grid;
-    grid-template-columns: repeat(4, minmax(190px, 1fr));
+    grid-template-columns: repeat(3, minmax(190px, 1fr));
     gap: 1rem;
+    height: auto;
+    align-items: start;
     overflow-x: auto;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0rem;
 }
 
 .fixture-bracket-round {
@@ -1080,8 +1082,8 @@ select.select option {
 .fixture-bracket-matches {
     display: grid;
     gap: 1rem;
-    align-content: space-around;
-    min-height: 100%;
+    align-content: start;
+    min-height: 0;
 }
 
 .fixture-bracket .fixture-matchup {
@@ -1378,6 +1380,15 @@ select.select option {
 }
 
 @media (max-width: 900px) {
+    .fixture-bracket {
+        grid-template-columns: minmax(0, 1fr);
+        overflow-x: visible;
+    }
+
+    .fixture-bracket-round {
+        min-width: 0;
+    }
+
     .hero-overlay {
         min-height: 400px;
         margin: 0 -1rem 1.5rem -1rem;
