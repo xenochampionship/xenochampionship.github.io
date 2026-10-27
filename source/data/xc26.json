@@ -55,10 +55,10 @@
       "name": "Bread God",
       "platform": "Nintendo Switch",
       "results": {
-        "played": 4,
-        "wins": 2,
+        "played": 5,
+        "wins": 3,
         "losses": 2,
-        "omw": 54.17
+        "omw": 49.33
       }
     },
     {
@@ -75,10 +75,10 @@
       "name": "ZackaryDoland",
       "platform": "PC",
       "results": {
-        "played": 4,
+        "played": 5,
         "wins": 1,
-        "losses": 3,
-        "omw": 41.67
+        "losses": 4,
+        "omw": 54.67
       }
     },
     {
