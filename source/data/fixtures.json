@@ -2,6 +2,36 @@
   "tournament": "xc26.json",
   "fixtures": [
     {
+      "fixtureId": "Grand Final",
+      "round": null,
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "",
+      "player2": "",
+      "platform1": "",
+      "platform2": "",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning",
+      "winner": null
+    },
+    {
+      "fixtureId": "Third Place Match",
+      "round": null,
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "",
+      "player2": "",
+      "platform1": "",
+      "platform2": "",
+      "umpire": "JamieHarperUK",
+      "streamLink": null,
+      "status": "planning",
+      "winner": null
+    },
+    {
       "fixtureId": "Semi-Final",
       "round": null,
       "date": "",
