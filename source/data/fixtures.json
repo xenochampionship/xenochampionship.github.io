@@ -49,8 +49,8 @@
     {
       "fixtureId": "Semi-Final",
       "round": null,
-      "date": "",
-      "time": "",
+      "date": "2026-11-02",
+      "time": "20:30",
       "timeZone": "UTC+01:00",
       "player1": "Scarecr0w",
       "player2": "ItIsYeOwl",
@@ -58,7 +58,7 @@
       "platform2": "PC",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
