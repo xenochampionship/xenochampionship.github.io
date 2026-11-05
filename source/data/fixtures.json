@@ -34,8 +34,8 @@
     {
       "fixtureId": "Semi-Final",
       "round": null,
-      "date": "",
-      "time": "",
+      "date": "2026-11-05",
+      "time": "21:00",
       "timeZone": "UTC+01:00",
       "player1": "JimmyM7",
       "player2": "mattmaintenance",
@@ -43,7 +43,7 @@
       "platform2": "Nintendo Switch",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
