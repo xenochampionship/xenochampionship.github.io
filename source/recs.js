@@ -10,7 +10,7 @@ const records = [
     {
         title: "XC 2026", dates: "01/10/2026 - 12/11/2026", 
         past: false, // If current or upcoming, set past to false
-        top3: ["TBC", "TBC", "TBC"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
+        top3: ["Scarecr0w", "JimmyM7", "TBC"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc26.json",
         charity: {current: 165.00, goal: 200.00, showOnHome: true} // GBP (£)
     }
