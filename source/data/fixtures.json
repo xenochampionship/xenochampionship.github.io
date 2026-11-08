@@ -4,8 +4,8 @@
     {
       "fixtureId": "Grand Final",
       "round": null,
-      "date": "",
-      "time": "",
+      "date": "2026-11-08",
+      "time": "19:45",
       "timeZone": "UTC+01:00",
       "player1": "Scarecr0w",
       "player2": "JimmyM7",
@@ -13,7 +13,7 @@
       "platform2": "PlayStation",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
+      "status": "scheduled",
       "winner": null
     },
     {
