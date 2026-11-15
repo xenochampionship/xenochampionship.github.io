@@ -474,33 +474,91 @@ async function loadCurrentChampionship() {
 
 function populateAboutPage() {
     const aboutPage = document.getElementById('page-about');
+    const championshipCharity = defaultCharity.cause || 'Cancer Research UK';
+    const leagueCharity = leaguesCharity.cause || 'Diabetes UK';
     aboutPage.innerHTML = `
-        <h1>About the Xeno Championship</h1>
-        <div class="card hero-card">
-            <img src="https://www.nomanssky.com/media/wzgpapjc/battleshots20.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
-        </div>
-        <div class="card about-hero">
-            <div class="about-content">
-                <h2 class="para-h1"><i class="fas fa-crown" style="margin-right: 0.5rem;"></i> Welcome to the NMS Xeno Championship</h2>
-                <p class="para-txt" style="margin-bottom: 1rem;">The NMS Xeno Championship is an annual community-run tournament celebrating the competitive spirit of No Man's Sky players. The championship aims to bring together players from across the globe to battle it out in thrilling Xeno Arena matches.</p>
-                <p class="para-txt">Compete in intense 1v1 best-of-3 fixtures, showcase your companion's skills, and climb the rankings to attain a place in the prestigious Hall of Fame!</p>
-            </div>
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-ribbon" style="margin-right: 0.5rem;"></i> Charitable Event</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship is proud to raising money in aid of <a href="https://www.cancerresearchuk.org" class="contact-email">Cancer Research UK</a> in a concerted effort to combat cancer and support those most deeply affected by it.</p>
-            <p class="para-txt" style="margin-bottom: 1rem;">Due to the tournament being free to enter, and each fixture being live streamed, it is highly encouraged that spectators and ontestants donate what they can. This is not a requirement, however the entire goal is to make a positive impact and a real difference in the fight against cancer.</p>
-            <p class="para-txt" style="margin-bottom: 1rem;">Charitable donations are made and received via a dedicated Cancer Research UK Giving Page, with the specific donation link for the associated tournament becoming available once contestant registration window opens. At the conclusion of the tournament all proceeds will be donated to Cancer Research UK.</p>
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-circle-info" style="margin-right: 0.5rem;"></i> What is Xeno Arena?</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">Xeno Arena is No Man's Sky's competitive multiplayer companion battling mode where interlopers engage in fast-paced creature battles. Using their own companions equipped with various attacks and abilities, players must outmaneuver and out-skill their opponents in a fun and competitive battle to claim the tournament's coveted title of <b>Xeno Champion</b>.</p>
-            <p class="para-txt">The championship focuses on fair, skill-based competition while maintaining the creative freedom that makes No Man's Sky special.</p>
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-users" style="margin-right: 0.5rem;"></i> Community Driven</h2>
-            <p class="para-txt" style="margin-bottom: 1rem;">This tournament is entirely community-run and fan-driven. From the organizers to the participants, everyone contributes to making the Xeno Championship a memorable annual event for the No Man's Sky community.</p>
-            <p class="para-txt">Join us in celebrating the game's competitive potential and connecting with fellow interlopers!</p>
+        <div class="about-circuit">
+            <section class="league-overview-hero about-circuit-hero" aria-labelledby="about-circuit-title">
+                <div class="league-overview-copy">
+                    <span class="league-overview-kicker"><i class="fas fa-compass" aria-hidden="true"></i> The annual Xeno circuit</span>
+                    <h1 id="about-circuit-title">Competition through every season</h1>
+                    <p>A community-run year of 1v1 Companion battles in No Man's Sky Xeno Arena: three Swiss-style Leagues lead into the Autumn Xeno Championship.</p>
+                    <div class="about-circuit-season-note">
+                        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                        <span><strong>Winter · Spring · Summer</strong> Leagues</span>
+                        <span class="about-circuit-season-divider" aria-hidden="true">→</span>
+                        <span><strong>Autumn</strong> Championship</span>
+                    </div>
+                    <div class="about-circuit-actions">
+                        <button class="btn site-btn" type="button" onclick="navigateToPage('leagues')"><i class="fas fa-layer-group" aria-hidden="true"></i> Explore the Leagues</button>
+                        <button class="btn site-btn about-circuit-secondary" type="button" onclick="navigateToPage('championship')"><i class="fas fa-trophy" aria-hidden="true"></i> About the Championship</button>
+                    </div>
+                </div>
+                <div class="league-season-cycle" aria-label="Annual circuit: Winter, Spring, Summer, then the Xeno Championship in Autumn">
+                    <div class="league-cycle-season winter"><i class="fas fa-snowflake" aria-hidden="true"></i><span>Winter</span></div>
+                    <div class="league-cycle-season spring"><i class="fas fa-seedling" aria-hidden="true"></i><span>Spring</span></div>
+                    <div class="league-cycle-season summer"><i class="fas fa-sun" aria-hidden="true"></i><span>Summer</span></div>
+                    <div class="league-cycle-championship"><i class="fas fa-trophy" aria-hidden="true"></i><span>Autumn · Xeno Championship</span></div>
+                </div>
+            </section>
+
+            <section class="about-circuit-overview" aria-labelledby="about-circuit-format-title">
+                <div class="about-circuit-section-heading">
+                    <span class="league-overview-kicker">One circuit, two competition paths</span>
+                    <h2 id="about-circuit-format-title">Play across the year, then chase the title</h2>
+                    <p>Each part of the circuit has its own format, rules, and season page with the latest event information.</p>
+                </div>
+                <div class="about-circuit-paths">
+                    <article class="about-circuit-path leagues">
+                        <span class="about-circuit-path-label"><i class="fas fa-arrows-rotate" aria-hidden="true"></i> Winter · Spring · Summer</span>
+                        <h3>Seasonal Leagues</h3>
+                        <p>Three opportunities to compete throughout the year. Every League stays Swiss-style from start to finish, with no knockout stage.</p>
+                        <ul>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> No fixed player limit</li>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> Up to 10 weekly rounds</li>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> Final standings decide the podium</li>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> Each League's top-ranked contestant is guaranteed a Championship Finals place</li>
+                        </ul>
+                        <div class="about-circuit-path-actions">
+                            <button class="btn site-btn" type="button" onclick="navigateToPage('leagues')">Explore the Leagues</button>
+                            <button class="btn site-btn about-circuit-secondary" type="button" onclick="populateLeagueRulesPage()">League Rules</button>
+                        </div>
+                    </article>
+                    <article class="about-circuit-path championship">
+                        <span class="about-circuit-path-label"><i class="fas fa-trophy" aria-hidden="true"></i> Autumn · Annual event</span>
+                        <h3>Xeno Championship</h3>
+                        <p>The flagship annual tournament brings the season to a close and crowns the Xeno Champion.</p>
+                        <ul>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> Up to 8 contestants</li>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> 5 Swiss-style qualification rounds</li>
+                            <li><i class="fas fa-check" aria-hidden="true"></i> Single-elimination Finals, including guaranteed places for League champions</li>
+                        </ul>
+                        <div class="about-circuit-path-actions">
+                            <button class="btn site-btn" type="button" onclick="navigateToPage('championship')">About the Championship</button>
+                            <button class="btn site-btn about-circuit-secondary" type="button" onclick="navigateToChampionshipRulesPage()">Championship Rules</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="about-circuit-community" aria-labelledby="about-circuit-community-title">
+                <div class="about-circuit-community-intro">
+                    <span class="about-circuit-path-label"><i class="fas fa-people-group" aria-hidden="true"></i> Built by the community</span>
+                    <h2 id="about-circuit-community-title">Good competition, shared purpose</h2>
+                    <p>Organisers, Umpires, and contestants help make the circuit welcoming and fair. Matches are best-of-three Companion battles, with sportsmanship at the heart of every season.</p>
+                </div>
+                <div class="about-circuit-charities">
+                    <article class="about-circuit-charity championship">
+                        <i class="fas fa-heart" aria-hidden="true"></i>
+                        <div><span>Championship fundraising</span><strong>${championshipCharity}</strong></div>
+                    </article>
+                    <article class="about-circuit-charity leagues">
+                        <i class="fas fa-heart" aria-hidden="true"></i>
+                        <div><span>League season fundraising</span><strong>${leagueCharity}</strong></div>
+                    </article>
+                    <p>Donations are voluntary. Visit the relevant event page for current fundraising information.</p>
+                </div>
+            </section>
         </div>
     `;
 }

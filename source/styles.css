@@ -284,7 +284,7 @@ ul.scoring-list li i {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.25rem;
     width: min(100%, 520px);
-    margin: 0 auto 1.5rem;
+    margin: 2rem auto;
     padding: 0.35rem;
     border: 1px solid rgb(215 25 32 / 0.45);
     border-radius: 999px;
@@ -909,6 +909,232 @@ ul.scoring-list li i {
     gap: 1rem;
 }
 
+.about-circuit {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.about-circuit-hero {
+    margin-top: 1.25rem;
+}
+
+.about-circuit-hero .league-overview-copy p {
+    margin-bottom: 1rem;
+}
+
+.about-circuit-season-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.65rem;
+    margin: 0 0 1.25rem;
+    color: rgb(255 255 255 / 0.75);
+    font-size: 0.9rem;
+}
+
+.about-circuit-season-note > i {
+    color: #ff9a9e;
+}
+
+.about-circuit-season-note strong {
+    color: #fff;
+}
+
+.about-circuit-season-divider {
+    color: #ffb84d;
+}
+
+.about-circuit-actions,
+.about-circuit-path-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.about-circuit-actions .btn,
+.about-circuit-path-actions .btn {
+    margin: 0;
+}
+
+.about-circuit-overview {
+    display: grid;
+    gap: 1rem;
+}
+
+.about-circuit-section-heading {
+    max-width: 760px;
+}
+
+.about-circuit-section-heading h2 {
+    margin: 0.35rem 0;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.about-circuit-section-heading p {
+    margin: 0;
+    color: rgb(255 255 255 / 0.7);
+    line-height: 1.55;
+}
+
+.about-circuit-paths {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.card.about-circuit-path {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 340px;
+    margin: 0;
+    border-color: rgb(255 255 255 / 0.14);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+}
+
+.card.about-circuit-path.leagues {
+    border-top: 3px solid #7ed89f;
+}
+
+.card.about-circuit-path.championship {
+    border-top: 3px solid #d71920;
+}
+
+.about-circuit-path-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #9ce8b3;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.about-circuit-path.championship .about-circuit-path-label {
+    color: #ff9a9e;
+}
+
+.about-circuit-path h3 {
+    margin: 0;
+    font-size: 1.55rem;
+}
+
+.about-circuit-path > p {
+    margin: 0;
+    color: rgb(255 255 255 / 0.76);
+    line-height: 1.55;
+}
+
+.about-circuit-path ul {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0.2rem 0 0.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.about-circuit-path li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    color: rgb(255 255 255 / 0.84);
+}
+
+.about-circuit-path li i {
+    margin-top: 0.25rem;
+    color: #8be0a4;
+}
+
+.about-circuit-path.championship li i {
+    color: #ff858a;
+}
+
+.about-circuit-path-actions {
+    margin-top: auto;
+}
+
+.btn.about-circuit-secondary {
+    border: 1px solid rgb(255 255 255 / 0.25);
+    background: rgb(10 11 15 / 0.72);
+    color: #fff;
+}
+
+.btn.about-circuit-secondary:hover {
+    border-color: rgb(255 255 255 / 0.55);
+    background: rgb(255 255 255 / 0.12);
+}
+
+.about-circuit-community {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 1.25rem;
+    align-items: center;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid rgb(255 184 77 / 0.25);
+    border-radius: 16px;
+    background: linear-gradient(120deg, rgb(255 184 77 / 0.07), rgb(255 255 255 / 0.025));
+}
+
+.about-circuit-community-intro h2 {
+    margin: 0.45rem 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.about-circuit-community-intro > p {
+    max-width: 650px;
+    margin: 0;
+    color: rgb(255 255 255 / 0.76);
+    line-height: 1.6;
+}
+
+.about-circuit-charities {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.about-circuit-charity {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 10px;
+    background: rgb(0 0 0 / 0.25);
+}
+
+.about-circuit-charity > i {
+    display: grid;
+    flex: 0 0 38px;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgb(0 156 238 / 0.16);
+    color: #79d4ff;
+}
+
+.about-circuit-charity.leagues > i {
+    background: rgb(3 117 224 / 0.2);
+    color: #8abfff;
+}
+
+.about-circuit-charity > div {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.about-circuit-charity span {
+    color: rgb(255 255 255 / 0.65);
+    font-size: 0.8rem;
+}
+
+.about-circuit-charities > p {
+    margin: 0.1rem 0 0;
+    color: rgb(255 255 255 / 0.62);
+    font-size: 0.85rem;
+}
+
 .card.league-season-card {
     display: flex;
     flex-direction: column;
@@ -1277,6 +1503,15 @@ ul.scoring-list li i {
         gap: 1.5rem;
     }
 
+    .about-circuit-paths,
+    .about-circuit-community {
+        grid-template-columns: 1fr;
+    }
+
+    .card.about-circuit-path {
+        min-height: 0;
+    }
+
     .league-now-banner {
         grid-template-columns: auto minmax(0, 1fr);
     }
@@ -1296,6 +1531,16 @@ ul.scoring-list li i {
 }
 
 @media (max-width: 480px) {
+    .about-circuit-actions,
+    .about-circuit-path-actions {
+        flex-direction: column;
+    }
+
+    .about-circuit-actions .btn,
+    .about-circuit-path-actions .btn {
+        width: 100%;
+    }
+
     .league-detail-facts {
         grid-template-columns: 1fr;
     }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xeno-championship-shell-v12';
+const CACHE_NAME = 'xeno-championship-shell-v14';
 const APP_SHELL_ASSETS = [
     './',
     './index.html',
