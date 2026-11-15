@@ -594,7 +594,7 @@ function populateChampionshipPage() {
                         <button class="btn site-btn championship-info-action" type="button" onclick="navigateToChampionshipRulesPage()"><i class="fas fa-book-open" aria-hidden="true"></i> Championship Rules</button>
                     </div>
                 </div>
-                <div class="championship-info-hero-emblem" aria-hidden="true"><i class="fas fa-crown"></i></div>
+                <div class="championship-info-hero-emblem" aria-hidden="true"><i class="fas fa-trophy"></i></div>
             </section>
 
             <section class="championship-info-highlights" aria-label="Championship at a glance">
@@ -1552,9 +1552,9 @@ function renderLeagueOverview(loadedLeagues) {
             ? `${nextLeague.definition.title} is next.`
             : 'Check back for announcements about the next season.';
     const iconBySeason = {
-        Winter: 'fa-snowflake',
-        Spring: 'fa-seedling',
-        Summer: 'fa-sun'
+        Winter: 'fa-snowflake fa-icon-winter',
+        Spring: 'fa-seedling fa-icon-spring',
+        Summer: 'fa-sun fa-icon-summer'
     };
     const leagueCards = loadedLeagues.map(({ definition, data, error }) => {
         const status = getLeagueStatus(definition, data);

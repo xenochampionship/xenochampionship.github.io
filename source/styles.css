@@ -14,6 +14,10 @@
     --nms-red: #D71920;
     --nms-red-light: #D719208C;
 
+    --xc-winter: #65c9f3;
+    --xc-spring: #7ed89f;
+    --xc-summer: #f3c35f;
+
     /* Charity Colors (Cancer Research UK) */
     --charity-box-bg: #00007e20;
     --charity-box-border: #009cee96;
@@ -31,6 +35,18 @@
     --bg-gradient: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
     --card-bg: rgba(255, 255, 255, 0.05);
     --text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.fa-icon-winter {
+    color: var(--xc-winter);
+}
+
+.fa-icon-spring {
+    color: var(--xc-spring);
+}
+
+.fa-icon-summer {
+    color: var(--xc-summer);
 }
 
 html {
