@@ -350,7 +350,7 @@ ul.scoring-list li i {
         radial-gradient(circle at 85% 15%, rgb(215 25 32 / 0.28), transparent 35%),
         linear-gradient(130deg, #17191f, #090a0d 72%);
     box-shadow: 0 16px 42px rgb(0 0 0 / 0.3);
-    margin-top: 2.5rem;
+    margin-top: 2rem;
 }
 
 .league-overview-copy {
@@ -705,7 +705,7 @@ ul.scoring-list li i {
     background:
         radial-gradient(circle at 86% 20%, var(--league-glow, rgb(255 255 255 / 0.13)), transparent 27%),
         linear-gradient(125deg, var(--league-gradient-start, #14202a), #090a0d 75%);
-    margin-top: 2.5rem;
+    margin-top: 2rem;
 }
 
 .league-detail-season {
