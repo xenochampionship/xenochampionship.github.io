@@ -1,10 +1,19 @@
 const dataHostUrl = "https://xenochampionship.co.uk/source/data/";
 
+// Default Charity For Championships
 const defaultCharity = {
     // Cancer Research UK - https://www.cancerresearchuk.org
     cause: "Cancer Research UK",
     link: "https://fundraise.cancerresearchuk.org/page/xc-2026"
 };
+
+// Default Charity For Leagues
+const leaguesCharity = {
+    // Diabetes UK - https://diabetes.org.uk
+    cause: "Diabetes UK",
+    link: "https://www.justgiving.com/page/xcl-26-27"
+};
+
 
 const records = [
     {
@@ -24,23 +33,20 @@ const leagueRecords = [
             winter: {
                 year: 2026,
                 podium: ["#", "#", "#"], // 1st - 2nd - 3rd
-                file: dataHostUrl+"winter-2026.json",
-                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+                file: dataHostUrl+"winter-2026.json"
             },
             spring: {
                 year: 2027,
                 podium: ["#", "#", "#"], // 1st - 2nd - 3rd
-                file: dataHostUrl+"spring-2027.json",
-                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+                file: dataHostUrl+"spring-2027.json"
             },
             summer: {
                 year: 2027,
                 podium: ["#", "#", "#"], // 1st - 2nd - 3rd
-                file: dataHostUrl+"summer-2027.json",
-                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+                file: dataHostUrl+"summer-2027.json"
             }
         },
-
+        charity: {current: 0.00, goal: 1000.00, showOnHome: false} // GBP (£)
     }
 ];
 

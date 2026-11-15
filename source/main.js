@@ -52,7 +52,15 @@ function initializeLeaguePages() {
     const allLeaguesPage = document.getElementById('page-leagues');
     const getComponent = season => {
         const seasonRecord = leagueRecords.find(record => record.components && record.components[season]);
-        return seasonRecord ? seasonRecord.components[season] : {};
+        if (!seasonRecord) {
+            return {};
+        }
+
+        const component = seasonRecord.components[season];
+        return {
+            ...component,
+            charity: component.charity || seasonRecord.charity
+        };
     };
     const getSeasonGroup = season => {
         const seasonRecord = leagueRecords.find(record => record.components && record.components[season]);
@@ -1676,13 +1684,17 @@ function renderLeagueInfoCards(definition, metadata) {
     `;
 
     const donation = registration.donation || {};
-    const donationUrl = getSafeExternalUrl(donation.link);
+    const charity = {
+        cause: donation.cause || leaguesCharity.cause || '',
+        link: donation.link || leaguesCharity.link || '#'
+    };
+    const donationUrl = getSafeExternalUrl(charity.link);
     const donationHtml = donationUrl ? `
-        <div class="card registration-card donation-card">
+        <div class="card registration-card donation-card league-donation-card">
             <h2 class="para-h1">Charitable Donation</h2>
-            <p class="para-txt">Support ${donation.cause || 'the league charity'}.</p>
+            <p class="para-txt">Support ${charity.cause}.</p>
             ${definition.charity?.goal > 0 ? renderDonationProgress({ charity: definition.charity }) : ''}
-            <a href="${donationUrl}" class="btn donation-btn" target="_blank" rel="noopener">Donate</a>
+            <a href="${donationUrl}" class="btn donation-btn" target="_blank" rel="noopener">Donate to ${charity.cause}</a>
         </div>
     ` : '';
 

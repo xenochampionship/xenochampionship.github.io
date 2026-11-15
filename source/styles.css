@@ -14,11 +14,17 @@
     --nms-red: #D71920;
     --nms-red-light: #D719208C;
 
-    /* Charity Colors */
+    /* Charity Colors (Cancer Research UK) */
     --charity-box-bg: #00007e20;
     --charity-box-border: #009cee96;
     --charity-btn-bg: #F0F0FFde;
     --charity-btn-hover: #e60079de;
+
+    /* Charity Colors (Diabetes UK) */
+    --charity-box-bg-2: #111478;
+    --charity-box-border-2: #0375e0;
+    --charity-btn-bg-2: #F0F0FFde;
+    --charity-btn-hover-2: #111478;
 
     --primary-color: var(--nms-red);
     --secondary-color: var(--nms-light);
@@ -999,15 +1005,26 @@ button i.fas {
 }
 
 .donation-card {
-    border-color: var(--charity-box-border);
-    background: #0f364a7a;
+    --donation-box-bg: var(--charity-box-bg);
+    --donation-box-border: var(--charity-box-border);
+    --donation-btn-bg: var(--charity-btn-bg);
+    --donation-btn-hover: var(--charity-btn-hover);
+    border-color: var(--donation-box-border);
+    background: var(--donation-box-bg);
     display: flex;
     flex-direction: column;
 }
 
+.donation-card.league-donation-card {
+    --donation-box-bg: var(--charity-box-bg-2);
+    --donation-box-border: var(--charity-box-border-2);
+    --donation-btn-bg: var(--charity-btn-bg-2);
+    --donation-btn-hover: var(--charity-btn-hover-2);
+}
+
 .donation-card p {
     margin: 0.75rem 0 0;
-    color: #fff3bf;
+    color: #fff;
     display: inline-flex;
 }
 
@@ -1059,14 +1076,14 @@ button i.fas {
     text-decoration: none;
     width: var(--wfa);
     text-align: center;
-    background-color: var(--charity-btn-bg) !important;
-    color: var(--charity-btn-hover) !important;
+    background-color: var(--donation-btn-bg, var(--charity-btn-bg)) !important;
+    color: var(--donation-btn-hover, var(--charity-btn-hover)) !important;
     margin-top: 1rem;
 }
 
 .donation-btn:hover {
-    background-color: var(--charity-btn-hover) !important;
-    color: var(--charity-btn-bgr) !important;
+    background-color: var(--donation-btn-hover, var(--charity-btn-hover)) !important;
+    color: #fff !important;
 }
 
 .donation-progress {
