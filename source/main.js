@@ -1620,7 +1620,7 @@ function renderLeagueOverview(loadedLeagues) {
                     <span class="league-overview-kicker">Choose your season</span>
                     <h2>Explore the Leagues</h2>
                 </div>
-                <p>Swiss-style play throughout · No fixed player limit · No elimination stage</p>
+                <p>Swiss-style play throughout · No elimination stage</p>
             </div>
             <div class="league-season-grid">
                 ${leagueCards || '<div class="card"><p class="para-txt">League editions will be announced soon.</p></div>'}
