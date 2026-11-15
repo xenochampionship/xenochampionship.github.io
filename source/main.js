@@ -1595,9 +1595,9 @@ function renderLeagueOverview(loadedLeagues) {
                     <button class="btn site-btn" type="button" onclick="populateLeagueRulesPage()"><i class="fas fa-book" aria-hidden="true"></i> Explore League Rules</button>
                 </div>
                 <div class="league-season-cycle" aria-label="League seasons: Winter, Spring, Summer">
-                    <div class="league-cycle-season winter"><i class="fas fa-snowflake" aria-hidden="true"></i><span>Winter</span></div>
-                    <div class="league-cycle-season spring"><i class="fas fa-seedling" aria-hidden="true"></i><span>Spring</span></div>
-                    <div class="league-cycle-season summer"><i class="fas fa-sun" aria-hidden="true"></i><span>Summer</span></div>
+                    <div class="league-cycle-season winter"><i class="fas fa-snowflake fa-icon-winter" aria-hidden="true"></i><span>Winter</span></div>
+                    <div class="league-cycle-season spring"><i class="fas fa-seedling fa-icon-spring" aria-hidden="true"></i><span>Spring</span></div>
+                    <div class="league-cycle-season summer"><i class="fas fa-sun fa-icon-summer" aria-hidden="true"></i><span>Summer</span></div>
                     <div class="league-cycle-championship"><i class="fas fa-trophy" aria-hidden="true"></i><span>Xeno Championship</span></div>
                 </div>
             </div>
@@ -1685,7 +1685,7 @@ function getLeagueStatus(definition, data) {
 function renderWinterLeaguePage(definition, data, error) {
     return renderSeasonLeaguePage(definition, data, error, {
         theme: 'winter',
-        icon: 'fa-snowflake',
+        icon: 'fa-snowflake fa-icon-winter',
         intro: 'The Winter League opens the seasonal competition cycle. Check the current event status before making plans to compete.',
         detail: 'Winter rounds are played Swiss-style, with every contestant staying in the standings through the final scheduled round.'
     });
@@ -1694,7 +1694,7 @@ function renderWinterLeaguePage(definition, data, error) {
 function renderSpringLeaguePage(definition, data, error) {
     return renderSeasonLeaguePage(definition, data, error, {
         theme: 'spring',
-        icon: 'fa-seedling',
+        icon: 'fa-seedling fa-icon-spring',
         intro: "The Spring League brings contestants back for another season of No Man's Sky Xeno Arena competition.",
         detail: 'Build your record across the full Swiss-style schedule; there is no knockout bracket or playoff stage.'
     });
@@ -1703,7 +1703,7 @@ function renderSpringLeaguePage(definition, data, error) {
 function renderSummerLeaguePage(definition, data, error) {
     return renderSeasonLeaguePage(definition, data, error, {
         theme: 'summer',
-        icon: 'fa-sun',
+        icon: 'fa-sun fa-icon-summer',
         intro: 'The Summer League is the final seasonal League before the Xeno Championship returns in Autumn.',
         detail: 'Follow standings across up to 10 weekly rounds, with results determining the final League table.'
     });
