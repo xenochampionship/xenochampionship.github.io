@@ -3194,6 +3194,15 @@
                     && Array.isArray(data.fixtures);
             }
 
+            function isXenoLeagueFile() {
+                return isXenoCompetitionFile()
+                    && /(^|[\\/])(?:winter|spring|summer)-\d{4}\.json$/i.test(String(state.currentJsonPath || ""));
+            }
+
+            function fixtureSupportsRound(fixtureId) {
+                return isXenoLeagueFile() ? fixtureId === "League" : fixtureId === "Qualifier";
+            }
+
             function isFcTemplateFile() {
                 const path = String(state.currentJsonPath || "").toLowerCase();
                 return path.includes("fc-template/") || path.includes("/fc-template/");
@@ -3229,11 +3238,12 @@
                     };
                 }
                 if (getCurrentEditorFileKind() === "xeno_fixtures") {
+                    const fixtureIds = isXenoLeagueFile() ? ["League"] : ALLOWED_FIXTURE_IDS;
                     return {
                         dataKey: "fixtures",
                         label: "Fixtures",
                         fields: [
-                            { key: "fixtureId", label: "Fixture ID", type: "select", options: ALLOWED_FIXTURE_IDS.map(function(value) { return { value: value, label: value }; }) },
+                            { key: "fixtureId", label: "Fixture ID", type: "select", options: fixtureIds.map(function(value) { return { value: value, label: value }; }) },
                             { key: "round", label: "Round", type: "nullable-number" },
                             { key: "date", label: "Date", type: "date" },
                             { key: "time", label: "Time", type: "time" },
@@ -3248,7 +3258,7 @@
                             { key: "winner", label: "Winner", type: "fixture-winner-select" }
                         ],
                         create: function() {
-                            return { fixtureId: "", round: null, date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning", winner: null };
+                            return { fixtureId: isXenoLeagueFile() ? "League" : "", round: isXenoLeagueFile() ? 1 : null, date: "", time: "", timeZone: "UTC+01:00", player1: "", player2: "", platform1: "", platform2: "", umpire: "TBC", streamLink: null, status: "planning", winner: null };
                         }
                     };
                 }
@@ -5619,30 +5629,70 @@
                 });
             }
 
+            function getLeagueFixtureCardTitle() {
+                const metadata = state.currentJsonData && state.currentJsonData.metadata || {};
+                const name = String(metadata.tournamentName || "League").trim();
+                const dateMatch = String(metadata.dates || "").match(/^\s*\d{1,2}\/(\d{1,2})\/(\d{4})/);
+                let seasonStartYear;
+
+                if (dateMatch) {
+                    const startMonth = Number(dateMatch[1]);
+                    const startYear = Number(dateMatch[2]);
+                    seasonStartYear = startMonth >= 9 ? startYear : startYear - 1;
+                } else {
+                    const pathYearMatch = String(state.currentJsonPath || "").match(/(?:winter|spring|summer)-(\d{4})\.json$/i);
+                    const year = Number(pathYearMatch && pathYearMatch[1] || metadata.year);
+                    if (Number.isFinite(year) && year > 0) {
+                        seasonStartYear = /winter/i.test(name) ? year : year - 1;
+                    }
+                }
+
+                const season = seasonStartYear
+                    ? " " + String(seasonStartYear).slice(-2) + "/" + String(seasonStartYear + 1).slice(-2)
+                    : "";
+                return name + season;
+            }
+
+            function getLeagueFixtureCardAccentColor() {
+                const metadata = state.currentJsonData && state.currentJsonData.metadata || {};
+                const competition = (String(metadata.tournamentName || "") + " " + String(state.currentJsonPath || "")).toLowerCase();
+                if (competition.indexOf("winter") !== -1) return "#65c9f3";
+                if (competition.indexOf("summer") !== -1) return "#f3c35f";
+                return "#7ed89f";
+            }
+
             // Fixture Card SVG Generation
             function buildFixtureCardSvg(fixture, logoDataUrl) {
                 const fixtureDate = fixture.date
                     ? new Date(fixture.date + "T" + (fixture.time || "00:00")).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })
                     : "Scheduling To Be Confirmed";
                 const status = fixture.status === "live" ? "LIVE" : fixture.status === "completed" ? "COMPLETED" : fixture.status === "scheduled" ? "SCHEDULED" : "PLANNING";
+                const isLeagueFixture = isXenoLeagueFile();
                 const stage = fixture.fixtureId || "Xeno Championship";
                 const fRound = fixture.round ? " · Round " + fixture.round : "";
+                const cardTitle = isLeagueFixture ? getLeagueFixtureCardTitle() : stage + fRound;
+                const roundLabel = fixture.round == null || fixture.round === "" ? "Round TBC" : "Round " + fixture.round;
+                const accentColor = isLeagueFixture ? getLeagueFixtureCardAccentColor() : "#d71920";
+                const dateY = isLeagueFixture ? 200 : 163;
+                const dividerY = isLeagueFixture ? 232 : 205;
+                const eventHashtag = isLeagueFixture ? "#XenoLeague" : "#XenoChampionship";
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
                     <defs><linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="0.55" stop-color="#161616"/><stop offset="1" stop-color="#050505"/></linearGradient></defs>
                     <rect width="1200" height="600" fill="url(#background)"/>
-                    <rect x="28" y="28" width="1144" height="544" rx="12" fill="none" stroke="#d71920" stroke-width="3"/>
+                    <rect x="28" y="28" width="1144" height="544" rx="12" fill="none" stroke="${accentColor}" stroke-width="3"/>
                     <image href="${logoDataUrl}" x="435" y="110.5" width="330" height="330" preserveAspectRatio="xMidYMid meet" opacity="0.16"/>
-                    <text x="70" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(stage)}${escapeFixtureCardText(fRound)}</text>
-                    <text x="70" y="163" fill="#b8f2ff" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
-                    <line x1="70" y1="205" x2="1130" y2="205" stroke="#d71920" stroke-width="2"/>
+                    <text x="70" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">${escapeFixtureCardText(cardTitle)}</text>
+                    ${isLeagueFixture ? `<text x="70" y="160" fill="${accentColor}" font-family="Arial, sans-serif" font-size="30" font-weight="700">${escapeFixtureCardText(roundLabel)}</text>` : ""}
+                    <text x="70" y="${dateY}" fill="${isLeagueFixture ? accentColor : "#b8f2ff"}" font-family="Arial, sans-serif" font-size="25">${escapeFixtureCardText(fixtureDate)}  |  ${escapeFixtureCardText(fixture.time || "")} ${escapeFixtureCardText(fixture.timeZone || "")}</text>
+                    <line x1="70" y1="${dividerY}" x2="1130" y2="${dividerY}" stroke="${accentColor}" stroke-width="2"/>
                     <text x="270" y="325" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player1 || "TBC")}</text>
-                    <text x="600" y="325" fill="#d71920" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
+                    <text x="600" y="325" fill="${accentColor}" font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle">VS</text>
                     <text x="930" y="325" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">${escapeFixtureCardText(fixture.player2 || "TBC")}</text>
                     <text x="270" y="365" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform1 || "")}</text>
                     <text x="930" y="365" fill="#a9a9a9" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">${escapeFixtureCardText(fixture.platform2 || "")}</text>
-                    <rect x="500" y="420" width="200" height="54" rx="8" fill="#d71920"/>
+                    <rect x="500" y="420" width="200" height="54" rx="8" fill="${accentColor}"/>
                     <text x="600" y="456" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle">${status}</text>
-                    <text x="600" y="505" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">#XenoChampionship</text>
+                    <text x="600" y="505" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">${eventHashtag}</text>
                     <text x="70" y="535" fill="#b8b8b8" font-family="Arial, sans-serif" font-size="22">Umpire: ${escapeFixtureCardText(fixture.umpire || "TBC")}</text>
                 </svg>`;
             }
@@ -6008,14 +6058,14 @@
                                 }
                             }
                             if (kind === "xeno_fixtures" && field.key === "fixtureId") {
-                                const roundValue = nextValue === "Qualifier"
+                                const roundValue = fixtureSupportsRound(nextValue)
                                     ? getNestedRecordValue(record, "round") ?? 1
                                     : null;
                                 setNestedRecordValue(record, "round", roundValue);
                                 const roundInput = targetContainer.querySelector('[data-fixture-field="round"]');
                                 if (roundInput) {
                                     roundInput.value = roundValue == null ? "" : String(roundValue);
-                                    roundInput.disabled = nextValue !== "Qualifier";
+                                    roundInput.disabled = !fixtureSupportsRound(nextValue);
                                 }
                             }
                             syncCrmToJsonText();
@@ -6030,7 +6080,7 @@
                             if (field.key === "round") {
                                 input.min = "1";
                                 input.step = "1";
-                                input.disabled = getNestedRecordValue(record, "fixtureId") !== "Qualifier";
+                                input.disabled = !fixtureSupportsRound(getNestedRecordValue(record, "fixtureId"));
                             } else if (field.key === "winner") {
                                 input.disabled = getNestedRecordValue(record, "status") !== "completed";
                             }
