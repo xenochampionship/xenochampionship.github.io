@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "tournamentName": "Summer League",
+    "year": 2026,
+    "state": "upcoming",
+    "dates": "",
+    "registration": {
+      "registrationLink": "",
+      "donation": {
+        "cause": "Charity Name",
+        "link": "#"
+      }
+    }
+  },
+  "players": [],
+  "fixtures": []
+}

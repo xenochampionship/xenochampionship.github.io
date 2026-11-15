@@ -51,12 +51,27 @@
             <nav class="nav-menu">
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#current" id="nav-current">Current Championship</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn" tabindex="0">Championship</a>
+                        <div class="dropdown-content">
+                            <a href="#championship">Xeno Championship</a>
+                            <a href="#current">Current Championship</a>
+                        </div>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropbtn" tabindex="0">History</a>
                         <div class="dropdown-content">
                             <a href="#hof">Hall of Fame</a>
                             <a href="#results">Past Results</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn" tabindex="0">Leagues</a>
+                        <div class="dropdown-content" id="league-menu-items">
+                            <a href="#leagues">All Leagues</a>
+                            <a href="#league-winter" data-league-season="winter">Winter League</a>
+                            <a href="#league-spring" data-league-season="spring">Spring League</a>
+                            <a href="#league-summer" data-league-season="summer">Summer League</a>
                         </div>
                     </li>
                     <li class="dropdown">
@@ -76,12 +91,27 @@
             <nav class="mobile-nav-menu">
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#current" id="nav-current">Current Championship</a></li>
+                    <li class="mobile-dropdown">
+                        <a href="#" class="mobile-dropbtn" tabindex="0">Championship</a>
+                        <div class="mobile-dropdown-content">
+                            <a href="#championship">Xeno Championship</a>
+                            <a href="#current">Current Championship</a>
+                        </div>
+                    </li>
                     <li class="mobile-dropdown">
                         <a href="#" class="mobile-dropbtn" tabindex="0">History</a>
                         <div class="mobile-dropdown-content">
                             <a href="#hof">Hall of Fame</a>
                             <a href="#results">Past Results</a>
+                        </div>
+                    </li>
+                    <li class="mobile-dropdown">
+                        <a href="#" class="mobile-dropbtn" tabindex="0">Leagues</a>
+                        <div class="mobile-dropdown-content" id="mobile-league-menu-items">
+                            <a href="#leagues">All Leagues</a>
+                            <a href="#league-winter" data-league-season="winter">Winter League</a>
+                            <a href="#league-spring" data-league-season="spring">Spring League</a>
+                            <a href="#league-summer" data-league-season="summer">Summer League</a>
                         </div>
                     </li>
                     <li class="mobile-dropdown">
@@ -111,6 +141,7 @@
             </div>
             <div id="completed-fixtures-content" class="completed-fixtures-content"></div>
         </dialog>
+        <div id="current-completed-fixtures-source" hidden></div>
         <div class="fixture-alert-control">
             <button id="fixture-push-toggle" class="fixture-push-button" type="button" aria-pressed="false" aria-describedby="fixture-push-status">
                 <span class="fixture-push-indicator" aria-hidden="true"></span>
@@ -125,6 +156,11 @@
             <div id="page-hof" class="page"></div>
             <div id="page-results" class="page"></div>
             <div id="page-current" class="page"></div>
+            <div id="page-championship" class="page"></div>
+            <div id="page-leagues" class="page"></div>
+            <div id="page-league-winter" class="page"></div>
+            <div id="page-league-spring" class="page"></div>
+            <div id="page-league-summer" class="page"></div>
             <div id="page-umpires" class="page"></div>
             <div id="page-contact" class="page">
                 <h1>Contact</h1>

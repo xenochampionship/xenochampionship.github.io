@@ -16,4 +16,32 @@ const records = [
     }
 ];
 
+const leagueRecords = [
+    {
+        league: "26-27",
+        current_season: true,
+        components: {
+            winter: {
+                year: 2026,
+                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                file: dataHostUrl+"winter-2026.json",
+                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+            },
+            spring: {
+                year: 2027,
+                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                file: dataHostUrl+"spring-2027.json",
+                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+            },
+            summer: {
+                year: 2027,
+                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                file: dataHostUrl+"summer-2027.json",
+                charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+            }
+        },
+
+    }
+];
+
 const tournamentMonth = "October";

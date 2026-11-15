@@ -2,14 +2,22 @@ const pageNames = {
     'home': 'Home',
     'about': 'About',
     'rules': 'Championship Rules',
+    'championship': 'About the Championship',
     'hof': 'Hall of Fame',
     'results': 'Past Results',
     'current': null,
+    'leagues': 'Leagues',
     'contact': 'Contact',
     'disclaimer': 'Disclaimer',
     'thank-you': 'Thank You',
     'umpires': 'Become an Umpire',
     'umpire-thank-you': 'Thank You'
+};
+
+const pageAliases = {
+    'league-winter-2026': 'league-winter',
+    'league-spring-2027': 'league-spring',
+    'league-summer-2027': 'league-summer'
 };
 
 const allowedFixtureIds = [
@@ -40,7 +48,62 @@ function toggleRuleAccordion(button) {
     }
 }
 
+function initializeLeaguePages() {
+    const allLeaguesPage = document.getElementById('page-leagues');
+    const getComponent = season => {
+        const seasonRecord = leagueRecords.find(record => record.components && record.components[season]);
+        return seasonRecord ? seasonRecord.components[season] : {};
+    };
+    const getSeasonGroup = season => {
+        const seasonRecord = leagueRecords.find(record => record.components && record.components[season]);
+        return seasonRecord ? seasonRecord.league : '26-27';
+    };
+    const createDefinition = (season, seasonName, description, defaultStatus) => {
+        const component = getComponent(season);
+        const fileYear = String(component.file || '').match(/(?:^|[-_])(20\d{2})(?=\.json(?:$|[?#]))/i);
+        const configuredYear = Number(component.year);
+        const year = Number.isInteger(configuredYear) && configuredYear >= 2000
+            ? configuredYear
+            : fileYear
+                ? Number(fileYear[1])
+                : '';
+        return {
+            ...component,
+            pageId: `league-${season}`,
+            title: `${seasonName} League${year ? ` ${year}` : ''}`,
+            seasonName,
+            seasonGroup: component.seasonGroup || getSeasonGroup(season),
+            year,
+            description,
+            defaultStatus
+        };
+    };
+    const definitions = [
+        createDefinition('winter', 'Winter', 'The Winter League opens the seasonal competition cycle. Check the current event status before making plans to compete.', 'postponed'),
+        createDefinition('spring', 'Spring', 'The Spring League brings contestants back for another Swiss-style season, with standings built across the full schedule.', 'upcoming'),
+        createDefinition('summer', 'Summer', 'The Summer League is the final seasonal league before the Xeno Championship returns in Autumn.', 'upcoming')
+    ];
+
+    definitions.forEach(definition => {
+        if (!document.getElementById(`page-${definition.pageId}`)) {
+            throw new Error(`Missing static page container for ${definition.title}.`);
+        }
+        pageNames[definition.pageId] = definition.title;
+        document.querySelectorAll(`[data-league-season="${definition.seasonName.toLowerCase()}"]`)
+            .forEach(link => { link.textContent = definition.title; });
+    });
+
+    if (allLeaguesPage) {
+        allLeaguesPage.innerHTML = renderLeagueOverview(
+            definitions.map(definition => ({ definition, data: null, error: false }))
+        );
+    }
+
+    return definitions;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    const leaguePageDefinitions = initializeLeaguePages();
     initMobileMenu();
     initAppInstallation();
     initCompletedFixturesDialog();
@@ -99,12 +162,14 @@ document.addEventListener('DOMContentLoaded', function() {
     trackPageView(initialHash);
 
     populateAboutPage();
+    populateChampionshipPage();
     populateRulesPage();
     populateUmpiresPage();
     loadCurrentChampionship();
     populateHallOfFame();
     setupPastResultsSelector();
     populateCurrentChampionship();
+    populateLeaguePages(leaguePageDefinitions);
 });
 
 function initMobileMenu() {
@@ -205,10 +270,20 @@ function initAppInstallation() {
 function initCompletedFixturesDialog() {
     const dialog = document.getElementById('completed-fixtures-dialog');
     const closeButton = document.getElementById('completed-fixtures-close');
+    const dialogTitle = document.getElementById('completed-fixtures-title');
+    const dialogContent = document.getElementById('completed-fixtures-content');
 
     document.addEventListener('click', function(event) {
         const openButton = event.target.closest('[data-open-completed-fixtures]');
         if (openButton && !dialog.open) {
+            const sourceId = openButton.dataset.completedFixturesSource;
+            const source = sourceId ? document.getElementById(sourceId) : null;
+            if (!source) {
+                console.error(`Completed fixtures content source "${sourceId}" was not found.`);
+                return;
+            }
+            dialogTitle.textContent = openButton.dataset.completedFixturesTitle || 'Completed Fixtures';
+            dialogContent.innerHTML = source.innerHTML;
             dialog.showModal();
         }
     });
@@ -344,14 +419,15 @@ function navigateToPage(pageId) {
 }
 
 function showPage(pageId) {
+    const resolvedPageId = pageAliases[pageId] || pageId;
     const pages = document.querySelectorAll('.page');
     pages.forEach(page => {
         page.classList.remove('active');
     });
-    const targetPage = document.getElementById('page-' + pageId);
+    const targetPage = document.getElementById('page-' + resolvedPageId);
     if (targetPage) {
         targetPage.classList.add('active');
-        updatePageTitle(pageId);
+        updatePageTitle(resolvedPageId);
     }
 }
 
@@ -420,9 +496,132 @@ function populateAboutPage() {
     `;
 }
 
+function populateChampionshipPage() {
+    const page = document.getElementById('page-championship');
+    const currentRecord = records.find(record => !record.past);
+    const currentEdition = currentRecord?.dates
+        ? `<p class="para-txt"><strong>Current edition:</strong> ${currentRecord.dates}</p>`
+        : '';
+
+    page.innerHTML = `
+        <h1>Xeno Championship</h1>
+        <div class="card hero-card">
+            <img src="https://www.nomanssky.com/media/wzgpapjc/battleshots20.jpg" alt="No Man's Sky Xeno Arena competition" class="home-hero-image-secondary">
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-trophy" style="margin-right: 0.5rem;"></i> The annual championship</h2>
+            <p class="para-txt">The Xeno Championship is the annual No Man's Sky Xeno Arena tournament, bringing competitors together for a season of 1v1 creature battles. It takes place in Autumn, with dates and registration details announced for each edition.</p>
+            ${currentEdition}
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-medal" style="margin-right: 0.5rem;"></i> Championship format</h2>
+            <p class="para-txt">The championship features up to eight contestants and begins with five Swiss-style qualification rounds. The top four advance to the Finals: two semi-finals, a third-place match, and the Grand Final.</p>
+            <p class="para-txt">Matches are played as 1v1 best-of-three Xeno Arena fixtures. The Swiss format is used for qualification; single elimination is reserved for the Finals.</p>
+        </div>
+        <div class="card">
+            <h2 class="para-h1"><i class="fas fa-circle-info" style="margin-right: 0.5rem;"></i> Follow the event</h2>
+            <p class="para-txt">See the current edition's standings, fixtures, and registration information, or read the full Championship Rules.</p>
+            <a class="btn site-btn" href="#current">Current Championship</a>
+            <button class="btn site-btn" type="button" onclick="navigateToPage('rules')"><i class="fas fa-book"></i> Championship Rules</button>
+        </div>
+    `;
+}
+
+function populateLeagueRulesPage() {
+    const rulesPage = document.getElementById('page-rules');
+    pageNames.rules = 'League Rules';
+    if (rulesPage.classList.contains('active')) {
+        updatePageTitle('rules');
+    }
+    rulesPage.innerHTML = `
+        <div class="ruleset-switch" role="group" aria-label="Choose rules">
+            <button type="button" class="ruleset-switch-button" aria-pressed="false" onclick="populateRulesPage()"><i class="fas fa-trophy" aria-hidden="true"></i> Championship Rules</button>
+            <button type="button" class="ruleset-switch-button" aria-pressed="true" onclick="populateLeagueRulesPage()"><i class="fas fa-calendar-alt" aria-hidden="true"></i> League Rules</button>
+        </div>
+        <h1>League Rules</h1>
+        <div class="card hero-card">
+            <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
+        </div>
+        <p class="para-txt">These rules apply to the Winter, Spring, and Summer Leagues. League-specific dates and registration details will be announced on each league page.</p>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-medal" style="margin-right: 0.5rem;"></i> League Format</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">Each league is played entirely in a <b>Swiss-style format</b>. There is no single-elimination stage or playoff bracket; all contestants remain in the league standings throughout the scheduled rounds.</p>
+                <ul>
+                    <li>A league may include up to <b>10 rounds</b>, typically one fixture per week over just over two months</li>
+                    <li>Contestants are paired with opponents on similar records where possible</li>
+                    <li>Final standings are based on results across the league's scheduled fixtures</li>
+                </ul>
+                <p class="para-txt">The contestant ranked first at the end of the league is the League Champion. The next highest-ranked contestants take the remaining podium places.</p>
+            </div>
+        </div>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-gamepad" style="margin-right: 0.5rem;"></i> Fixtures and Match Rules</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">Each fixture is a <b>1v1, best-of-three series</b> in Xeno Arena. The first contestant to win two battles wins the fixture.</p>
+                <p class="para-txt">Before their first fixture, contestants must submit a Companion Declaration covering each Companion's name, class, affinity, health, agility, and combat values and classes. The declared roster is locked for the duration of the league; undeclared Companions may not be used.</p>
+                <p class="para-txt">Each fixture is overseen by an assigned Umpire, who helps coordinate the match, observes it, and confirms the result. At least one contestant must be able to stream the fixture live on Twitch or provide a full recording upon request. Live streaming is encouraged.</p>
+                <p class="para-txt">Fixtures take place in a shared No Man's Sky session arranged by the Umpire. Contestants must follow the Umpire's instructions and report results promptly.</p>
+            </div>
+        </div>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-star" style="margin-right: 0.5rem;"></i> Scoring and Standings</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">A fixture win adds a Match Win to a contestant's record; a loss adds a Match Loss. A No Show is recorded as a loss for the absent contestant.</p>
+                <p class="para-txt">Contestants are ranked first by total Match Wins. Ties are resolved using <b>Opponent Match Win Percentage (OMW%)</b>, which reflects the match-win percentage of their opponents over the league.</p>
+                <p class="para-txt">Every scheduled round contributes to the final standings. No contestant is eliminated before the league concludes.</p>
+            </div>
+        </div>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-calendar" style="margin-right: 0.5rem;"></i> Scheduling</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">Leagues generally run for just over two months, with one fixture scheduled each week and up to 10 rounds. The organizer will publish each league's exact dates and fixture windows.</p>
+                <p class="para-txt">Contestants are responsible for coordinating a fixture time with their opponent within each round's window and must be ready at the agreed time. A <b>15-minute grace period</b> applies; failure to attend may result in a No Show loss.</p>
+                <p class="para-txt">Umpires will assist with scheduling through Discord. Contestants must remain responsive and complete all assigned fixtures within the published windows.</p>
+            </div>
+        </div>
+
+        <div class="card accordion-rule-card">
+            <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
+                <h2 class="para-h1"><i class="fas fa-user-plus" style="margin-right: 0.5rem;"></i> Registration and Participation</h2>
+                <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="accordion-rule-content">
+                <p class="para-txt">There is no fixed entrant limit or registration fee. Registration windows and instructions will be announced for each league; contestants should use the registration link on that league's page when available.</p>
+                <p class="para-txt">By registering, contestants agree to participate throughout the league, coordinate fixtures through Discord, and follow Umpire instructions. They must have a stable connection, access to No Man's Sky multiplayer, and a valid Friend Code.</p>
+                <p class="para-txt">All contestants are expected to compete fairly and respect their opponents, Umpires, and organizers. Cheating, use of save edits or mods, unsportsmanlike conduct, or repeated disruption may result in penalties or removal from the league.</p>
+            </div>
+        </div>
+    `;
+}
+
 function populateRulesPage() {
     const rulesPage = document.getElementById('page-rules');
+    pageNames.rules = 'Championship Rules';
+    if (rulesPage.classList.contains('active')) {
+        updatePageTitle('rules');
+    }
     rulesPage.innerHTML = `
+        <div class="ruleset-switch" role="group" aria-label="Choose rules">
+            <button type="button" class="ruleset-switch-button" aria-pressed="true" onclick="populateRulesPage()"><i class="fas fa-trophy" aria-hidden="true"></i> Championship Rules</button>
+            <button type="button" class="ruleset-switch-button" aria-pressed="false" onclick="populateLeagueRulesPage()"><i class="fas fa-calendar-alt" aria-hidden="true"></i> League Rules</button>
+        </div>
         <h1>Championship Rules</h1>
         <div class="card hero-card">
             <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
@@ -433,7 +632,7 @@ function populateRulesPage() {
                 <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
             <div class="accordion-rule-content">
-                <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship features up to <b>32 contestants</b>, competing across two stanges for the title of <b>Xeno Champion</b>. The tournament is designed to reward consistent performance across multiple rounds, culminating in a high-stakes elimination Finals.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">The Xeno Championship features up to <b>8 contestants</b>, competing across two stages for the title of <b>Xeno Champion</b>. The tournament is designed to reward consistent performance across multiple rounds, culminating in a high-stakes elimination Finals.</p>
                 <h3 style="margin-bottom: 0.5rem;">Qualification Stage (Swiss Format)</h3>
                 <p class="para-txt">All registered contestants begin in the Qualification stage, which follows a <b>Swiss-style format</b> over the course of <b>5 rounds</b>.</p>
                 <ul>
@@ -441,13 +640,12 @@ function populateRulesPage() {
                     <li>Contestants accumulate wins and losses across all rounds</li>
                     <li>At the conclusion of Round 5, players are ranked based on their overall performance</li>
                 </ul>
-                <p class="para-txt" style="margin-bottom: 1rem;">The <b>top 8 ranked contestants</b> advance to the Finals stage.</p>
-                <p class="para-txt">In the event of tied records, final Qualification standings are determined using <b>Opponent Match Win Percentage (OMW%)</b>, as outlined in the Scoring System section.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">The <b>top 4 ranked contestants</b> advance to the Finals stage.</p>
+                <p class="para-txt">In the event of tied records, semi-final Qualification standings are determined using <b>Opponent Match Win Percentage (OMW%)</b>, as outlined in the Scoring System section.</p>
                 <h3 style="margin-bottom: 0.5rem;">Finals Stage (Single Elimination)</h3>
-                <p class="para-txt">The top 8 contestants from the Qualification stage progress to the Finals, which follow a <b>single-elimination knockout format</b>.</p>
+                <p class="para-txt">The top 4 contestants from the Qualification stage progress to the Finals, which follow a <b>single-elimination knockout format</b>.</p>
                 <ul>
-                    <li>Quarter-finals determine the four semi-finalists</li>
-                    <li>Semi-finals determine the finalists and third-place contenders</li>
+                    <li>Semi-Finals determine the finalists and third-place contenders</li>
                     <li>A <b>Third Place Match</b> is played to determine the Bronze Medalist</li>
                     <li>The <b>Grand Final</b> determines the Xeno Champion and Silver Medalist</li>
                 </ul>
@@ -478,7 +676,7 @@ function populateRulesPage() {
                     <li><b>At least one contestant must stream the fixture live on Twitch</b>, or</li>
                     <li>The fixture must be <b>recorded in full</b> and made available upon request</li>
                 </ul>
-                <p class="para-txt">Live streaming is strongly encouraged, and <b>required in the case of Finals fixtures</b>.</p>
+                <p class="para-txt">Live streaming is strongly encouraged, and <b>required in the case of fiixtures in this Finals stage</b>.</p>
                 <h3 style="margin-bottom: 0.5rem;">Umpire Oversight</h3>
                 <p class="para-txt" style="margin-bottom: 1rem;">Each fixture is assigned a <b>tournament Umprire</b>, whose role it is to oversee and validate the match.</p>
                 <p class="para-txt">The Umpire is responsible for:</p>
@@ -524,8 +722,8 @@ function populateRulesPage() {
                     <li>Combat Value and Class</li>
                 </ul>
                 <h3 style="margin-bottom: 0.5rem;">Battle Order</h3>
-                <p class="para-txt" style="margin-bottom: 1rem;">Once submitted, a contestant’s declared Companion roster becomes locked for the duration of the Fixture. Contestants may freely switch between their declared Companions throughout individual Matches, as permitted by the standard Xeno Arena mechanics, however undeclared Companions may not be used under any circumstances.</p>
-                <p class="para-txt">The declared Companion order is also locked upon submission. As per standard Xeno Arena functionality, the first listed Companion will automatically be summoned at the beginning of each Match.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">Once submitted, a contestant’s declared Companion roster becomes locked for the duration of the stage. Contestants may freely switch between their declared Companions throughout individual Matches, as permitted by the standard Xeno Arena mechanics, however undeclared Companions may not be used under any circumstances.</p>
+                <p class="para-txt">The only exception to this is when entering the Finals stage, at which point one companion substitution can be made for that stage (either being use straight away in a Semi-Final, or being banked for the Grand Final or Third Place Match).</p>
                 <h3 style="margin-bottom: 0.5rem;">Reasoning</h3>
                 <p class="para-txt">The Companion Declaration system exists for two primary reasons:</p>
                 <ol style="font-size: 18px;">
@@ -556,7 +754,7 @@ function populateRulesPage() {
                 <p class="para-txt">At the conclusion of the Qualification stage:</p>
                 <ul>
                     <li>Contestants are ranked primarily by <b>total Match Wins</b></li>
-                    <li>The <b>top 8 ranked contestants</b> advance to the Finals</li>
+                    <li>The <b>top 4 ranked contestants</b> advance to the Finals</li>
                 </ul>
                 <h3 style="margin-bottom: 0.5rem;">Tiebreakers</h3>
                 <p class="para-txt">In the event that two or more contestants have the same number of Match Wins, ties are resolved using the following tiebreaker:</p>
@@ -567,7 +765,7 @@ function populateRulesPage() {
                 <h3 style="margin-bottom: 0.5rem;">Finals Seeding</h3>
                 <p class="para-txt">Final standings from the Qualification stage are used to determine seeding for the Finals bracket.</p>
                 <ul>
-                    <li>Higher-seeded contestants are matched against lower-seeded contestants in the Quarter-finals</li>
+                    <li>Higher-seeded contestants are matched against lower-seeded contestants in the Semi-Finals</li>
                     <li>Seeding is based on <b>Match Wins</b>, with <b>OMW% used as a tiebreaker</b> where required</li>
                 </ul>
             </div>
@@ -584,7 +782,7 @@ function populateRulesPage() {
                 <p class="para-txt" style="margin-bottom: 1rem;">As the Qualification stage is played over 5 rounds, each round takes place within a <b>4-day match window</b>.</p>
                 <p class="para-txt">Prior to the start of each round, fixtures will be generated and shared with contestants. Players are then required to <b>coordinate with their assigned opponent to agree on a specific date and time</b> for their match within the allotted window.</p>
                 <ul>
-                    <li>For <b>Round 1</b>, all foxtures must be scheduled <b>before the tournament begins</b>. Failure to do so may result in forfeiture of a contestant's place in the tournament.</li>
+                    <li>For <b>Round 1</b>, all fixtures must be scheduled <b>before the tournament begins</b>. Failure to do so may result in forfeiture of a contestant's place in the tournament.</li>
                     <li>For subsequent rounds, a <b>2-day scheduling period</b> is provided between rounds to allow players to arrange their next fixture.</li>
                 </ul>
                 <p class="para-txt" style="margin-bottom: 1rem;">While an assigned Umpire will assist in facilitating scheduling via Discord, <b>the responsibility ultimately lies with both contestants</b> to communicate promptly and confirm a suitable date and time within the given timeframe.</p>
@@ -592,11 +790,11 @@ function populateRulesPage() {
                 <h3 style="margin-bottom: 0.5rem;">Finals Scheduling</h3>
                 <p class="para-txt">The Finals stage follows a <b>fixed schedule</b> and takes place across two days:</p>
                 <ul>
-                    <li><b>30th ${tournamentMonth}</b> - Quarter-finals (Top 8)</li>
-                    <li><b>31st ${tournamentMonth}</b> - Semi-finals, Third Place Match, and Grand Final</li>
+                    <li><b>30th ${tournamentMonth}</b> - Semi-Finals (Top 4)</li>
+                    <li><b>31st ${tournamentMonth}</b> - Third Place Match, and Grand Final</li>
                 </ul>
                 <p class="para-txt" style="margin-bottom: 1rem;">Due to broadcast and production requirements, all Finals fixtures must be played at their assigned times and are expected to be <b>live streamed on Twitch</b>.</p>
-                <p class="para-txt">Each day will follow a structured schedule:</p>
+                <p class="para-txt">Each day will attempt to follow a structured schedule:</p>
                 <ul>
                     <li>11:00 - 12:00 (Fixture 1)</li>
                     <li>13:00 - 14:00 (Fixture 2)</li>
@@ -608,7 +806,7 @@ function populateRulesPage() {
                 <ul>
                     <li>Be available to schedule fixtures within the 2-day scheduling window</li>
                     <li>Be available to complete scheduled fixtures within the 4-day match window</li>
-                    <li>Be fully available on <b>30th and 31st ${tournamentMonth}</b> if the qualify for Finals</li>
+                    <li>Be fully available on <b>30th and 31st ${tournamentMonth}</b> if they qualify for Finals</li>
                 </ul>
                 <p class="para-txt">Failure to meet these availability requirements may result in match forfeiture.</p>
             </div>
@@ -620,7 +818,7 @@ function populateRulesPage() {
                 <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
             <div class="accordion-rule-content">
-                <p class="para-txt" style="margin-bottom: 1rem;">Participartion in the Xeno Championship is limited to <b>32 contestants</b>, with places being allocated on a <b>first come, first serve</b> basis.</p>
+                <p class="para-txt" style="margin-bottom: 1rem;">Participartion in the Xeno Championship is limited to <b>8 contestants</b>, with places being allocated on a <b>first come, first serve</b> basis.</p>
                 <p class="para-txt">There is <b>no registration fee</b> required to enter.</p>
                 <h3 style="margin-bottom: 0.5rem;">Registration Window</h3>
                 <p class="para-txt" style="margin-bottom: 1rem;">Registration will open automatically on <b>the first day of the month prior to the tournament</b> and will close <b>the day before the tournament begins</b>.</p>
@@ -707,8 +905,8 @@ function populateRulesPage() {
                 <h3 style="margin-bottom: 0.5rem;">Finals Availability</h3>
                 <p class="para-txt">Contestants who qualify for the Finals must be fully available on:</p>
                 <ul>
-                    <li><b>30th ${tournamentMonth}</b> for Quarter-finals</li>
-                    <li><b>31st ${tournamentMonth}</b> for Semi-finals, Third Place Match, and Grand Final</li>
+                    <li><b>30th ${tournamentMonth}</b> for Semi-Finals</li>
+                    <li><b>31st ${tournamentMonth}</b> for Third Place Match, and Grand Final</li>
                 </ul>
                 <p class="para-txt">As Finals fixtures follow a fixed schedule and are broadcast-focused, failure to attend may result in forfeiture.</p>
             </div>
@@ -797,9 +995,9 @@ function populateHomePage(data, record) {
         <div class="hero-overlay" style="background-image: url('https://www.nomanssky.com/media/eohnnwwy/no-mans-sky-xeno-arena-screenshot-3-5mb.jpg');">
             <div class="hero-overlay-content">
                 <h1 style="font-size: 3.5rem; margin: 0 0 1.5rem 0; text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);">Enter the Xeno Arena</h1>
-                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship blends fan-fueled passion with community-run organized competition. Interlopers face off in 1v1 Xeno Arena fixtures across Swiss-style Qualification rounds and a top-8 elimination Finals bracket. Every battle is important and all in aid of Cancer Research UK.</p>
+                <p style="font-size: 1.3rem; max-width: 600px; margin-bottom: 2rem; text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); line-height: 1.6;">The Xeno Championship blends fan-fueled passion with community-run organized competition. Interlopers face off in 1v1 Xeno Arena fixtures across Swiss-style Qualification rounds, with the top four advancing to the Finals. Every battle is important and all in aid of Cancer Research UK.</p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('about')"><i class="fas fa-info-circle"></i> Find Out More</button>
+                    <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('championship')"><i class="fas fa-info-circle"></i> About the Championship</button>
                     <button class="btn site-btn" style="flex: 1;" onclick="navigateToPage('current')"><i class="fas fa-trophy"></i> View Championship</button>
                 </div>
             </div>
@@ -854,11 +1052,18 @@ function populateHomePage(data, record) {
     `;
 }
 
-function populateHallOfFame() {
+function populateHallOfFame(loadedLeagues = []) {
     const hofPage = document.getElementById('page-hof');
     const pastRecords = records.filter(r => r.past).slice().sort((a, b) => getRecordYear(b) - getRecordYear(a));
+    const pastLeagueRecords = loadedLeagues
+        .filter(({ definition, data }) => getLeagueStatus(definition, data).key === 'past')
+        .map(({ definition, data }) => ({ definition, data }))
+        .filter(({ definition, data }) => {
+            return getLeaguePodium(definition, data).some(isRecordedPodiumName);
+        })
+        .sort((a, b) => getRecordYear(b.definition) - getRecordYear(a.definition));
 
-    const hofContent = pastRecords.length > 0
+    const championshipContent = pastRecords.length > 0
         ? `<div class="hof-grid">
             ${pastRecords.map(record => `
                 <div class="card hof-winner-card">
@@ -869,17 +1074,69 @@ function populateHallOfFame() {
                 </div>
             `).join('')}
         </div>`
-        : `<div class="card" style="text-align: center; padding: 2rem;">
-            <i class="fas fa-trophy" style="font-size: 4rem; color: rgba(255, 215, 0, 1); margin-bottom: 2rem;"></i>
-            <h2 class="para-h1" style="margin-bottom: 2rem;">Champions Will Be Immortalized Here</h2>
-            <p class="para-txt">The Hall of Fame will showcase the champions of each Xeno Championship tournament.<br><br>Check back after the completion of future tournaments to see the winners celebrated here.</p>
+        : `<div class="card hof-empty-card">
+            <i class="fas fa-trophy" aria-hidden="true"></i>
+            <h3>Champions will be immortalized here</h3>
+            <p class="para-txt">Completed Xeno Championship winners will be celebrated here first.</p>
+        </div>`;
+
+    const leagueContent = pastLeagueRecords.length
+        ? `<div class="hof-league-grid">
+            ${pastLeagueRecords.map(({ definition, data }) => {
+                const podium = getLeaguePodium(definition, data);
+                const places = [
+                    { position: '1st', name: podium[0], label: 'League Champion', className: 'gold' },
+                    { position: '2nd', name: podium[1], label: 'Runner-up', className: 'silver' },
+                    { position: '3rd', name: podium[2], label: 'Third Place', className: 'bronze' }
+                ];
+                return `
+                    <div class="card hof-league-card">
+                        <div class="hof-league-heading">
+                            <h3>${definition.title}</h3>
+                            <span class="league-status-badge past">Past League</span>
+                        </div>
+                        <div class="hof-league-podium">
+                            ${places.map(place => `
+                                <div class="hof-league-place ${place.className}">
+                                    <span class="hof-league-position">${place.position}</span>
+                                    <strong>${isRecordedPodiumName(place.name) ? place.name : 'Not recorded'}</strong>
+                                    <span>${place.label}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>`
+        : `<div class="card hof-empty-card hof-league-empty">
+            <i class="fas fa-medal" aria-hidden="true"></i>
+            <p class="para-txt">Past League podiums will appear here after an edition is marked as past and its results are recorded.</p>
         </div>`;
 
     hofPage.innerHTML = `
         <h1>Hall of Fame</h1>
-        <p class="hof-subtitle para-txt">Only the champions make it here. Every year a single player wins the right to be immortalized in the Xeno Championship Hall of Fame.</p>
-        ${hofContent}
+        <p class="hof-subtitle para-txt">Celebrating the champions and podium finishers across the Xeno Championship and seasonal Leagues.</p>
+        <section class="hof-section">
+            <h2 class="para-h1">Xeno Championship</h2>
+            ${championshipContent}
+        </section>
+        <section class="hof-section">
+            <h2 class="para-h1">League Podiums</h2>
+            ${leagueContent}
+        </section>
     `;
+}
+
+function isRecordedPodiumName(name) {
+    return typeof name === 'string' && name.trim() !== '' && name.trim() !== '#' && name.trim().toLowerCase() !== 'tbc';
+}
+
+function getLeaguePodium(definition, data) {
+    const metadataPodium = data?.metadata?.podium;
+    if (Array.isArray(metadataPodium) && metadataPodium.some(isRecordedPodiumName)) {
+        return metadataPodium;
+    }
+    return Array.isArray(definition.podium) ? definition.podium : [];
 }
 
 function setupPastResultsSelector() {
@@ -942,14 +1199,50 @@ function sortPlayersByStandings(players) {
     });
 }
 
-function togglePlayerDetails(index) {
-    const card = document.getElementById(`player-card-${index}`);
+function togglePlayerDetails(index, cardIdPrefix = 'player-card') {
+    const card = document.getElementById(`${cardIdPrefix}-${index}`);
     if (!card) return;
     card.classList.toggle('expanded');
     const summary = card.querySelector('.player-summary');
     if (summary) {
         summary.setAttribute('aria-expanded', card.classList.contains('expanded') ? 'true' : 'false');
     }
+}
+
+function renderPlayerStandings(players, advancingCount = 0, cardIdPrefix = 'player-card') {
+    if (!Array.isArray(players) || players.length === 0) {
+        return '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>';
+    }
+
+    const hasScores = players.some(player => Number(player.results?.wins ?? 0) > 0 || Number(player.results?.played ?? 0) > 0);
+    return `
+        <div class="standings-accordion">
+            ${sortPlayersByStandings(players).map((player, index) => {
+                const results = player.results || {};
+                return `
+                    <div class="player-card${hasScores && index < advancingCount ? ' advancing' : ''}" id="${cardIdPrefix}-${index}">
+                        <button class="player-summary" type="button" onclick="togglePlayerDetails(${index}, '${cardIdPrefix}')" aria-expanded="false" style="grid-template-columns: ${hasScores ? 'auto 1fr auto' : '1fr auto'};">
+                            ${hasScores ? `<span class="rank-badge">${index + 1}</span>` : ''}
+                            <span class="player-title">
+                                <span class="player-name">${player.name}</span>
+                                <span class="player-platform">${player.platform}</span>
+                            </span>
+                            <span class="player-stats">
+                                <span class="wins">${results.wins ?? 0} Wins</span>
+                                <span class="omw">OMW ${results.omw ?? '—'}%</span>
+                            </span>
+                        </button>
+                        <div class="player-details">
+                            <div class="detail-row"><span>Played</span><span>${results.played ?? 0}</span></div>
+                            <div class="detail-row"><span>Wins</span><span>${results.wins ?? 0}</span></div>
+                            <div class="detail-row"><span>Losses</span><span>${results.losses ?? 0}</span></div>
+                            ${results.omw !== undefined ? `<div class="detail-row"><span>OMW%</span><span>${results.omw}%</span></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
 }
 
 async function populateCurrentChampionship() {
@@ -976,7 +1269,7 @@ async function populateCurrentChampionship() {
     completedFixturesCount = completedFixtures.length;
     completedFixturesHtml = renderCompletedFixtures(completedFixtures);
     fixturesHtml = renderUpcomingFixtures({ fixtures }, data?.players?.length || 32);
-    document.getElementById('completed-fixtures-content').innerHTML = completedFixturesHtml;
+    document.getElementById('current-completed-fixtures-source').innerHTML = completedFixturesHtml;
 
     const registrationHtml = renderRegistrationCard(currentRecord, data?.metadata);
     const tournamentRange = parseTournamentDateRange(currentRecord.dates);
@@ -992,37 +1285,8 @@ async function populateCurrentChampionship() {
     
     const tournamentName = data?.metadata?.tournamentName || currentRecord.title;
 
-    const standingsHtml = (!data || !data.players || data.players.length === 0) 
-        ? '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No players registered yet.</p></div>'
-        : (() => {
-            const hasScores = data.players.some(p => p.results.wins > 0 || p.results.played > 0);
-            const advancingCount = data.players.length <= 8 ? 4 : 8;
-            return `
-                <div class="standings-accordion">
-                    ${sortPlayersByStandings(data.players).map((player, index) => `
-                        <div class="player-card${hasScores && index < advancingCount ? ' advancing' : ''}" id="player-card-${index}">
-                            <button class="player-summary" type="button" onclick="togglePlayerDetails(${index})" aria-expanded="false" style="grid-template-columns: ${hasScores ? 'auto 1fr auto' : '1fr auto'};">
-                                ${hasScores ? `<span class="rank-badge">${index + 1}</span>` : ''}
-                                <span class="player-title">
-                                    <span class="player-name">${player.name}</span>
-                                    <span class="player-platform">${player.platform}</span>
-                                </span>
-                                <span class="player-stats">
-                                    <span class="wins">${player.results.wins} Wins</span>
-                                    <span class="omw">OMW ${player.results.omw ?? '—'}%</span>
-                                </span>
-                            </button>
-                            <div class="player-details">
-                                <div class="detail-row"><span>Played</span><span>${player.results.played}</span></div>
-                                <div class="detail-row"><span>Wins</span><span>${player.results.wins}</span></div>
-                                <div class="detail-row"><span>Losses</span><span>${player.results.losses}</span></div>
-                                ${player.results.omw !== undefined ? `<div class="detail-row"><span>OMW%</span><span>${player.results.omw}%</span></div>` : ''}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        })();
+    const advancingCount = data?.players?.length ? 4 : 0;
+    const standingsHtml = renderPlayerStandings(data?.players || [], advancingCount);
 
     currentChampionshipPage.innerHTML = `
         <h1 style="margin-bottom: 0;">${tournamentName}</h1>
@@ -1039,7 +1303,7 @@ async function populateCurrentChampionship() {
         <div class="card">
             <div class="fixtures-section-header">
                 <h2 class="para-h1">Upcoming Fixtures</h2>
-                ${completedFixturesCount ? `<button class="completed-fixtures-trigger" type="button" data-open-completed-fixtures>
+                ${completedFixturesCount ? `<button class="completed-fixtures-trigger" type="button" data-open-completed-fixtures data-completed-fixtures-source="current-completed-fixtures-source" data-completed-fixtures-title="Completed Championship Fixtures">
                     <i class="fas fa-flag-checkered" aria-hidden="true"></i>
                     <span>Completed fixtures</span>
                     <span class="completed-fixtures-count">${completedFixturesCount}</span>
@@ -1070,12 +1334,372 @@ async function populateCurrentChampionship() {
         <div class="card">
             <h2 class="para-h1">Tournament Information</h2>
             <p class="para-txt"><strong>Format:</strong> 1v1 Best-of-3 Xeno Arena matches</p>
-            <p class="para-txt"><strong>Stages:</strong> Qualification Round → Top 8 Playoffs</p>
+            <p class="para-txt"><strong>Stages:</strong> Swiss Qualification → Top 4 Finals</p>
             <p class="para-txt"><strong>Schedule:</strong> Round completion windows in UK time (UTC+01:00)</p>
             <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout ${tournamentMonth}</p>
             <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
+}
+
+async function populateLeaguePages(definitions) {
+    if (!definitions.length) {
+        const allLeaguesPage = document.getElementById('page-leagues');
+        allLeaguesPage.innerHTML = renderLeagueOverview([]);
+        populateHallOfFame([]);
+        return;
+    }
+
+    const loadedLeagues = await Promise.all(definitions.map(async definition => {
+        try {
+            const response = await fetch(definition.file, { cache: 'no-store' });
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+            return { definition, data: await response.json(), error: null };
+        } catch (error) {
+            console.error(`Error loading ${definition.title} data:`, error);
+            return { definition, data: null, error };
+        }
+    }));
+
+    const allLeaguesPage = document.getElementById('page-leagues');
+    allLeaguesPage.innerHTML = renderLeagueOverview(loadedLeagues);
+    populateHallOfFame(loadedLeagues);
+
+    const pageRenderers = {
+        'league-winter': renderWinterLeaguePage,
+        'league-spring': renderSpringLeaguePage,
+        'league-summer': renderSummerLeaguePage
+    };
+
+    loadedLeagues.forEach(({ definition, data, error }) => {
+        const page = document.getElementById(`page-${definition.pageId}`);
+        const renderPage = pageRenderers[definition.pageId];
+        if (!renderPage) {
+            throw new Error(`Missing page renderer for ${definition.title}.`);
+        }
+        page.innerHTML = renderPage(definition, data, error);
+    });
+}
+
+function renderLeagueOverview(loadedLeagues) {
+    const activeLeague = loadedLeagues.find(({ definition, data }) => getLeagueStatus(definition, data).key === 'active');
+    const nextLeague = loadedLeagues.find(({ definition, data }) => getLeagueStatus(definition, data).key === 'upcoming');
+    const pastCount = loadedLeagues.filter(({ definition, data }) => getLeagueStatus(definition, data).key === 'past').length;
+    const activeHeadline = activeLeague
+        ? `${activeLeague.definition.title} is active now.`
+        : 'No seasonal League is active right now.';
+    const activeDetail = activeLeague
+        ? getLeagueStatus(activeLeague.definition, activeLeague.data).detail
+        : nextLeague
+            ? `${nextLeague.definition.title} is next.`
+            : 'Check back for announcements about the next season.';
+    const iconBySeason = {
+        Winter: 'fa-snowflake',
+        Spring: 'fa-seedling',
+        Summer: 'fa-sun'
+    };
+    const leagueCards = loadedLeagues.map(({ definition, data, error }) => {
+        const status = getLeagueStatus(definition, data);
+        const players = Array.isArray(data?.players) ? data.players : [];
+        const fixtures = Array.isArray(data?.fixtures) ? data.fixtures : [];
+        const summary = error
+            ? 'League data is currently unavailable.'
+            : data
+                ? `${players.length} contestants · ${fixtures.length} fixtures`
+                : 'Season information loading...';
+        const dateText = data?.metadata?.dates || status.detail;
+        const theme = definition.seasonName.toLowerCase();
+        return `
+            <article class="card league-season-card ${theme} ${status.key}">
+                <div class="league-season-card-top">
+                    <span class="league-season-icon"><i class="fas ${iconBySeason[definition.seasonName]}" aria-hidden="true"></i>${definition.seasonName}</span>
+                    <span class="league-status-badge ${status.key}">${status.label}</span>
+                </div>
+                <h3>${definition.title}</h3>
+                <p>${definition.description}</p>
+                <div class="league-season-meta">
+                    <span><i class="fas fa-layer-group" aria-hidden="true"></i> Season ${definition.seasonGroup}</span>
+                    <span><i class="fas fa-calendar" aria-hidden="true"></i> ${dateText}</span>
+                </div>
+                <p class="league-card-summary">${summary}</p>
+                <a class="btn site-btn" href="#${definition.pageId}">Explore ${definition.seasonName} League <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </article>
+        `;
+    }).join('');
+
+    return `
+        <div class="league-overview">
+            <div class="league-overview-hero">
+                <div class="league-overview-copy">
+                    <span class="league-overview-kicker"><i class="fas fa-compass" aria-hidden="true"></i> The seasonal circuit</span>
+                    <h1>Four seasons. One community.</h1>
+                    <p>Join the Winter, Spring, and Summer Leagues for year-round competition, then follow the Xeno Championship in Autumn.</p>
+                    <button class="btn site-btn" type="button" onclick="populateLeagueRulesPage()"><i class="fas fa-book" aria-hidden="true"></i> Explore League Rules</button>
+                </div>
+                <div class="league-season-cycle" aria-label="League seasons: Winter, Spring, Summer">
+                    <div class="league-cycle-season winter"><i class="fas fa-snowflake" aria-hidden="true"></i><span>Winter</span></div>
+                    <div class="league-cycle-season spring"><i class="fas fa-seedling" aria-hidden="true"></i><span>Spring</span></div>
+                    <div class="league-cycle-season summer"><i class="fas fa-sun" aria-hidden="true"></i><span>Summer</span></div>
+                    <div class="league-cycle-championship"><i class="fas fa-trophy" aria-hidden="true"></i><span>Xeno Championship</span></div>
+                </div>
+            </div>
+
+            <div class="league-now-banner">
+                <span class="league-now-icon"><i class="fas ${activeLeague ? 'fa-bolt' : 'fa-hourglass-half'}" aria-hidden="true"></i></span>
+                <div class="league-now-copy">
+                    <span class="league-now-label">${activeLeague ? 'Currently active' : 'League status'}</span>
+                    <strong>${activeHeadline}</strong>
+                    <span>${activeDetail}</span>
+                </div>
+                <div class="league-now-stats">
+                    <span><strong>${pastCount}</strong> past</span>
+                    <span><strong>${loadedLeagues.length}</strong> seasons</span>
+                </div>
+            </div>
+
+            <div class="league-overview-heading">
+                <div>
+                    <span class="league-overview-kicker">Choose your season</span>
+                    <h2>Explore the Leagues</h2>
+                </div>
+                <p>Swiss-style play throughout · No fixed player limit · No elimination stage</p>
+            </div>
+            <div class="league-season-grid">
+                ${leagueCards || '<div class="card"><p class="para-txt">League editions will be announced soon.</p></div>'}
+            </div>
+        </div>
+    `;
+}
+
+function getLeagueStatus(definition, data) {
+    const metadata = data?.metadata || {};
+    const state = String(metadata.state || metadata.status || definition.status || '').trim().toLowerCase();
+    const specialState = state.includes('postpon') ? 'postponed' : state.includes('cancel') ? 'cancelled' : '';
+    if (specialState) {
+        return {
+            key: specialState,
+            label: specialState === 'postponed' ? 'Postponed' : 'Cancelled',
+            detail: specialState === 'postponed' ? 'The season is postponed.' : 'The season has been cancelled.'
+        };
+    }
+
+    const dateRange = parseTournamentDateRange(metadata.dates || definition.dates);
+    if (dateRange) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        dateRange.start.setHours(0, 0, 0, 0);
+        dateRange.end.setHours(23, 59, 59, 999);
+        if (today < dateRange.start) {
+            return { key: 'upcoming', label: 'Upcoming', detail: `Starts ${dateRange.start.toLocaleDateString('en-GB')}.` };
+        }
+        if (today > dateRange.end) {
+            return { key: 'past', label: 'Past', detail: `Finished ${dateRange.end.toLocaleDateString('en-GB')}.` };
+        }
+        return { key: 'active', label: 'Active now', detail: `Runs until ${dateRange.end.toLocaleDateString('en-GB')}.` };
+    }
+
+    if (['active', 'in progress', 'ongoing', 'live'].includes(state)) {
+        return { key: 'active', label: 'Active now', detail: 'This League is currently underway.' };
+    }
+    if (['past', 'completed', 'complete', 'finished', 'ended'].includes(state)) {
+        return { key: 'past', label: 'Past', detail: 'This season has finished.' };
+    }
+    if (['upcoming', 'planned', 'scheduled', 'registration open'].includes(state)) {
+        return { key: 'upcoming', label: 'Upcoming', detail: 'Dates and registration information will be announced.' };
+    }
+
+    const fallbackStatus = String(definition.defaultStatus || '').toLowerCase();
+    if (fallbackStatus === 'postponed') {
+        return { key: 'postponed', label: 'Postponed', detail: 'The season is postponed.' };
+    }
+    if (fallbackStatus === 'past') {
+        return { key: 'past', label: 'Past', detail: 'This season has finished.' };
+    }
+    if (fallbackStatus === 'active') {
+        return { key: 'active', label: 'Active now', detail: 'This League is currently underway.' };
+    }
+    if (fallbackStatus === 'upcoming') {
+        return { key: 'upcoming', label: 'Upcoming', detail: 'Dates and registration information will be announced.' };
+    }
+    return { key: 'scheduled', label: 'Schedule TBC', detail: 'Dates will be announced soon.' };
+}
+
+function renderWinterLeaguePage(definition, data, error) {
+    return renderSeasonLeaguePage(definition, data, error, {
+        theme: 'winter',
+        icon: 'fa-snowflake',
+        intro: 'The Winter League opens the seasonal competition cycle. Check the current event status before making plans to compete.',
+        detail: 'Winter rounds are played Swiss-style, with every contestant staying in the standings through the final scheduled round.'
+    });
+}
+
+function renderSpringLeaguePage(definition, data, error) {
+    return renderSeasonLeaguePage(definition, data, error, {
+        theme: 'spring',
+        icon: 'fa-seedling',
+        intro: "The Spring League brings contestants back for another season of No Man's Sky Xeno Arena competition.",
+        detail: 'Build your record across the full Swiss-style schedule; there is no knockout bracket or playoff stage.'
+    });
+}
+
+function renderSummerLeaguePage(definition, data, error) {
+    return renderSeasonLeaguePage(definition, data, error, {
+        theme: 'summer',
+        icon: 'fa-sun',
+        intro: 'The Summer League is the final seasonal League before the Xeno Championship returns in Autumn.',
+        detail: 'Follow standings across up to 10 weekly rounds, with results determining the final League table.'
+    });
+}
+
+function renderSeasonLeaguePage(definition, data, error, content) {
+    const status = getLeagueStatus(definition, data);
+    const eventInfo = renderLeagueEventInfo(definition, status, content);
+    const pageHeader = `
+        <div class="league-detail-hero ${content.theme}">
+            <div class="league-detail-season"><i class="fas ${content.icon}" aria-hidden="true"></i> ${definition.seasonName} season · ${definition.seasonGroup}</div>
+            <span class="league-status-badge ${status.key}">${status.label}</span>
+            <h1>${definition.title}</h1>
+            <p>${content.intro}</p>
+            <button class="btn site-btn league-back-button" type="button" onclick="navigateToPage('leagues')"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Leagues</button>
+        </div>
+    `;
+    if (error || !data) {
+        return `
+            <div class="league-page ${content.theme}">
+                ${pageHeader}
+                ${eventInfo}
+                <div class="card league-unavailable"><p class="para-txt">Live standings and fixtures could not be loaded right now. Please try again later.</p></div>
+            </div>
+        `;
+    }
+
+    const players = Array.isArray(data.players) ? data.players : [];
+    const fixtures = Array.isArray(data.fixtures) ? data.fixtures : [];
+    const completedFixtures = fixtures.filter(fixture => fixture.status === 'completed');
+    const completedFixturesSourceId = `completed-fixtures-${definition.pageId}`;
+    const completedFixturesTrigger = completedFixtures.length ? `
+        <button class="completed-fixtures-trigger" type="button"
+            data-open-completed-fixtures
+            data-completed-fixtures-source="${completedFixturesSourceId}"
+            data-completed-fixtures-title="${definition.title} - Completed Fixtures">
+            <i class="fas fa-flag-checkered" aria-hidden="true"></i>
+            <span>Completed fixtures</span>
+            <span class="completed-fixtures-count">${completedFixtures.length}</span>
+        </button>
+    ` : '';
+    const completedFixturesSource = `
+        <div id="${completedFixturesSourceId}" hidden>
+            ${renderCompletedFixtures(completedFixtures)}
+        </div>
+    `;
+    const podium = getLeaguePodium(definition, data);
+    const hasPodium = podium.some(isRecordedPodiumName);
+    const podiumHtml = hasPodium ? `
+        <div class="card podium-card">
+            <h2 class="para-h1">League Podium</h2>
+            <div class="podium-grid">
+                <div class="podium-item gold">
+                    <span class="medal-badge">1</span>
+                    <div>${podium[0] || 'TBC'}</div>
+                    <div class="podium-label">League Champion</div>
+                </div>
+                <div class="podium-item silver">
+                    <span class="medal-badge">2</span>
+                    <div>${podium[1] || 'TBC'}</div>
+                    <div class="podium-label">Runner-up</div>
+                </div>
+                <div class="podium-item bronze">
+                    <span class="medal-badge">3</span>
+                    <div>${podium[2] || 'TBC'}</div>
+                    <div class="podium-label">Third Place</div>
+                </div>
+            </div>
+        </div>
+    ` : '';
+    const cardIdPrefix = `player-card-${definition.pageId}`;
+    const leagueInfoHtml = renderLeagueInfoCards(definition, data.metadata);
+
+    return `
+        <div class="league-page ${content.theme}">
+            ${pageHeader}
+            ${eventInfo}
+            ${leagueInfoHtml}
+            <div class="card">
+                <h2 class="para-h1">Current Standings</h2>
+                ${renderPlayerStandings(players, 0, cardIdPrefix)}
+            </div>
+            <div class="card">
+                <div class="fixtures-section-header">
+                    <h2 class="para-h1">Upcoming Fixtures</h2>
+                    ${completedFixturesTrigger}
+                </div>
+                ${renderUpcomingFixtures({ fixtures }, players.length || 32, { league: true })}
+            </div>
+            ${completedFixturesSource}
+            ${podiumHtml}
+            <div class="card">
+                <button class="btn site-btn" type="button" onclick="populateLeagueRulesPage()"><i class="fas fa-book"></i> View League Rules</button>
+            </div>
+        </div>
+    `;
+}
+
+function renderLeagueEventInfo(definition, status, content) {
+    return `
+        <div class="card league-detail-info">
+            <h2 class="para-h1">About the ${definition.seasonName} League</h2>
+            <p class="para-txt">${definition.description}</p>
+            <p class="para-txt">${content.detail}</p>
+            <div class="league-detail-facts">
+                <span><i class="fas fa-users" aria-hidden="true"></i> No fixed player limit</span>
+                <span><i class="fas fa-arrows-rotate" aria-hidden="true"></i> Swiss format throughout</span>
+                <span><i class="fas fa-calendar-week" aria-hidden="true"></i> Up to 10 weekly rounds</span>
+                <span><i class="fas fa-ban" aria-hidden="true"></i> No elimination stage</span>
+            </div>
+            <p class="league-detail-status"><strong>Status:</strong> <span class="league-status-badge ${status.key}">${status.label}</span> ${status.detail}</p>
+            <button class="btn site-btn" type="button" onclick="populateLeagueRulesPage()"><i class="fas fa-book"></i> Read League Rules</button>
+        </div>
+    `;
+}
+
+function renderLeagueInfoCards(definition, metadata) {
+    const registration = metadata?.registration || {};
+    const registrationUrl = getSafeExternalUrl(registration.registrationLink);
+    const registrationHtml = `
+        <div class="card registration-card">
+            <h2 class="para-h1">League Registration</h2>
+            <p class="para-txt">${registrationUrl ? 'Use the link below to register for this league.' : 'Registration details will be announced here when available.'}</p>
+            ${registrationUrl ? `<a href="${registrationUrl}" class="btn registration-btn" target="_blank" rel="noopener">Register Now</a>` : ''}
+        </div>
+    `;
+
+    const donation = registration.donation || {};
+    const donationUrl = getSafeExternalUrl(donation.link);
+    const donationHtml = donationUrl ? `
+        <div class="card registration-card donation-card">
+            <h2 class="para-h1">Charitable Donation</h2>
+            <p class="para-txt">Support ${donation.cause || 'the league charity'}.</p>
+            ${definition.charity?.goal > 0 ? renderDonationProgress({ charity: definition.charity }) : ''}
+            <a href="${donationUrl}" class="btn donation-btn" target="_blank" rel="noopener">Donate</a>
+        </div>
+    ` : '';
+
+    return `<div class="card-row ${donationHtml ? 'two-cards' : 'one-card'}">${registrationHtml}${donationHtml}</div>`;
+}
+
+function getSafeExternalUrl(value) {
+    if (!value) {
+        return '';
+    }
+
+    try {
+        const url = new URL(value, window.location.href);
+        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+    } catch (error) {
+        return '';
+    }
 }
 
 function renderPodium(top3) {
@@ -1272,15 +1896,20 @@ function renderAllPastRecords(records) {
     `).join('');
 }
 
-function renderUpcomingFixtures(fixturesData, playerCount = 32) {
+function renderUpcomingFixtures(fixturesData, playerCount = 32, options = {}) {
     if (!fixturesData || !fixturesData.fixtures || fixturesData.fixtures.length === 0) {
         return '<p class="para-txt">No upcoming fixtures scheduled yet.</p>';
     }
 
+    const isLeague = options.league === true;
     const fixtures = fixturesData.fixtures.filter(fixture => fixture.status !== 'completed');
     const qualifiers = fixtures
-        .filter(fixture => fixture.fixtureId === 'Qualifier')
+        .filter(fixture => isLeague || fixture.fixtureId === 'Qualifier')
         .sort((a, b) => {
+            if (isLeague) {
+                const roundDifference = Number(a.round ?? Number.POSITIVE_INFINITY) - Number(b.round ?? Number.POSITIVE_INFINITY);
+                if (Number.isFinite(roundDifference) && roundDifference !== 0) return roundDifference;
+            }
             const dateA = a.date ? new Date(`${a.date}T${a.time || '00:00'}`).getTime() : Number.POSITIVE_INFINITY;
             const dateB = b.date ? new Date(`${b.date}T${b.time || '00:00'}`).getTime() : Number.POSITIVE_INFINITY;
             return (Number.isNaN(dateA) ? Number.POSITIVE_INFINITY : dateA) - (Number.isNaN(dateB) ? Number.POSITIVE_INFINITY : dateB);
@@ -1288,7 +1917,7 @@ function renderUpcomingFixtures(fixturesData, playerCount = 32) {
     const advancingCount = playerCount <= 8 ? 4 : 8;
     const openingRound = advancingCount === 4 ? 'Semi-Final' : 'Quarter-Final';
     const knockoutRoundOrder = [openingRound, `${openingRound}s`, 'Third Place Match', 'Grand Final'];
-    const knockoutRounds = knockoutRoundOrder
+    const knockoutRounds = (isLeague ? [] : knockoutRoundOrder)
         .filter((round, index, rounds) => rounds.indexOf(round) === index)
         .map(round => ({
             name: round,
@@ -1299,9 +1928,11 @@ function renderUpcomingFixtures(fixturesData, playerCount = 32) {
     const qualifierHtml = qualifiers.length > 0
         ? `<div class="fixture-stage fixture-stage-qualification">
             <div class="fixture-stage-heading">
-                <span class="fixture-stage-kicker">First Stage</span>
-                <h3>Swiss-Style Qualification</h3>
-                <p>Five rounds, with the top ${advancingCount} advancing to the championship bracket.</p>
+                <span class="fixture-stage-kicker">${isLeague ? 'League Stage' : 'First Stage'}</span>
+                <h3>${isLeague ? 'Swiss-Style League' : 'Swiss-Style Qualification'}</h3>
+                <p>${isLeague
+                    ? 'Up to 10 weekly rounds, with final standings determined by league results and no playoff stage.'
+                    : `Five rounds, with the top ${advancingCount} advancing to the championship bracket.`}</p>
             </div>
             <div class="fixtures-list">
                 ${qualifiers.map(renderFixtureCard).join('')}
@@ -1372,7 +2003,7 @@ function renderFixtureCard(fixture) {
         }
     }
     const fixtureRound = fixture.fixtureId === 'Qualifier' && fixture.round != null ? ` · Round ${fixture.round}` : '';
-    const fixtureTimeZone = fixture.timezone || 'UTC+01:00';
+    const fixtureTimeZone = fixture.timeZone || fixture.timezone || 'UTC+01:00';
     let fixtureTime = fixture.time || 'TBC';
     if (fixture.time !== "") {
         fixtureTime = `${fixtureTime} (${fixtureTimeZone})`;

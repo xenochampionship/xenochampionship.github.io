@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "tournamentName": "Spring League",
+    "year": 2027,
+    "state": "upcoming",
+    "dates": "",
+    "registration": {
+      "registrationLink": "",
+      "donation": {
+        "cause": "Charity Name",
+        "link": "#"
+      }
+    }
+  },
+  "players": [],
+  "fixtures": []
+}
