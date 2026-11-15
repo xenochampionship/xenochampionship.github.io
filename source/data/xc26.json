@@ -111,8 +111,8 @@
     {
       "fixtureId": "Third Place Match",
       "round": null,
-      "date": "",
-      "time": "",
+      "date": "2026-11-14",
+      "time": "14:30",
       "timeZone": "UTC+01:00",
       "player1": "ItIsYeOwl",
       "player2": "mattmaintenance",
@@ -120,8 +120,8 @@
       "platform2": "Nintendo Switch",
       "umpire": "JamieHarperUK",
       "streamLink": null,
-      "status": "planning",
-      "winner": null
+      "status": "completed",
+      "winner": "ItIsYeOwl"
     },
     {
       "fixtureId": "Semi-Final",

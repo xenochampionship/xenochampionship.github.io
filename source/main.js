@@ -603,7 +603,7 @@ function populateChampionshipPage() {
                     </div>
                 </article>
                 <article class="championship-info-story community">
-                    <span class="championship-story-icon"><i class="fas fa-people-group" aria-hidden="true"></i></span>
+                    <span class="championship-story-icon"><i class="fas fa-scale-balanced" aria-hidden="true"></i></span>
                     <div>
                         <span class="championship-story-label">Made by the community</span>
                         <h2>Fair play comes first</h2>
@@ -641,7 +641,7 @@ function populateLeagueRulesPage() {
             <div class="accordion-rule-content">
                 <p class="para-txt">Each league is played entirely in a <b>Swiss-style format</b>. There is no single-elimination stage or playoff bracket; all contestants remain in the league standings throughout the scheduled rounds.</p>
                 <ul>
-                    <li>A league may include up to <b>10 rounds</b>, typically one fixture per week over just over two months</li>
+                    <li>A league may include up to <b>10 rounds</b>, typically one fixture per week within a ten week period</li>
                     <li>Contestants are paired with opponents on similar records where possible</li>
                     <li>Final standings are based on results across the league's scheduled fixtures</li>
                 </ul>

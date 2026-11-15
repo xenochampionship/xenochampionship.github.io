@@ -17,11 +17,18 @@ const leaguesCharity = {
 
 const records = [
     {
-        title: "XC 2026", dates: "01/10/2026 - 12/11/2026", 
+        title: "XC 2027", dates: "01/10/2027 - 14/11/2027", 
         past: false, // If current or upcoming, set past to false
-        top3: ["Scarecr0w", "JimmyM7", "TBC"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
+        top3: ["#", "#", "#"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
+        resultsJson: dataHostUrl+"xc27.json",
+        charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
+    },
+    {
+        title: "XC 2026", dates: "01/10/2026 - 14/11/2026", 
+        past: true, // If current or upcoming, set past to false
+        top3: ["Scarecr0w", "JimmyM7", "ItIsYeOwl"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc26.json",
-        charity: {current: 165.00, goal: 200.00, showOnHome: true} // GBP (£)
+        charity: {current: 165.00, goal: 200.00, showOnHome: false} // GBP (£)
     }
 ];
 
@@ -46,7 +53,7 @@ const leagueRecords = [
                 file: dataHostUrl+"summer-2027.json"
             }
         },
-        charity: {current: 0.00, goal: 1000.00, showOnHome: false} // GBP (£)
+        charity: {current: 0.00, goal: 1000.00, showOnHome: true} // GBP (£)
     }
 ];
 
