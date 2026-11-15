@@ -1383,14 +1383,14 @@
                                 </div>
 
                                 <div id="crmMode" style="margin-top:0.8rem;">
-                                    <p>Manage the fixed Xeno Championship player and fixture records below. Changes are written back to their existing array without changing the surrounding JSON structure.</p>
+                                    <p>Manage the players or fixtures in the selected Championship or League file. Both arrays stay together in the same JSON file, and changes preserve the rest of its structure.</p>
                                     <div class="row" style="margin-bottom:0.7rem;">
                                         <button id="crmNewRecordBtn">Add Entry</button>
                                         <button id="crmDuplicateRecordBtn">Duplicate Selected</button>
                                         <button id="crmDeleteRecordBtn" class="warn">Delete Selected</button>
                                     </div>
                                     <div id="xenoDataKeyWrap" class="hidden" style="margin-bottom:0.7rem;">
-                                        <label for="xenoDataKeySelect">Tournament data</label>
+                                        <label for="xenoDataKeySelect">Competition data</label>
                                         <select id="xenoDataKeySelect">
                                             <option value="players">Players</option>
                                             <option value="fixtures">Fixtures</option>
@@ -1912,7 +1912,7 @@
                     appTitle: "Xeno Championship Manager",
                     tagline: "Used to maintain the Xeno Championship site content.",
                     homeTitle: "Welcome",
-                    homeIntro: "This tool runs entirely in the browser and can authenticate to GitHub, verify write access to the configured repository, then edit and commit configured JSON files.",
+                    homeIntro: "This tool runs entirely in the browser and can authenticate to GitHub, verify write access to the configured repository, then edit and commit Championship and League JSON files.",
                     aboutTitle: "About",
                     aboutIntro: "Xeno Championship Manager is a browser-based Single Page Application for maintaining JSON data files for static websites."
                 },
@@ -1927,9 +1927,13 @@
                 repository: {
                     targetRepoFullName: "xenochampionship/xenochampionship.github.io",
                     files: {
-                        tournament: "source/data/xc26.json"
+                        "Xeno Championship 2027": "source/data/xc27.json",
+                        "Xeno Championship 2026": "source/data/xc26.json",
+                        "Winter League 2026": "source/data/winter-2026.json",
+                        "Spring League 2027": "source/data/spring-2027.json",
+                        "Summer League 2027": "source/data/summer-2027.json"
                     },
-                    defaultFileKey: "tournament"
+                    defaultFileKey: "Xeno Championship 2027"
                 },
                 notifications: {
                     enabled: false,
@@ -3088,9 +3092,7 @@
                     }
                     const key = entry[0];
                     const path = entry[1];
-                    const safeKeyLabel = String(key[0]).toUpperCase() + String(key).slice(1);
-
-                    // 
+                    const safeKeyLabel = String(key);
                     const xcYearFromPath = _getXcYearFromPath(path);
 
                     const item = document.createElement("li");
@@ -3100,7 +3102,7 @@
 
                     const option = document.createElement("option");
                     option.value = path;
-                    option.textContent = safeKeyLabel + (xcYearFromPath ? " (" + xcYearFromPath + ")" : "");
+                    option.textContent = safeKeyLabel + (xcYearFromPath && safeKeyLabel.indexOf(xcYearFromPath) === -1 ? " (" + xcYearFromPath + ")" : "");
                     if (DEFAULT_FILE_KEY && key === DEFAULT_FILE_KEY) {
                         option.selected = true;
                     } else if (!DEFAULT_FILE_KEY && idx === 0) {
@@ -3128,7 +3130,7 @@
                 state.currentJsonData = parsed;
                 state.currentXenoDataKey = "players";
                 el.xenoDataKeySelect.value = "players";
-                el.xenoDataKeyWrap.classList.toggle("hidden", !isXenoTournamentFile());
+                el.xenoDataKeyWrap.classList.toggle("hidden", !isXenoCompetitionFile());
                 state.fixturePlayerOptions = [];
                 el.jsonTextArea.value = JSON.stringify(parsed, null, 2);
 
@@ -3176,14 +3178,20 @@
             }
 
             function getCurrentEditorFileKind() {
-                if (isXenoTournamentFile()) {
+                if (isXenoCompetitionFile()) {
                     return state.currentXenoDataKey === "fixtures" ? "xeno_fixtures" : "xeno_players";
                 }
                 return "generic";
             }
 
-            function isXenoTournamentFile() {
-                return /(^|[\\/])xc\d{2}\.json$/i.test(String(state.currentJsonPath || ""));
+            function isXenoCompetitionFile() {
+                const path = String(state.currentJsonPath || "");
+                const data = state.currentJsonData;
+                return /(^|[\\/])(?:xc\d{2}|(?:winter|spring|summer)-\d{4})\.json$/i.test(path)
+                    && data
+                    && !Array.isArray(data)
+                    && Array.isArray(data.players)
+                    && Array.isArray(data.fixtures);
             }
 
             function isFcTemplateFile() {
