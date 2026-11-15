@@ -1116,6 +1116,7 @@ function populateHomePage(data, record) {
         </div>
 
         ${renderHomeDonationSection(record, data?.metadata)}
+        ${renderHomeLeagueDonationSection()}
 
         <div class="card-row two-cards">
             <div class="card home-card-single" style="margin: 0; padding: 0; overflow: hidden;">
@@ -1958,6 +1959,28 @@ function renderHomeDonationSection(record, metadata) {
             <p class="para-txt">Help us support ${charity.cause} during the ${record.title} tournament.</p>
             ${progressHtml}
             <a href="${charity.link}" class="btn donation-btn" target="_blank" rel="noopener">Donate to ${charity.cause}</a>
+        </div>
+    `;
+}
+
+function renderHomeLeagueDonationSection() {
+    const leagueRecord = leagueRecords.find(record => record.current_season);
+    if (!leagueRecord?.charity?.showOnHome) {
+        return '';
+    }
+
+    const cause = leaguesCharity.cause || '';
+    const donationUrl = getSafeExternalUrl(leaguesCharity.link);
+    if (!cause || !donationUrl) {
+        return '';
+    }
+
+    return `
+        <div class="card donation-card league-donation-card home-league-donation-card">
+            <h2 class="para-h1">Current League Season Donation Target</h2>
+            <p class="para-txt">Help us support ${cause} throughout the ${leagueRecord.league} League season.</p>
+            ${renderDonationProgress(leagueRecord)}
+            <a href="${donationUrl}" class="btn donation-btn" target="_blank" rel="noopener noreferrer">Donate to ${cause}</a>
         </div>
     `;
 }
