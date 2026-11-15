@@ -424,6 +424,7 @@ async function initFixturePushControls() {
 function navigateToPage(pageId) {
     window.location.hash = '#' + pageId;
     showPage(pageId);
+    window.scrollTo(0, 0);
 }
 
 function showPage(pageId) {
@@ -508,35 +509,115 @@ function populateChampionshipPage() {
     const page = document.getElementById('page-championship');
     const currentRecord = records.find(record => !record.past);
     const currentEdition = currentRecord?.dates
-        ? `<p class="para-txt"><strong>Current edition:</strong> ${currentRecord.dates}</p>`
+        ? `
+            <div class="championship-edition-chip">
+                <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                <span>Current edition</span>
+                <strong>${currentRecord.title}</strong>
+                <span>${currentRecord.dates}</span>
+            </div>
+        `
+        : '';
+    const currentAction = currentRecord
+        ? `<button class="btn site-btn championship-info-action primary" type="button" onclick="navigateToPage('current')"><i class="fas fa-chart-line" aria-hidden="true"></i> View Current Championship</button>`
         : '';
 
     page.innerHTML = `
-        <h1>Xeno Championship</h1>
-        <div class="card hero-card">
-            <img src="https://www.nomanssky.com/media/wzgpapjc/battleshots20.jpg" alt="No Man's Sky Xeno Arena competition" class="home-hero-image-secondary">
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-trophy" style="margin-right: 0.5rem;"></i> The annual championship</h2>
-            <p class="para-txt">The Xeno Championship is the annual No Man's Sky Xeno Arena tournament, bringing competitors together for a season of 1v1 creature battles. It takes place in Autumn, with dates and registration details announced for each edition.</p>
-            ${currentEdition}
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-medal" style="margin-right: 0.5rem;"></i> Championship format</h2>
-            <p class="para-txt">The championship features up to eight contestants and begins with five Swiss-style qualification rounds. The top four advance to the Finals: two semi-finals, a third-place match, and the Grand Final.</p>
-            <p class="para-txt">Matches are played as 1v1 best-of-three Xeno Arena fixtures. The Swiss format is used for qualification; single elimination is reserved for the Finals.</p>
-        </div>
-        <div class="card">
-            <h2 class="para-h1"><i class="fas fa-circle-info" style="margin-right: 0.5rem;"></i> Follow the event</h2>
-            <p class="para-txt">See the current edition's standings, fixtures, and registration information, or read the full Championship Rules.</p>
-            <a class="btn site-btn" href="#current">Current Championship</a>
-            <button class="btn site-btn" type="button" onclick="navigateToPage('rules')"><i class="fas fa-book"></i> Championship Rules</button>
+        <div class="championship-info-page">
+            <section class="championship-info-hero" aria-labelledby="championship-info-title">
+                <img src="https://www.nomanssky.com/media/wzgpapjc/battleshots20.jpg" alt="No Man's Sky Xeno Arena competition">
+                <div class="championship-info-hero-content">
+                    <span class="championship-info-kicker"><i class="fas fa-trophy" aria-hidden="true"></i> The annual Autumn tournament</span>
+                    <h1 id="championship-info-title">One arena. Eight contenders. One champion.</h1>
+                    <p>A community-run celebration of No Man's Sky Xeno Arena, where skill, strategy, and sportsmanship decide who earns the title of Xeno Champion.</p>
+                    ${currentEdition}
+                    <div class="championship-info-actions">
+                        ${currentAction}
+                        <button class="btn site-btn championship-info-action" type="button" onclick="navigateToChampionshipRulesPage()"><i class="fas fa-book-open" aria-hidden="true"></i> Championship Rules</button>
+                    </div>
+                </div>
+                <div class="championship-info-hero-emblem" aria-hidden="true"><i class="fas fa-crown"></i></div>
+            </section>
+
+            <section class="championship-info-highlights" aria-label="Championship at a glance">
+                <article class="championship-highlight">
+                    <span class="championship-highlight-icon"><i class="fas fa-users" aria-hidden="true"></i></span>
+                    <div><strong>Up to 8</strong><span>Contestants</span></div>
+                </article>
+                <article class="championship-highlight">
+                    <span class="championship-highlight-icon"><i class="fas fa-arrows-rotate" aria-hidden="true"></i></span>
+                    <div><strong>5 rounds</strong><span>Swiss qualification</span></div>
+                </article>
+                <article class="championship-highlight">
+                    <span class="championship-highlight-icon"><i class="fas fa-medal" aria-hidden="true"></i></span>
+                    <div><strong>Top 4</strong><span>Advance to Finals</span></div>
+                </article>
+                <article class="championship-highlight">
+                    <span class="championship-highlight-icon"><i class="fas fa-gamepad" aria-hidden="true"></i></span>
+                    <div><strong>Best of 3</strong><span>Every fixture</span></div>
+                </article>
+            </section>
+
+            <section class="championship-info-format" aria-labelledby="championship-format-title">
+                <div class="championship-info-section-heading">
+                    <span class="championship-info-kicker">The road to the title</span>
+                    <h2 id="championship-format-title">Consistency earns a place in the Finals</h2>
+                    <p>Every match matters, from the first qualification round to the Grand Final.</p>
+                </div>
+                <div class="championship-format-steps">
+                    <article class="championship-format-step">
+                        <span class="championship-step-number">01</span>
+                        <div>
+                            <span class="championship-step-label">Build your record</span>
+                            <h3>Swiss qualification</h3>
+                            <p>Contestants play five rounds of 1v1 fixtures, with pairings based on results where possible.</p>
+                        </div>
+                    </article>
+                    <article class="championship-format-step">
+                        <span class="championship-step-number">02</span>
+                        <div>
+                            <span class="championship-step-label">The top four</span>
+                            <h3>Reach the Finals</h3>
+                            <p>The four highest-ranked contestants move on to the semi-finals and the third-place match.</p>
+                        </div>
+                    </article>
+                    <article class="championship-format-step">
+                        <span class="championship-step-number">03</span>
+                        <div>
+                            <span class="championship-step-label">One final battle</span>
+                            <h3>Crown a champion</h3>
+                            <p>The Grand Final decides the Xeno Champion and Silver Medallist; the third-place match awards Bronze.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="championship-info-stories" aria-label="Championship values">
+                <article class="championship-info-story charity">
+                    <span class="championship-story-icon"><i class="fas fa-heart" aria-hidden="true"></i></span>
+                    <div>
+                        <span class="championship-story-label">Competition with a cause</span>
+                        <h2>Supporting Cancer Research UK</h2>
+                        <p>The Championship brings the community together in support of Cancer Research UK. Donations are voluntary and help the charity continue its work.</p>
+                        <a href="https://www.cancerresearchuk.org" target="_blank" rel="noopener noreferrer">Learn about the charity <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+                <article class="championship-info-story community">
+                    <span class="championship-story-icon"><i class="fas fa-people-group" aria-hidden="true"></i></span>
+                    <div>
+                        <span class="championship-story-label">Made by the community</span>
+                        <h2>Fair play comes first</h2>
+                        <p>Organizers, Umpires, and contestants all help create a welcoming event built around respect, good sportsmanship, and a shared love of No Man's Sky.</p>
+                    </div>
+                </article>
+            </section>
         </div>
     `;
 }
 
 function populateLeagueRulesPage() {
     const rulesPage = document.getElementById('page-rules');
+    const shouldNavigate = !rulesPage.classList.contains('active');
     pageNames.rules = 'League Rules';
     if (rulesPage.classList.contains('active')) {
         updatePageTitle('rules');
@@ -617,6 +698,14 @@ function populateLeagueRulesPage() {
             </div>
         </div>
     `;
+    if (shouldNavigate) {
+        navigateToPage('rules');
+    }
+}
+
+function navigateToChampionshipRulesPage() {
+    populateRulesPage();
+    navigateToPage('rules');
 }
 
 function populateRulesPage() {
@@ -1345,7 +1434,7 @@ async function populateCurrentChampionship() {
             <p class="para-txt"><strong>Stages:</strong> Swiss Qualification → Top 4 Finals</p>
             <p class="para-txt"><strong>Schedule:</strong> Round completion windows in UK time (UTC+01:00)</p>
             <p class="para-txt"><strong>Streaming:</strong> All Finals matches are streamed, with Qualification highlights throughout ${tournamentMonth}</p>
-            <button class="btn site-btn" onclick="navigateToPage('rules')" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
+            <button class="btn site-btn" onclick="navigateToChampionshipRulesPage()" style="margin-top: 1rem;"><i class="fas fa-book"></i> View Full Rules</button>
         </div>
     `;
 }

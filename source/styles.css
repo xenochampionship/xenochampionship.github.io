@@ -331,6 +331,398 @@ ul.scoring-list li i {
     color: #fff;
 }
 
+.championship-info-page {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.championship-info-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(390px, 52vw, 560px);
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgb(215 25 32 / 0.48);
+    border-radius: 20px;
+    background: #101015;
+    box-shadow: 0 18px 48px rgb(0 0 0 / 0.38);
+}
+
+.championship-info-hero > img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+}
+
+.championship-info-hero::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 78% 24%, rgb(215 25 32 / 0.22), transparent 30%),
+        linear-gradient(90deg, rgb(5 6 9 / 0.97) 0%, rgb(5 6 9 / 0.83) 48%, rgb(5 6 9 / 0.25) 100%),
+        linear-gradient(0deg, rgb(5 6 9 / 0.6), transparent 58%);
+    content: "";
+}
+
+.championship-info-hero-content {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.championship-info-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ff9a9e;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.championship-info-hero h1 {
+    max-width: 720px;
+    margin: 0.8rem 0 0.9rem;
+    font-size: clamp(2.2rem, 5.2vw, 4.25rem);
+    line-height: 1.02;
+    text-wrap: balance;
+    text-shadow: 0 3px 18px rgb(0 0 0 / 0.65);
+}
+
+.championship-info-hero-content > p {
+    max-width: 650px;
+    margin: 0 0 1.2rem;
+    color: rgb(255 255 255 / 0.86);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.6;
+}
+
+.championship-edition-chip {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.55rem;
+    max-width: 100%;
+    margin-bottom: 1.25rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.52);
+    color: rgb(255 255 255 / 0.82);
+    font-size: 0.9rem;
+    backdrop-filter: blur(8px);
+}
+
+.championship-edition-chip i {
+    color: #ffb84d;
+}
+
+.championship-edition-chip strong {
+    color: #fff;
+}
+
+.championship-info-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.btn.championship-info-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 46px;
+    margin: 0;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    border-radius: 7px;
+    background: rgb(10 11 15 / 0.72);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.btn.championship-info-action.primary {
+    border-color: #ef4148;
+    background: linear-gradient(135deg, #d71920, #a90f17);
+    box-shadow: 0 6px 20px rgb(215 25 32 / 0.28);
+}
+
+.btn.championship-info-action:hover {
+    transform: translateY(-2px);
+    border-color: rgb(255 255 255 / 0.58);
+    background-color: rgb(255 255 255 / 0.12);
+    color: #fff;
+}
+
+.btn.championship-info-action.primary:hover {
+    background: linear-gradient(135deg, #ef343c, #bd111a);
+}
+
+.btn.championship-info-action:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.championship-info-hero-emblem {
+    position: absolute;
+    right: clamp(1.5rem, 7vw, 6rem);
+    bottom: 12%;
+    z-index: 0;
+    color: rgb(255 196 89 / 0.25);
+    font-size: clamp(6rem, 16vw, 13rem);
+    filter: drop-shadow(0 0 30px rgb(255 184 77 / 0.2));
+    transform: rotate(9deg);
+}
+
+.championship-info-hero-emblem i.fas {
+    color: rgb(255 196 89 / 0.25);
+    text-shadow: none;
+}
+
+.championship-info-highlights {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.championship-highlight {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 92px;
+    padding: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+    transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.championship-highlight:hover {
+    transform: translateY(-3px);
+    border-color: rgb(215 25 32 / 0.55);
+}
+
+.championship-highlight-icon {
+    display: grid;
+    flex: 0 0 42px;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgb(215 25 32 / 0.16);
+    color: #ff858a;
+    font-size: 1.1rem;
+}
+
+.championship-highlight > div {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.championship-highlight strong {
+    font-size: 1.1rem;
+}
+
+.championship-highlight > div > span {
+    color: rgb(255 255 255 / 0.68);
+    font-size: 0.85rem;
+}
+
+.championship-info-format {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 16px;
+    background: radial-gradient(circle at 100% 0, rgb(215 25 32 / 0.1), transparent 34%), rgb(255 255 255 / 0.025);
+}
+
+.championship-info-section-heading h2 {
+    margin: 0.35rem 0;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+.championship-info-section-heading > p {
+    margin: 0;
+    color: rgb(255 255 255 / 0.7);
+}
+
+.championship-format-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.championship-format-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: start;
+    gap: 0.85rem;
+    min-height: 170px;
+    padding: 1.1rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 12px;
+    background: rgb(0 0 0 / 0.24);
+}
+
+.championship-step-number {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgb(215 25 32 / 0.6);
+    border-radius: 50%;
+    background: rgb(215 25 32 / 0.13);
+    color: #ff9a9e;
+    font-weight: 700;
+}
+
+.championship-step-label,
+.championship-story-label {
+    color: #ff9a9e;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.championship-format-step h3 {
+    margin: 0.25rem 0 0.45rem;
+    font-size: 1.15rem;
+}
+
+.championship-format-step p {
+    margin: 0;
+    color: rgb(255 255 255 / 0.72);
+    line-height: 1.5;
+}
+
+.championship-info-stories {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.championship-info-story {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: start;
+    gap: 1rem;
+    padding: 1.35rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.035);
+}
+
+.championship-info-story.charity {
+    border-color: rgb(0 156 238 / 0.35);
+    background: linear-gradient(130deg, rgb(0 156 238 / 0.11), rgb(255 255 255 / 0.025));
+}
+
+.championship-info-story.community {
+    border-color: rgb(255 184 77 / 0.28);
+    background: linear-gradient(130deg, rgb(255 184 77 / 0.08), rgb(255 255 255 / 0.025));
+}
+
+.championship-story-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: rgb(0 156 238 / 0.16);
+    color: #79d4ff;
+    font-size: 1.1rem;
+}
+
+.championship-info-story.community .championship-story-icon {
+    background: rgb(255 184 77 / 0.14);
+    color: #ffd078;
+}
+
+.championship-info-story h2 {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.championship-info-story p {
+    margin: 0 0 0.75rem;
+    color: rgb(255 255 255 / 0.74);
+    line-height: 1.55;
+}
+
+.championship-info-story a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #8bdcff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.championship-info-story a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .championship-info-highlights {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .championship-format-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .championship-format-step {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 620px) {
+    .championship-info-hero {
+        min-height: 480px;
+    }
+
+    .championship-info-hero::before {
+        background:
+            linear-gradient(90deg, rgb(5 6 9 / 0.9), rgb(5 6 9 / 0.45)),
+            linear-gradient(0deg, rgb(5 6 9 / 0.95), transparent 90%);
+    }
+
+    .championship-info-hero-emblem {
+        right: 1rem;
+        top: 1rem;
+        bottom: auto;
+        font-size: 5rem;
+    }
+
+    .championship-info-actions,
+    .championship-info-action {
+        width: 100%;
+    }
+
+    .championship-info-highlights,
+    .championship-info-stories {
+        grid-template-columns: 1fr;
+    }
+
+    .championship-info-story {
+        grid-template-columns: 1fr;
+    }
+}
+
 .league-overview {
     display: grid;
     gap: 1.5rem;
