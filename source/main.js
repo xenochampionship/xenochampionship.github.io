@@ -971,17 +971,11 @@ async function populateCurrentChampionship() {
     let fixturesHtml = '';
     let completedFixturesHtml = '<p class="para-txt">No completed fixtures yet.</p>';
     let completedFixturesCount = 0;
-    try {
-        const fixturesResponse = await fetch(dataHostUrl + 'fixtures.json', { cache: 'no-store' });
-        const fixturesData = await fixturesResponse.json();
-        const completedFixtures = fixturesData.fixtures.filter(fixture => fixture.status === 'completed');
-        completedFixturesCount = completedFixtures.length;
-        completedFixturesHtml = renderCompletedFixtures(completedFixtures);
-        fixturesHtml = renderUpcomingFixtures(fixturesData, data?.players?.length || 32);
-    } catch (error) {
-        console.log('No fixtures data available');
-        fixturesHtml = '<div class="card" style="margin-bottom: 0px;"><p class="para-txt">No upcoming fixtures scheduled yet.</p></div>';
-    }
+    const fixtures = Array.isArray(data?.fixtures) ? data.fixtures : [];
+    const completedFixtures = fixtures.filter(fixture => fixture.status === 'completed');
+    completedFixturesCount = completedFixtures.length;
+    completedFixturesHtml = renderCompletedFixtures(completedFixtures);
+    fixturesHtml = renderUpcomingFixtures({ fixtures }, data?.players?.length || 32);
     document.getElementById('completed-fixtures-content').innerHTML = completedFixturesHtml;
 
     const registrationHtml = renderRegistrationCard(currentRecord, data?.metadata);

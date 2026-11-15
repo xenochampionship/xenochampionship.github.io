@@ -1389,6 +1389,13 @@
                                         <button id="crmDuplicateRecordBtn">Duplicate Selected</button>
                                         <button id="crmDeleteRecordBtn" class="warn">Delete Selected</button>
                                     </div>
+                                    <div id="xenoDataKeyWrap" class="hidden" style="margin-bottom:0.7rem;">
+                                        <label for="xenoDataKeySelect">Tournament data</label>
+                                        <select id="xenoDataKeySelect">
+                                            <option value="players">Players</option>
+                                            <option value="fixtures">Fixtures</option>
+                                        </select>
+                                    </div>
                                     <div class="two-col">
                                         <div>
                                             <label for="crmRecordSelect">Entries</label>
@@ -1920,10 +1927,9 @@
                 repository: {
                     targetRepoFullName: "xenochampionship/xenochampionship.github.io",
                     files: {
-                        players: "source/data/xc26.json",
-                        fixtures: "source/data/fixtures.json"
+                        tournament: "source/data/xc26.json"
                     },
-                    defaultFileKey: "players"
+                    defaultFileKey: "tournament"
                 },
                 notifications: {
                     enabled: false,
@@ -2063,6 +2069,7 @@
                 currentJsonPath: "",
                 currentJsonSha: "",
                 currentJsonData: null,
+                currentXenoDataKey: "players",
                 fixturePlayerOptions: [],
                 subscriberKeys: [],
                 lastNotificationPreferenceKind: "",
@@ -2153,6 +2160,8 @@
                 modeCrmBtn: document.getElementById("modeCrmBtn"),
                 modeTextBtn: document.getElementById("modeTextBtn"),
                 currentFilePill: document.getElementById("currentFilePill"),
+                xenoDataKeyWrap: document.getElementById("xenoDataKeyWrap"),
+                xenoDataKeySelect: document.getElementById("xenoDataKeySelect"),
                 dndMode: document.getElementById("dndMode"),
                 crmMode: document.getElementById("crmMode"),
                 textMode: document.getElementById("textMode"),
@@ -2904,6 +2913,9 @@
                 state.currentJsonPath = "";
                 state.currentJsonSha = "";
                 state.currentJsonData = null;
+                state.currentXenoDataKey = "players";
+                el.xenoDataKeySelect.value = "players";
+                el.xenoDataKeyWrap.classList.add("hidden");
                 state.lastNotificationPreferenceKind = "";
                 clearStoredAuthSession();
                 el.authPill.textContent = "Not authenticated";
@@ -3114,12 +3126,11 @@
                 state.currentJsonPath = file.path;
                 state.currentJsonSha = file.sha;
                 state.currentJsonData = parsed;
+                state.currentXenoDataKey = "players";
+                el.xenoDataKeySelect.value = "players";
+                el.xenoDataKeyWrap.classList.toggle("hidden", !isXenoTournamentFile());
                 state.fixturePlayerOptions = [];
                 el.jsonTextArea.value = JSON.stringify(parsed, null, 2);
-
-                if (getCurrentEditorFileKind() === "xeno_fixtures") {
-                    await loadFixturePlayerOptions(parsed);
-                }
 
                 hydrateCrmFromCurrentJson();
                 updateCommitNotificationChoiceVisibility();
@@ -3165,14 +3176,14 @@
             }
 
             function getCurrentEditorFileKind() {
-                const path = String(state.currentJsonPath || "").toLowerCase();
-                if (path.endsWith("/xc26.json") || path.endsWith("xc26.json")) {
-                    return "xeno_players";
-                }
-                if (path.endsWith("/fixtures.json") || path.endsWith("fixtures.json")) {
-                    return "xeno_fixtures";
+                if (isXenoTournamentFile()) {
+                    return state.currentXenoDataKey === "fixtures" ? "xeno_fixtures" : "xeno_players";
                 }
                 return "generic";
+            }
+
+            function isXenoTournamentFile() {
+                return /(^|[\\/])xc\d{2}\.json$/i.test(String(state.currentJsonPath || ""));
             }
 
             function isFcTemplateFile() {
@@ -3236,42 +3247,14 @@
                 return null;
             }
 
-            function resolveTournamentFilePath(tournamentReference) {
-                const reference = String(tournamentReference || "").trim();
-                if (!reference) {
-                    return "";
-                }
-                if (Object.prototype.hasOwnProperty.call(REPOSITORY_FILE_MAP, reference)) {
-                    return REPOSITORY_FILE_MAP[reference];
-                }
-                const configuredPath = Object.values(REPOSITORY_FILE_MAP).find(function(path) {
-                    return path === reference || path.endsWith("/" + reference) || path.endsWith("\\" + reference);
-                });
-                return configuredPath || (reference.includes("/") ? reference : "source/data/" + reference);
-            }
-
-            async function loadFixturePlayerOptions(fixturesData) {
+            function loadFixturePlayerOptions(tournamentData) {
                 state.fixturePlayerOptions = [];
-                if (!state.selectedRepo || !fixturesData || typeof fixturesData !== "object") {
-                    return;
-                }
-
-                const playerFilePath = resolveTournamentFilePath(fixturesData.tournament);
-                if (!playerFilePath) {
-                    return;
-                }
-
-                try {
-                    const loadedPlayers = await loadRepoJsonFile(state.selectedRepo.full_name, playerFilePath);
-                    const players = loadedPlayers.data && Array.isArray(loadedPlayers.data.players)
-                        ? loadedPlayers.data.players
-                        : [];
-                    state.fixturePlayerOptions = players
-                        .map(function(player) { return String(player && player.name || "").trim(); })
-                        .filter(Boolean);
-                } catch (error) {
-                    console.warn("Unable to load tournament players for fixture dropdowns:", error);
-                }
+                const players = tournamentData && Array.isArray(tournamentData.players)
+                    ? tournamentData.players
+                    : [];
+                state.fixturePlayerOptions = players
+                    .map(function(player) { return String(player && player.name || "").trim(); })
+                    .filter(Boolean);
             }
 
             function getNestedRecordValue(record, key) {
@@ -7251,6 +7234,14 @@
                     if (event.target === el.nodeJsonEditModal) {
                         closeNodeJsonEditModal();
                     }
+                });
+
+                el.xenoDataKeySelect.addEventListener("change", function() {
+                    state.currentXenoDataKey = el.xenoDataKeySelect.value;
+                    if (state.currentXenoDataKey === "fixtures") {
+                        loadFixturePlayerOptions(state.currentJsonData);
+                    }
+                    hydrateCrmFromCurrentJson();
                 });
 
                 el.crmRootMode.addEventListener("change", function() {
