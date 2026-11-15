@@ -38,15 +38,15 @@
 }
 
 .fa-icon-winter {
-    color: var(--xc-winter);
+    color: var(--xc-winter) !important;
 }
 
 .fa-icon-spring {
-    color: var(--xc-spring);
+    color: var(--xc-spring) !important;
 }
 
 .fa-icon-summer {
-    color: var(--xc-summer);
+    color: var(--xc-summer) !important;
 }
 
 html {
