@@ -21,7 +21,7 @@
     --charity-btn-hover: #e60079de;
 
     /* Charity Colors (Diabetes UK) */
-    --charity-box-bg-2: #111478;
+    --charity-box-bg-2: #11147861;
     --charity-box-border-2: #0375e0;
     --charity-btn-bg-2: #F0F0FFde;
     --charity-btn-hover-2: #111478;
@@ -546,7 +546,7 @@ ul.scoring-list li i {
 
 .league-season-card-top,
 .league-season-meta {
-    display: flex;
+    display: grid;
     justify-content: space-between;
     align-items: center;
     gap: 0.6rem;
@@ -642,12 +642,17 @@ ul.scoring-list li i {
 
 .league-season-card .site-btn {
     display: inline-flex;
+    text-decoration: none;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
     width: 100%;
     box-sizing: border-box;
     margin-top: 0.4rem;
+}
+
+.league-season-card .site-btn i.fas {
+    color: var(--charity-btn-bg-2);
 }
 
 .league-page {
