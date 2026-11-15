@@ -1764,7 +1764,7 @@ function renderSeasonLeaguePage(definition, data, error, content) {
                 <div class="podium-item silver">
                     <span class="medal-badge">2</span>
                     <div>${podium[1] || 'TBC'}</div>
-                    <div class="podium-label">Runner-up</div>
+                    <div class="podium-label">Second Place</div>
                 </div>
                 <div class="podium-item bronze">
                     <span class="medal-badge">3</span>
