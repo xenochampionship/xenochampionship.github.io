@@ -510,7 +510,7 @@ function populateAboutPage() {
                 </div>
                 <div class="about-circuit-paths">
                     <article class="about-circuit-path leagues">
-                        <span class="about-circuit-path-label"><i class="fas fa-arrows-rotate" aria-hidden="true"></i> Winter · Spring · Summer</span>
+                        <span class="about-circuit-path-label"><i class="fas fa-arrows-rotate" aria-hidden="true"></i> Winter / Spring / Summer · Seasonal</span>
                         <h3>Seasonal Leagues</h3>
                         <p>Three opportunities to compete throughout the year. Every League stays Swiss-style from start to finish, with no knockout stage.</p>
                         <ul>
@@ -525,7 +525,7 @@ function populateAboutPage() {
                         </div>
                     </article>
                     <article class="about-circuit-path championship">
-                        <span class="about-circuit-path-label"><i class="fas fa-trophy" aria-hidden="true"></i> Autumn · Annual event</span>
+                        <span class="about-circuit-path-label"><i class="fas fa-trophy" aria-hidden="true"></i> Autumn · Annual</span>
                         <h3>Xeno Championship</h3>
                         <p>The flagship annual tournament brings the season to a close and crowns the Xeno Champion.</p>
                         <ul>
@@ -543,18 +543,18 @@ function populateAboutPage() {
 
             <section class="about-circuit-community" aria-labelledby="about-circuit-community-title">
                 <div class="about-circuit-community-intro">
-                    <span class="about-circuit-path-label"><i class="fas fa-people-group" aria-hidden="true"></i> Built by the community</span>
+                    <span class="about-circuit-path-label"><i class="fas fa-users" aria-hidden="true"></i> Built by the community</span>
                     <h2 id="about-circuit-community-title">Good competition, shared purpose</h2>
                     <p>Organisers, Umpires, and contestants help make the circuit welcoming and fair. Matches are best-of-three Companion battles, with sportsmanship at the heart of every season.</p>
                 </div>
                 <div class="about-circuit-charities">
                     <article class="about-circuit-charity championship">
                         <i class="fas fa-heart" aria-hidden="true"></i>
-                        <div><span>Championship fundraising</span><strong>${championshipCharity}</strong></div>
+                        <div><span>Championship Fundraising</span><strong>${championshipCharity}</strong></div>
                     </article>
                     <article class="about-circuit-charity leagues">
                         <i class="fas fa-heart" aria-hidden="true"></i>
-                        <div><span>League season fundraising</span><strong>${leagueCharity}</strong></div>
+                        <div><span>League Season Fundraising</span><strong>${leagueCharity}</strong></div>
                     </article>
                     <p>Donations are voluntary. Visit the relevant event page for current fundraising information.</p>
                 </div>
