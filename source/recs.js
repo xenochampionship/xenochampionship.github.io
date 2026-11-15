@@ -19,7 +19,7 @@ const records = [
     {
         title: "XC 2027", dates: "01/10/2027 - 14/11/2027", 
         past: false, // If current or upcoming, set past to false
-        top3: ["#", "#", "#"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
+        top3: ["TBD", "TBD", "TBD"], // 1st (Gold), 2nd (Silver), 3rd (Bronze)
         resultsJson: dataHostUrl+"xc27.json",
         charity: {current: 0.00, goal: 0.00, showOnHome: false} // GBP (£)
     },
@@ -39,17 +39,17 @@ const leagueRecords = [
         components: {
             winter: {
                 year: 2026,
-                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                podium: ["TBD", "TBD", "TBD"], // 1st - 2nd - 3rd
                 file: dataHostUrl+"winter-2026.json"
             },
             spring: {
                 year: 2027,
-                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                podium: ["TBD", "TBD", "TBD"], // 1st - 2nd - 3rd
                 file: dataHostUrl+"spring-2027.json"
             },
             summer: {
                 year: 2027,
-                podium: ["#", "#", "#"], // 1st - 2nd - 3rd
+                podium: ["TBD", "TBD", "TBD"], // 1st - 2nd - 3rd
                 file: dataHostUrl+"summer-2027.json"
             }
         },

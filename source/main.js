@@ -631,7 +631,7 @@ function populateLeagueRulesPage() {
         <div class="card hero-card">
             <img src="https://www.nomanssky.com/media/rx0bsrqh/battleshots35.jpg" alt="Xeno Championship Image" class="home-hero-image-secondary">
         </div>
-        <p class="para-txt">These rules apply to the Winter, Spring, and Summer Leagues. League-specific dates and registration details will be announced on each league page.</p>
+        <p class="para-txt">These rules apply to the Winter, Spring, and Summer Leagues. League-specific dates and registration details will be announced on each league page.<br />The <b>Number 1</b> ranked contestant in each League is guaranteed a place in the Xeno Championship Finals stage.</p>
 
         <div class="card accordion-rule-card">
             <button class="accordion-rule-toggle" onclick="toggleRuleAccordion(this)">
