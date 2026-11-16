@@ -34,5 +34,21 @@
       }
     }
   ],
-  "fixtures": []
+  "fixtures": [
+    {
+      "fixtureId": "League",
+      "round": 1,
+      "date": "",
+      "time": "",
+      "timeZone": "UTC+01:00",
+      "player1": "ItIsYeOwl",
+      "player2": "masscolder",
+      "platform1": "PC",
+      "platform2": "PC",
+      "umpire": "TBC",
+      "streamLink": null,
+      "status": "planning",
+      "winner": null
+    }
+  ]
 }
