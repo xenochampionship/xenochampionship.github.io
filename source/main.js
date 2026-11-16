@@ -2184,7 +2184,7 @@ function renderFixtureCard(fixture) {
             streamLinkHtml = '';
         }
     }
-    const fixtureRound = fixture.fixtureId === 'Qualifier' && fixture.round != null ? ` · Round ${fixture.round}` : '';
+    const fixtureRound = fixture.fixtureId === 'Qualifier' || fixture.fixtureId == 'League' && fixture.round != null ? ` · Round ${fixture.round}` : '';
     const fixtureTimeZone = fixture.timeZone || fixture.timezone || 'UTC+01:00';
     let fixtureTime = fixture.time || 'TBC';
     if (fixture.time !== "") {
