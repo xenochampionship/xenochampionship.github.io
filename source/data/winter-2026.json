@@ -32,6 +32,16 @@
         "losses": 0,
         "omw": 0
       }
+    },
+    {
+      "name": "Yellow Jacket",
+      "platform": "PC",
+      "results": {
+        "played": 0,
+        "wins": 0,
+        "losses": 0,
+        "omw": 0
+      }
     }
   ],
   "fixtures": [
